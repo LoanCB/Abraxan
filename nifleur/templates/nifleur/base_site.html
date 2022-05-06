@@ -6,14 +6,20 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %} | Abraxan</title>
 
-    <!-- Custom CSS -->
+    <!-- Main CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+    <!-- Custom CSS -->
+    {% block custom_css %}{% endblock %}
 
 </head>
 <body>
-    <h1> Hello, world!</h1>
+    {% block content %}{% endblock %}
+
+    <!-- Main JS -->
+    <script rel="script" type="text/javascript" src="{% static 'js/main.js' %}"></script>
 
     <!-- Custom JS -->
-    <script rel="script" type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    {% block custom_javascript %}{% endblock %}
 </body>
 </html>
