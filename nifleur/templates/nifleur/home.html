@@ -1,0 +1,8 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>Bienvenue {{ request.user }}</h1>
+    <a href="{% url 'logout_user' %}">Déconnexion</a>
+{% endblock %}

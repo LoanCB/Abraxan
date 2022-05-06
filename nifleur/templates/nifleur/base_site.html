@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} | Abraxan</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+    <!-- Custom CSS -->
+    {% block custom_css %}{% endblock %}
+
+</head>
+<body>
+    {% block content %}{% endblock %}
+
+    <!-- Main JS -->
+    <script rel="script" type="text/javascript" src="{% static 'js/main.js' %}"></script>
+
+    <!-- Custom JS -->
+    {% block custom_javascript %}{% endblock %}
+</body>
+</html>
