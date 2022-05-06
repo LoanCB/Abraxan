@@ -6,4 +6,4 @@
 - Ajout du système d'authentification 
 
 ## v 0.1.0
-- Création du projet de base
+- Création de la base du projet
