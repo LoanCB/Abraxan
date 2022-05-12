@@ -46,6 +46,14 @@ cette dernière, un fichier requirements a été mis en place répertoriant l'en
 pip install -r requirements.txt
 ```
 
+### Clef secret & mot de passe
+Pour des questions de sécurité, la clef secrète du serveur de django ainsi que le mot de passe de la base de données
+sont stockées dans le fichier .env qui est propre à chaque machine. Vous devez donc créer ce fichier dans la racine du
+projet et le renseigner de cette manière avec vos données : 
+![img.png](static/images/readme/img_1.png)
+<br>
+<u>PS:</u> Pour la base de données, tout est expliqué juste en dessous.
+
 ### Base de données
 #### Mise en place
 Abraxan fonctionne sur une base de données Postgres SQL. Pour la faire fonctionner, il vous faudra l'installer en local:
@@ -57,9 +65,7 @@ Une fois l'installation effectuée, lancer pgAdmin et connectez vous. Ceci doit 
 ![img_3.png](static/images/readme/img_3.png)
 Ensuite, faites un clique droit sur base de données -> créer -> base de donnée puis créez une base se nomant 
 "abraxan_dev".
-Pour finir, vous devez renseigner le mot de passe dans les paramètres du projet dans le champ "PASSWORD" 
-(base/settings.py) :
-![img_1.png](static/images/readme/img_1.png)
+Pour finir, vous devez renseigner le mot de passe dans le fichier .env créé juste avant.
 
 #### Pycharm
 Si vous utilisez l'IDE pycharm, vous pouvez ajouter la base de donnée à l'éditeur. Pour cela, cliquez sur le bouton 
