@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # Dependencies
     'fontawesomefree',
+    'phonenumber_field',
 
     # Modules
     'nifleur'
