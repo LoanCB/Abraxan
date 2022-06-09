@@ -23,7 +23,10 @@ vous conseille de l'installer via la commande suivante :
 ```bash
 pip install virtualenv
 ```
-
+Il faut maintenant créer l'environnement virtuel via la commande suivante :
+```bash
+python3 -m venv /path/de/votre/environnement/virtuel 
+```
 A partir de maintenant, l'ensemble du projet se passera dans l'environnement virtuel créé à cet effet dans le dossier
 venv. Pour activer ce dernier, il suffit de se rendre dans le dossier du projet ressemblant à ceci et de l'activer :
 ![img.png](static/images/readme/img.png)
