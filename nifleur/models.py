@@ -122,7 +122,7 @@ class ContractRequest(TimeStampedModel):
     started_at = models.DateTimeField('Début du contrat')
     ended_at = models.DateTimeField('Fin du contrat')
     alternating = models.BooleanField('Alternant', help_text="Est une classe d'alternants", default=False)
-    period = models.CharField('Période', choices=PERIOD)
+    period = models.CharField('Période', choices=PERIOD, max_length=2)
     rp = models.ForeignKey(User, verbose_name='Responsable pédagogique', related_name='rp', on_delete=models.PROTECT)
     recruitment_type = models.PositiveSmallIntegerField('Type de recrutement', choices=RECRUITMENT_TYPE)
     highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
