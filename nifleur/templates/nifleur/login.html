@@ -1,21 +1,67 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Meta tags -->
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Title & favicon -->
     <title>Connexion | Abraxan</title>
+    <link rel="icon" href="{# TODO favicon #}" type="image/x-icon">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+
+    <!-- Font awesome -->
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <form method="post">
-        {% csrf_token %}
-        {% if messages %}
-            {% for message in messages %}
-                {{ message }}
-                <br>
-            {% endfor %}
-        {% endif %}
-        <input type="text" placeholder="Nom d'utilisateur" name="username">
-        <input type="password" placeholder="Mot de passe" name="password">
-        <button type="submit">Se connecter</button>
-    </form>
+<img src="{% static 'images/login/circle.svg' %}" alt="wave" class="wave">
+<div class="container">
+    <div class="img">
+        <img src="{% static 'images/login/bg.svg' %}">
+    </div>
+    <div class="login-content">
+        <form method="post">
+            {% csrf_token %}
+            <img src="{% static 'images/login/avatar.svg' %}">
+            <h2 class="title">Bienvenue</h2>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="error_box">
+                        <p>{{ message }}</p>
+                        <i class="fas fa-times close_icon" onclick="this.parentElement.remove()"></i>
+                    </div>
+                    <br>
+                {% endfor %}
+            {% endif %}
+            <div class="input-div one">
+                <div class="i">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="div">
+                    <h5>Nom d'utilisateur</h5>
+                    <input type="text" class="input" name="username">
+                </div>
+            </div>
+            <div class="input-div pass">
+                <div class="i">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="div">
+                    <h5>Mot de passe</h5>
+                    <input type="password" class="input" name="password">
+                </div>
+            </div>
+            <a>Mot de passe oublié ?</a> {# TODO forgot password #}
+            <input type="submit" class="btn" value="Connexion">
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/login.js' %}"></script>
 </body>
 </html>
