@@ -8,14 +8,6 @@
     box-sizing: border-box;
 }
 
-:root
-{
-    --main_blue: #06264c;
-    --main_yellow: #cc972d;
-    --main_beige: #ebdcbd;
-    --main_salmon: #e07f48;
-}
-
 body
 {
     font-family: 'Poppins', sans-serif;

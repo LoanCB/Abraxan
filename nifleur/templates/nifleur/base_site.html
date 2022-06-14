@@ -11,9 +11,10 @@
 
     <!-- Title & favicon -->
     <title>{% block title %}{% endblock %} | Abraxan</title>
-    <link rel="icon" href="{# TODO favicon #}" type="image/x-icon">
+    <link rel="icon" href="{% static 'images/logo_abraxan.svg' %}" type="image/x-icon">
 
     <!-- Main CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/colors.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 
     <!-- Custom CSS -->
@@ -24,7 +25,94 @@
 
 </head>
 <body>
-    {% block content %}{% endblock %}
+
+    <!-- Sidebar -->
+    <nav class="main-menu">
+        <div class="header">
+            <h3>Bienvenue, {{ request.user }}</h3>
+        </div>
+        <ul>
+            <li>
+                <a href="{# TODO #}">
+                    <i class="fa fa-home fa-2x"></i>
+                    <span class="nav-text">
+                        Dashboard
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-laptop fa-2x"></i>
+                    <span class="nav-text">
+                        Stars Components
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                   <i class="fa fa-list fa-2x"></i>
+                    <span class="nav-text">
+                        Forms
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                   <i class="fa fa-folder-open fa-2x"></i>
+                    <span class="nav-text">
+                        Pages
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-font fa-2x"></i>
+                    <span class="nav-text">
+                       Quotes
+                    </span>
+                </a>
+            </li>
+            <li>
+               <a href="#">
+                   <i class="fa fa-table fa-2x"></i>
+                    <span class="nav-text">
+                        Tables
+                    </span>
+                </a>
+            </li>
+            <li>
+               <a href="#">
+                    <i class="fa fa-map-marker fa-2x"></i>
+                    <span class="nav-text">
+                        Maps
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                   <i class="fa fa-info fa-2x"></i>
+                    <span class="nav-text">
+                        Documentation
+                    </span>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="logout">
+            <li>
+               <a href="{% url 'logout_user' %}">
+                     <i class="fa fa-power-off fa-2x"></i>
+                    <span class="nav-text">
+                        Déconnexion
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div style="margin-left: 4.5rem">
+        {% block content %}{% endblock %}
+    </div>
 
     <!-- Main JS -->
     <script rel="script" type="text/javascript" src="{% static 'js/main.js' %}"></script>
