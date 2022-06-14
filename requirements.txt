@@ -3,3 +3,4 @@ psycopg2==2.9.3
 fontawesomefree==6.1.1
 python-dotenv==0.20.0
 coverage==6.3.2
+django-phonenumber-field[phonenumbers]==6.1.0
