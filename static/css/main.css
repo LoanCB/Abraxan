@@ -14,6 +14,25 @@
          SIDEBAR
 *************************/
 
+.btn
+{
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary
+{
+    background-image: linear-gradient(to right, var(--main_salmon), var(--main_yellow));
+    color: white;
+}
+
+
+/*************************
+         SIDEBAR
+*************************/
+
 .fa-2x
 {
     font-size: 2em;
@@ -76,7 +95,8 @@ nav.main-menu.expanded
     margin: 0.5rem 0;
 }
 
-.main-menu li>a
+.main-menu li>a,
+.main-menu li .header-menu
 {
     position: relative;
     display: table;
@@ -114,6 +134,12 @@ nav.main-menu.expanded
     position: absolute;
     left: 0;
     bottom: 0;
+}
+
+.main-menu .img-avatar
+{
+    border-radius: 100%;
+    margin-right: 10px;
 }
 
 .no-touch .scrollable.hover
