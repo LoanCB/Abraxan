@@ -65,7 +65,7 @@
                 </a>
             </li>
             <li class="has-subnav">
-                <a href="{# TODO parameters #}">
+                <a href="{% url 'admin_management' %}">
                    <i class="fa fa-2x fa-solid fa-gear"></i>
                     <span class="nav-text">
                         Paramètres
@@ -86,7 +86,7 @@
         </ul>
     </nav>
 
-    <div style="margin-left: 4.5rem">
+    <div class="block-content">
         {% block content %}{% endblock %}
     </div>
 

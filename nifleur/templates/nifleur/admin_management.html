@@ -1,0 +1,19 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block content %}
+    <article class="card">
+        <header class="card-title">Ajouter un utilisateur</header>
+        <main class="card-content">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-section">
+                    {{ form.first_name.label }}
+                    {{ form.first_name }}
+                    {{ form.first_name.errors }}
+                </div>
+            </form>
+        </main>
+    </article>
+{% endblock %}
