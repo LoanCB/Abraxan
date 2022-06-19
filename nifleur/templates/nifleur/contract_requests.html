@@ -1,0 +1,15 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% load static %}
+
+{% block title %}Liste des contrats{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/DataTables/datatables.min.css' %}">
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block custom_javascript %}
+    <script rel="script" type="text/javascript" src="{% static 'vendors/DataTables/datatables.min.js' %}"></script>
+{% endblock %}

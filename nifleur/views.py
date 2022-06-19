@@ -28,3 +28,7 @@ def logout_user(request):
     logout(request)
     messages.success(request, "Vous avez bien été déconnecté")
     return redirect(login_user)
+
+
+def contract_requests_list(request):
+    return render(request, 'nifleur/contract_requests.html')
