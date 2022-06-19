@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from nifleur.models import ContractRequest
+
 
 @login_required
 def home(request):
@@ -31,4 +33,5 @@ def logout_user(request):
 
 
 def contract_requests_list(request):
-    return render(request, 'nifleur/contract_requests.html')
+    contract_requests = ContractRequest.objects.all()
+    return render(request, 'nifleur/contract_requests.html', {'contract_requests': contract_requests})

@@ -8,8 +8,67 @@
     <link rel="stylesheet" type="text/css" href="{% static 'vendors/DataTables/datatables.min.css' %}">
 {% endblock %}
 
-{% block content %}{% endblock %}
+{% block content %}
+    <table id="datatable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Date de la demande</th>
+                <th>Ecole</th>
+                <th>Intervenant</th>
+                <th>Commentaire</th>
+                <th>Status</th>
+                <th>Type de mission</th>
+                <th>Tarif</th>
+                <th>Type d'horaire</th>
+                <th>TTC</th>
+                <th>Volume horaire</th>
+                <th>Unité</th>
+                <th>Date début</th>
+                <th>Date fin</th>
+                <th>Matière</th>
+                <th>Promotion</th>
+                <th>Alternant</th>
+                <th>Période</th>
+                <th>RP</th>
+                <th>Type de recrutement</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contract in contract_requests %}
+                <tr>
+                    <td>{{ contract.created_at }}</td>
+                    <td>TODO Ecole</td>
+                    <td>TODO Intervenant</td>
+                    <td>{{ contract.comment }}</td>
+                    <td>{{ contract.status }}</td>
+                    <td>TODO type de mission</td>
+                    <td>{{ contract.applied_rate }}</td>
+                    <td>TODO type d'horaire</td>
+                    <td>{{ contract.ttc }}</td>
+                    <td>{{ contract.hourly_volume }}</td>
+                    <td>{{ contract.unit }}</td>
+                    <td>{{ contract.started_at }}</td>
+                    <td>{{ contract.ended_at }}</td>
+                    <td>TODO Matière</td>
+                    <td>TODO Promotion</td>
+                    <td>{{ contract.alternating }}</td>
+                    <td>{{ contract.period }}</td>
+                    <td>{{ contract.rp }}</td>
+                    <td>{{ contract.recruitment_type }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
 
 {% block custom_javascript %}
-    <script rel="script" type="text/javascript" src="{% static 'vendors/DataTables/datatables.min.js' %}"></script>
+{#    <script rel="script" type="text/javascript" src="{% static 'vendors/DataTables/datatables.min.js' %}"></script>#}
+    <script rel="script" type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script rel="script" type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(() => {
+            $('#datatable').DataTable()
+        })
+    </script>
 {% endblock %}
