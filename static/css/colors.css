@@ -4,4 +4,5 @@
     --main_yellow: #cc972d;
     --main_beige: #ebdcbd;
     --main_salmon: #e07f48;
+    --background-linear: linear-gradient(to right, var(--main_salmon), var(--main_yellow));
 }
