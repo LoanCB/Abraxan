@@ -12,3 +12,4 @@ class CustomUserCreationForm(UserCreationForm):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-input'
+        self.fields['is_staff'].widget.attrs['class'] = ''

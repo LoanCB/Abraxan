@@ -9,9 +9,37 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="form-section">
+                    {{ form.last_name.label }}
+                    {{ form.last_name }}
+                    {{ form.last_name.errors }}
+                </div>
+                <div class="form-section">
                     {{ form.first_name.label }}
                     {{ form.first_name }}
                     {{ form.first_name.errors }}
+                </div>
+                <div class="form-section">
+                    {{ form.email.label }}
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+                <div class="form-section">
+                    {{ form.password1.label }}
+                    {{ form.password1 }}
+                    {{ form.password1.errors }}
+                </div>
+                <div class="form-section">
+                    {{ form.password2.label }}
+                    {{ form.password2 }}
+                    {{ form.password2.errors }}
+                </div>
+                <div class="form-section">
+                    {{ form.is_staff.label }}
+                    {{ form.is_staff }}
+                    {{ form.is_staff.errors }}
+                </div>
+                <div class="horizontal-center">
+                    <button type="submit" class="btn btn-primary">Créer</button>
                 </div>
             </form>
         </main>

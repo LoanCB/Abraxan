@@ -24,7 +24,7 @@
 
 .btn-primary
 {
-    background-image: linear-gradient(to right, var(--main_salmon), var(--main_yellow));
+    background-image: var(--background-linear);
     color: white;
 }
 
@@ -35,23 +35,27 @@
 
 .card
 {
-    background-color: #cdcdcd;
-    border-radius: 10px;
+    background-color: #CECBCA;
     width: fit-content;
     height: fit-content;
-    padding: 10px;
+    border-radius: 10px;
 }
 
 .card-title
 {
     font-size: x-large;
-    border-bottom: solid 1px black;
     margin-bottom: 0.5rem;
+    border-radius: 10px;
+    background-image: var(--background-linear);
+    padding: 10px;
+    color: white;
+    text-align: center;
 }
 
 .card-content
 {
     font-size: medium;
+    padding: 10px;
 }
 
 .card-footer
@@ -95,6 +99,17 @@
     border-color: #86b7fe;
     outline: 0;
     box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+}
+
+
+/*************************
+        Alignment
+*************************/
+
+.horizontal-center
+{
+    display: flex;
+    justify-content: center;
 }
 
 
