@@ -35,6 +35,7 @@ def logout_user(request):
 @login_required
 def admin_management(request):
     form = CustomUserCreationForm()
+    print('ok')
     if form.is_valid():
         form.save()
         messages.success(request, "L'utilisateur a bien été créé")
