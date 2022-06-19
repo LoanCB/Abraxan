@@ -19,28 +19,181 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
+class StructureCampus(models.Model):
+    """
+    Value of structure or campus
+
+    Attributes:
+
+    - :class:`str` label -> Name of the campus or structure
+    - :class:`str` full_name -> Full name of the campus or structure
+    """
+    label = models.CharField('Nom', max_length=20)
+    full_name = models.CharField('Nom complet', max_length=255, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Structure & campus'
+        verbose_name_plural = 'Structures & campus'
+
+    def __str__(self):
+        return self.label
+
+
+class Speaker(models.Model):
+    """
+    A speaker belong to a contract request
+
+    Attributes:
+
+    - :class:`str` first_name
+    - :class:`str` last_name
+    - :class:`str` civility
+    - :class:`str` company_type
+    - :class:`str` mail
+    - :class:`str` phone_number
+    - :class:`str` main_area_of_expertise
+    - :class:`str` second_area_of_expertise
+    - :class:`str` third_area_of_expertise
+    """
+    MEN = 'M'
+    WOMEN = 'W'
+    CIVILITY = (
+        (MEN, 'Mr'),
+        (WOMEN, 'Mme')
+    )
+    first_name = models.CharField('Prénom', max_length=50)
+    last_name = models.CharField('Nom', max_length=100)
+    civility = models.CharField('Civilité', max_length=1, choices=CIVILITY, default=MEN)
+    company_type = models.CharField('Type de la société', max_length=255, blank=True, null=True)
+    mail = models.EmailField()
+    phone_number = PhoneNumberField(verbose_name='Numéro de téléphone', null=True, blank=True)
+    main_area_of_expertise = models.CharField('Domaine de compétence principal', max_length=255)
+    second_area_of_expertise = models.CharField(
+        'Deuximème domaine de compétence',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    third_area_of_expertise = models.CharField('Troisième domaine de compétence', max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Intervenant'
+        verbose_name_plural = 'Intervenants'
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    # TODO get_absolute_url on Speaker model
+    def get_absolute_url(self):
+        pass
+
+
+class Performance(models.Model):
+    """
+    A contract request reattached to a performance
+
+    Attributes:
+
+    - :class:`str` label
+    """
+    label = models.CharField('Nom', max_length=255)
+
+    class Meta:
+        verbose_name = 'Prestation'
+        verbose_name_plural = 'Prestations'
+
+    def __str__(self):
+        return self.label
+
+
+class RateType(models.Model):
+    """
+    A contract request reattached to a rate type
+
+    Attributes:
+
+    - :class:`str` label
+    """
+    label = models.CharField('Nom', max_length=255)
+
+    class Meta:
+        verbose_name = 'Type de tarif'
+        verbose_name_plural = 'Types de tarif'
+
+    def __str__(self):
+        return self.label
+
+
+class Discipline(models.Model):
+    """
+    A contract request reattached to a discipline
+
+    Attributes:
+
+    - :class:`str` label
+    """
+    label = models.CharField('Nom', max_length=255)
+
+    class Meta:
+        verbose_name = 'Matière'
+        verbose_name_plural = 'Matières'
+
+    def __str__(self):
+        return self.label
+
+
+class SchoolYear(models.Model):
+    """
+    A school year reattached to a structure campus. A contract request need a school year
+
+    Attributes:
+
+    - :class:`StructureCampus` structure_campus
+    - :class:`str` year -> Year of the school year (ex: M1, L2, B3...)
+    - :class:`str` label
+    """
+    structure_campus = models.OneToOneField(
+        StructureCampus,
+        verbose_name='Ecole',
+        related_name='structure_school_year',
+        on_delete=models.PROTECT
+    )
+    year = models.CharField('Année', max_length=10, help_text='ex: M1')
+    label = models.CharField('Nom', max_length=255, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Promotion'
+        verbose_name_plural = 'Promotions'
+
+    def __str__(self):
+        return f'{self.year} - {self.label}'
+
+
 class ContractRequest(TimeStampedModel):
     """
     Main model to list all contract requests
 
     Attributes:
 
+    - :class:`StructureCampus` structure_campus
+    - :class:`Speaker` speaker
     - :class:`str` comment
     - :class:`int` status
+    - :class:`Performance` performance
     - :class:`float` applied_rate
+    - :class:`RateType` rate_type
     - :class:`bool` ttc
     - :class:`float` hourly_volume
     - :class:`int` unit
     - :class:`datetime` started_at
     - :class:`datetime` ended_at
+    - :class:`Discipline` discipline
+    - :class:`SchoolYear` school_year
     - :class:`bool` alternating
     - :class:`str` period
     - :class:`User` rp
     - :class:`int` recruitment_type
     - :class:`str` highest_degree
-    - :class:`str` main_area_of_expertise
-    - :class:`str` second_area_of_expertise
-    - :class:`str` third_area_of_expertise
     - :class:`int` teaching_expertise_level
     - :class:`int` professional_expertise_level
     """
@@ -113,22 +266,55 @@ class ContractRequest(TimeStampedModel):
         (EXPERT, 'Expert')
     )
 
+    structure_campus = models.ForeignKey(
+        StructureCampus,
+        verbose_name='Structure ou campus',
+        related_name='contract_request_structure',
+        on_delete=models.PROTECT
+    )
+    speaker = models.ForeignKey(
+        Speaker,
+        verbose_name='Intervenant',
+        related_name='contract_request_speaker',
+        on_delete=models.PROTECT
+    )
     comment = models.CharField('Commentaire', max_length=255, null=True, blank=True)
     status = models.PositiveSmallIntegerField('Statut', choices=STATUS, default=WAITING_DOC)
+    performance = models.ForeignKey(
+        Performance,
+        verbose_name='Prestation',
+        related_name='contract_request_performance',
+        on_delete=models.PROTECT
+    )
     applied_rate = models.FloatField('Tarif à appliquer')
+    rate_type = models.ForeignKey(
+        RateType,
+        verbose_name="Type d'horaire",
+        related_name='contract_request_rate',
+        on_delete=models.PROTECT
+    )
     ttc = models.BooleanField('Toute Taxes Comprises', help_text='SST si faux', default=False)
     hourly_volume = models.FloatField('Volume horaire')
     unit = models.PositiveSmallIntegerField('Unité', choices=UNIT)
     started_at = models.DateTimeField('Début du contrat')
     ended_at = models.DateTimeField('Fin du contrat')
+    discipline = models.ForeignKey(
+        Discipline,
+        verbose_name="Matière",
+        related_name='contract_request_discipline',
+        on_delete=models.PROTECT
+    )
+    school_year = models.ForeignKey(
+        SchoolYear,
+        verbose_name="Année de la promotion",
+        related_name='contract_request_year',
+        on_delete=models.PROTECT
+    )
     alternating = models.BooleanField('Alternant', help_text="Est une classe d'alternants", default=False)
     period = models.CharField('Période', choices=PERIOD, max_length=2)
     rp = models.ForeignKey(User, verbose_name='Responsable pédagogique', related_name='rp', on_delete=models.PROTECT)
     recruitment_type = models.PositiveSmallIntegerField('Type de recrutement', choices=RECRUITMENT_TYPE)
     highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
-    main_area_of_expertise = models.CharField('Domaine de compétence principal', max_length=255)
-    second_area_of_expertise = models.CharField('Deuximèe domaine de compétence', max_length=255, null=True)
-    third_area_of_expertise = models.CharField('Troisième domaine de compétence', max_length=255, blank=True)
     teaching_expertise_level = models.PositiveSmallIntegerField("Niveau d'expertise en pédagogie", choices=LEVELS)
     professional_expertise_level = models.PositiveSmallIntegerField(
         "Niveau d'expertise en matière professionnelle",
@@ -145,182 +331,3 @@ class ContractRequest(TimeStampedModel):
     # TODO get_absolute_url on ContractRequest model
     def get_absolute_url(self):
         pass
-
-
-class StructureCampus(models.Model):
-    """
-    Value of structure or campus
-
-    Attributes:
-
-    - :class:`ContractRequest` contract_request
-    - :class:`str` label -> Name of the campus or structure
-    """
-    contract_request = models.ForeignKey(
-        ContractRequest,
-        verbose_name='Nom ou structure',
-        related_name='structure_campus',
-        on_delete=models.PROTECT
-    )
-    label = models.CharField('Nom', max_length=20)
-
-    class Meta:
-        verbose_name = 'Structure & campus'
-        verbose_name_plural = 'Structures & campus'
-
-    def __str__(self):
-        return self.label
-
-
-class Speaker(models.Model):
-    """
-    A speaker belong to a contract request
-
-    Attributes:
-
-    - :class:`ContractRequest` contract_request
-    - :class:`str` first_name
-    - :class:`str` last_name
-    - :class:`str` civility
-    - :class:`str` company_type
-    - :class:`str` mail
-    - :class:`str` phone_number
-    """
-    MEN = 'M'
-    WOMEN = 'W'
-    CIVILITY = (
-        (MEN, 'Mr'),
-        (WOMEN, 'Mme')
-    )
-    contract_request = models.ForeignKey(
-        ContractRequest,
-        verbose_name='Intervenant',
-        related_name='speaker',
-        on_delete=models.PROTECT
-    )
-    first_name = models.CharField('Prénom', max_length=50)
-    last_name = models.CharField('Nom', max_length=100)
-    civility = models.CharField('Civilité', max_length=1, choices=CIVILITY, default=MEN)
-    company_type = models.CharField('Type de la société', max_length=255, blank=True, null=True)
-    mail = models.EmailField()
-    phone_number = PhoneNumberField(verbose_name='Numéro de téléphone', null=True, blank=True)
-
-    class Meta:
-        verbose_name = 'Intervenant'
-        verbose_name_plural = 'Intervenants'
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
-    # TODO get_absolute_url on Speaker model
-    def get_absolute_url(self):
-        pass
-
-
-class Performance(models.Model):
-    """
-    A performance reattached to a contract request
-
-    Attributes:
-
-    - :class:`ContractRequest` contract_request
-    - :class:`str` label
-    """
-    contract_request = models.ForeignKey(
-        ContractRequest,
-        verbose_name='Prestation',
-        related_name='performance',
-        on_delete=models.PROTECT
-    )
-    label = models.CharField('Nom', max_length=255)
-
-    class Meta:
-        verbose_name = 'Prestation'
-        verbose_name_plural = 'Prestations'
-
-    def __str__(self):
-        return self.label
-
-
-class RateType(models.Model):
-    """
-    A rate type reattached to a contract request
-
-    Attributes:
-
-    - :class:`ContractRequest` contract_request
-    - :class:`str` label
-    """
-    contract_request = models.ForeignKey(
-        ContractRequest,
-        verbose_name='Type de tarif',
-        related_name='rate_type',
-        on_delete=models.PROTECT
-    )
-    label = models.CharField('Nom', max_length=255)
-
-    class Meta:
-        verbose_name = 'Type de tarif'
-        verbose_name_plural = 'Types de tarif'
-
-    def __str__(self):
-        return self.label
-
-
-class Discipline(models.Model):
-    """
-    A discipline reattached to a contract request
-
-    Attributes:
-
-    - :class:`ContractRequest` contract_request
-    - :class:`str` label
-    """
-    contract_request = models.ForeignKey(
-        ContractRequest,
-        verbose_name='Matière',
-        related_name='discipline',
-        on_delete=models.PROTECT
-    )
-    label = models.CharField('Nom', max_length=255)
-
-    class Meta:
-        verbose_name = 'Matière'
-        verbose_name_plural = 'Matières'
-
-    def __str__(self):
-        return self.label
-
-
-class SchoolYear(models.Model):
-    """
-    A school year reattached to a structure campus and a contract request
-
-    Attributes:
-
-    - :class:`StructureCampus` structure_campus
-    - :class:`ContractRequest` contract_request
-    - :class:`str` year -> Year of the school year (ex: M1, L2, B3...)
-    - :class:`str` label
-    """
-    structure_campus = models.OneToOneField(
-        StructureCampus,
-        verbose_name='Promotion',
-        related_name='promotion_school_year',
-        on_delete=models.PROTECT
-    )
-    contract_request = models.ForeignKey(
-        ContractRequest,
-        verbose_name='Promotion',
-        related_name='contract_school_year',
-        on_delete=models.PROTECT
-    )
-    year = models.CharField('Année', max_length=15, help_text='ex: M1')
-    label = models.CharField('Nom', max_length=255)
-
-    class Meta:
-        verbose_name = 'Promotion'
-        verbose_name_plural = 'Promotions'
-
-    def __str__(self):
-        return f'{self.year} - {self.label}'
