@@ -124,24 +124,6 @@ class RateType(models.Model):
         return self.label
 
 
-class Discipline(models.Model):
-    """
-    A contract request reattached to a discipline
-
-    Attributes:
-
-    - :class:`str` label
-    """
-    label = models.CharField('Nom', max_length=255)
-
-    class Meta:
-        verbose_name = 'Matière'
-        verbose_name_plural = 'Matières'
-
-    def __str__(self):
-        return self.label
-
-
 class SchoolYear(models.Model):
     """
     A school year reattached to a structure campus. A contract request need a school year
@@ -152,7 +134,7 @@ class SchoolYear(models.Model):
     - :class:`str` year -> Year of the school year (ex: M1, L2, B3...)
     - :class:`str` label
     """
-    structure_campus = models.OneToOneField(
+    structure_campus = models.ForeignKey(
         StructureCampus,
         verbose_name='Ecole',
         related_name='structure_school_year',
@@ -166,7 +148,41 @@ class SchoolYear(models.Model):
         verbose_name_plural = 'Promotions'
 
     def __str__(self):
-        return f'{self.year} - {self.label}'
+        return f'{self.year} - {self.label}' if self.label else self.year
+
+
+class Discipline(models.Model):
+    """
+    A contract request reattached to a discipline
+
+    Attributes:
+
+    - :class:`SchoolYear` school_year
+    - :class:`str` label
+    """
+    school_year = models.ForeignKey(
+        SchoolYear,
+        verbose_name='Classe',
+        related_name='school_year',
+        on_delete=models.PROTECT,
+        null=True
+    )
+    label = models.CharField('Nom', max_length=255)
+    speaker = models.ForeignKey(
+        Speaker,
+        verbose_name='Intervenant',
+        related_name='discipline',
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = 'Matière'
+        verbose_name_plural = 'Matières'
+
+    def __str__(self):
+        return self.label
 
 
 class ContractRequest(TimeStampedModel):

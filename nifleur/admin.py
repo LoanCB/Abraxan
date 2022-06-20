@@ -36,7 +36,7 @@ class RateTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Discipline)
 class DisciplineAdmin(admin.ModelAdmin):
-    list_display = ('label',)
+    list_display = ('school_year', 'label', 'speaker')
 
 
 @admin.register(SchoolYear)
