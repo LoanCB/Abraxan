@@ -7,9 +7,11 @@ from nifleur.models import ContractRequest, StructureCampus, Speaker, Performanc
 @admin.register(ContractRequest)
 class ContractRequestAdmin(admin.ModelAdmin):
     list_display = (
-        'structure_campus', 'speaker', 'created_at', 'comment', 'status', 'performance', 'applied_rate', 'rate_type',
-        'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year', 'alternating', 'period',
-        'rp', 'recruitment_type', 'highest_degree', 'teaching_expertise_level', 'professional_expertise_level')
+        'id', 'structure_campus', 'speaker', 'created_at', 'comment', 'status', 'performance', 'applied_rate',
+        'rate_type', 'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year',
+        'alternating', 'period', 'rp', 'recruitment_type', 'highest_degree', 'teaching_expertise_level',
+        'professional_expertise_level'
+    )
 
 
 @admin.register(StructureCampus)

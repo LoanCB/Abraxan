@@ -37,24 +37,24 @@
             {% for contract in contract_requests %}
                 <tr>
                     <td>{{ contract.created_at }}</td>
-                    <td>TODO Ecole</td>
-                    <td>TODO Intervenant</td>
-                    <td>{{ contract.comment }}</td>
-                    <td>{{ contract.status }}</td>
-                    <td>TODO type de mission</td>
+                    <td>{{ contract.structure_campus }}</td>
+                    <td>{{ contract.speaker }}</td>
+                    <td>{% if contract.comment %}{{ contract.comment }}{% endif %}</td>
+                    <td>{{ contract.get_status_display }}</td>
+                    <td>{{ contract.performance }}</td>
                     <td>{{ contract.applied_rate }}</td>
-                    <td>TODO type d'horaire</td>
+                    <td>{{ contract.rate_type }}</td>
                     <td>{{ contract.ttc }}</td>
                     <td>{{ contract.hourly_volume }}</td>
-                    <td>{{ contract.unit }}</td>
+                    <td>{{ contract.get_unit_display }}</td>
                     <td>{{ contract.started_at }}</td>
                     <td>{{ contract.ended_at }}</td>
-                    <td>TODO Matière</td>
-                    <td>TODO Promotion</td>
+                    <td>{{ contract.discipline }}</td>
+                    <td>{{ contract.school_year }}</td>
                     <td>{{ contract.alternating }}</td>
                     <td>{{ contract.period }}</td>
-                    <td>{{ contract.rp }}</td>
-                    <td>{{ contract.recruitment_type }}</td>
+                    <td>{{ contract.rp.get_full_name }}</td>
+                    <td>{{ contract.get_recruitment_type_display }}</td>
                 </tr>
             {% endfor %}
         </tbody>
