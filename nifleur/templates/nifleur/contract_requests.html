@@ -20,7 +20,7 @@
                 <th>Type de mission</th>
                 <th>Tarif</th>
                 <th>Type d'horaire</th>
-                <th>TTC</th>
+                <th>TVA</th>
                 <th>Volume horaire</th>
                 <th>Unité</th>
                 <th>Date début</th>
@@ -44,15 +44,15 @@
                     <td>{{ contract.performance }}</td>
                     <td>{{ contract.applied_rate }}</td>
                     <td>{{ contract.rate_type }}</td>
-                    <td>{{ contract.ttc }}</td>
-                    <td>{{ contract.hourly_volume }}</td>
+                    <td>{{ contract.ttc|yesno:"TTC,SST," }}</td>
+                    <td>{{ contract.hourly_volume|floatformat:"0" }}</td>
                     <td>{{ contract.get_unit_display }}</td>
                     <td>{{ contract.started_at }}</td>
                     <td>{{ contract.ended_at }}</td>
                     <td>{{ contract.discipline }}</td>
                     <td>{{ contract.school_year }}</td>
-                    <td>{{ contract.alternating }}</td>
-                    <td>{{ contract.period }}</td>
+                    <td>{% include 'nifleur/components/boolean_icon.html' with data=contract.alternating %}</td>
+                    <td>{{ contract.get_period_display }}</td>
                     <td>{{ contract.rp.get_full_name }}</td>
                     <td>{{ contract.get_recruitment_type_display }}</td>
                 </tr>
