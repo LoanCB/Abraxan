@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
+from nifleur.forms import DisciplineForm
 from nifleur.models import ContractRequest, Speaker, Discipline
 
 
@@ -49,4 +50,14 @@ def speaker_details(request, speaker_id):
 
 def discipline_list(request):
     disciplines = Discipline.objects.all()
-    return render(request, 'nifleur/disciplines.html', {'disciplines': disciplines})
+    form = DisciplineForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(
+            request,
+            f"La matière {form.cleaned_data['label']} a bien été créée pour la classe {form.cleaned_data['school_year']}"
+        )
+    return render(request, 'nifleur/disciplines.html', {
+        'disciplines': disciplines,
+        'form': form
+    })

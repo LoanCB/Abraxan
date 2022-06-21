@@ -160,7 +160,9 @@ class SchoolYear(models.Model):
         verbose_name_plural = 'Promotions'
 
     def __str__(self):
-        return f'{self.year} - {self.label}' if self.label else self.year
+        if self.label:
+            return f'{self.structure_campus} - {self.year} - {self.label}'
+        return f'{self.structure_campus} - {self.year}'
 
 
 class Discipline(models.Model):
