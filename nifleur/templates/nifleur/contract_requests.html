@@ -22,7 +22,6 @@
                 <th>Type d'horaire</th>
                 <th>TVA</th>
                 <th>Volume horaire</th>
-                <th>Unité</th>
                 <th>Date début</th>
                 <th>Date fin</th>
                 <th>Matière</th>
@@ -38,15 +37,14 @@
                 <tr>
                     <td>{{ contract.created_at }}</td>
                     <td>{{ contract.structure_campus }}</td>
-                    <td>{{ contract.speaker }}</td>
+                    <td><a href="{{ contract.speaker.get_absolute_url }}">{{ contract.speaker }}</a></td>
                     <td>{% if contract.comment %}{{ contract.comment }}{% endif %}</td>
                     <td>{{ contract.get_status_display }}</td>
                     <td>{{ contract.performance }}</td>
-                    <td>{{ contract.applied_rate }}</td>
+                    <td>{{ contract.applied_rate }} €</td>
                     <td>{{ contract.rate_type }}</td>
                     <td>{{ contract.ttc|yesno:"TTC,SST," }}</td>
-                    <td>{{ contract.hourly_volume|floatformat:"0" }}</td>
-                    <td>{{ contract.get_unit_display }}</td>
+                    <td>{{ contract.hourly_volume|floatformat:"0" }} {{ contract.get_unit_display }}</td>
                     <td>{{ contract.started_at }}</td>
                     <td>{{ contract.ended_at }}</td>
                     <td>{{ contract.discipline }}</td>

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -83,9 +84,8 @@ class Speaker(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
-    # TODO get_absolute_url on Speaker model
     def get_absolute_url(self):
-        pass
+        return reverse('speaker_details', kwargs={'speaker_id': self.id})
 
 
 class Performance(models.Model):
@@ -244,11 +244,11 @@ class ContractRequest(TimeStampedModel):
     HOUR = 4
     OTHER = 5
     UNIT = (
-        (HALF_DAY, 'Demie-journée'),
-        (DAY, 'Journée'),
-        (FLAT_FEE, 'Forfait'),
-        (HOUR, 'Heure'),
-        (OTHER, 'Autre')
+        (HALF_DAY, 'demies-journées'),
+        (DAY, 'journées'),
+        (FLAT_FEE, 'forfaits'),
+        (HOUR, 'heures'),
+        (OTHER, 'autre')
     )
 
     SEMESTER_1 = 'S1'

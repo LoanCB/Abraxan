@@ -1,0 +1,54 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% load static %}
+
+{% block title %}Intervenants{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/DataTables/datatables.min.css' %}">
+{% endblock %}
+
+{% block content %}
+        <table id="datatable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Civilité</th>
+                <th>Compagnie</th>
+                <th>Mail</th>
+                <th>Numéro de téléphone</th>
+                <th>Domaine de compétence principal</th>
+                <th>Domaine de compétence secondaire</th>
+                <th>Domaine de compétence tertiaire</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for speaker in speakers %}
+                <tr>
+                    <td>{{ speaker.first_name }}</td>
+                    <td>{{ speaker.last_name }}</td>
+                    <td>{{ speaker.get_civility_display }}</td>
+                    <td>{% if speaker.company_type %}{{ speaker.company_type }}{% endif %}</td>
+                    <td>{{ speaker.mail }}</td>
+                    <td>{% if speaker.phone_number %}{{ speaker.phone_number }}{% endif %}</td>
+                    <td>{{ speaker.main_area_of_expertise }}</td>
+                    <td>{{ speaker.second_area_of_expertise }}</td>
+                    <td>{{ speaker.third_area_of_expertise }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block custom_javascript %}
+{#    <script rel="script" type="text/javascript" src="{% static 'vendors/DataTables/datatables.min.js' %}"></script>#}
+    <script rel="script" type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script rel="script" type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(() => {
+            $('#datatable').DataTable()
+        })
+    </script>
+{% endblock %}
