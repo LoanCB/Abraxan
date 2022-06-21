@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from nifleur.models import ContractRequest, Speaker
+from nifleur.models import ContractRequest, Speaker, Discipline
 
 
 @login_required
@@ -37,7 +37,7 @@ def contract_requests_list(request):
     return render(request, 'nifleur/contract_requests.html', {'contract_requests': contract_requests})
 
 
-def speakers(request):
+def speakers_list(request):
     speakers = Speaker.objects.all()
     return render(request, 'nifleur/speakers.html', {'speakers': speakers})
 
@@ -45,3 +45,8 @@ def speakers(request):
 def speaker_details(request, speaker_id):
     speaker = get_object_or_404(Speaker, id=speaker_id)
     return render(request, 'nifleur/speaker_details.html', {'speaker': speaker})
+
+
+def discipline_list(request):
+    disciplines = Discipline.objects.all()
+    return render(request, 'nifleur/disciplines.html', {'disciplines': disciplines})
