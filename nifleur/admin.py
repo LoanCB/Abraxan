@@ -9,8 +9,7 @@ class ContractRequestAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'structure_campus', 'speaker', 'created_at', 'comment', 'status', 'performance', 'applied_rate',
         'rate_type', 'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year',
-        'alternating', 'period', 'rp', 'recruitment_type', 'highest_degree', 'teaching_expertise_level',
-        'professional_expertise_level'
+        'alternating', 'period', 'rp', 'recruitment_type', 'professional_expertise_level'
     )
 
 
@@ -23,7 +22,9 @@ class StructureCampusAdmin(admin.ModelAdmin):
 class SpeakerAdmin(admin.ModelAdmin):
     list_display = (
         'first_name', 'last_name', 'civility', 'company_type', 'mail', 'phone_number',
-        'main_area_of_expertise', 'second_area_of_expertise', 'third_area_of_expertise')
+        'main_area_of_expertise', 'second_area_of_expertise', 'third_area_of_expertise', 'highest_degree',
+        'teaching_expertise_level'
+    )
 
 
 @admin.register(Performance)

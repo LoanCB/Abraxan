@@ -4,6 +4,16 @@ from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 
 
+BEGINNER = 1
+INTERMEDIATE = 2
+EXPERT = 3
+LEVELS = (
+    (BEGINNER, 'Débutant'),
+    (INTERMEDIATE, 'Intermédiaire'),
+    (EXPERT, 'Expert')
+)
+
+
 class TimeStampedModel(models.Model):
     """
     Abstract base model to have automatic fields for creation and update
@@ -68,6 +78,7 @@ class Speaker(models.Model):
     company_type = models.CharField('Type de la société', max_length=255, blank=True, null=True)
     mail = models.EmailField()
     phone_number = PhoneNumberField(verbose_name='Numéro de téléphone', null=True, blank=True)
+    highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
     main_area_of_expertise = models.CharField('Domaine de compétence principal', max_length=255)
     second_area_of_expertise = models.CharField(
         'Deuximème domaine de compétence',
@@ -76,6 +87,7 @@ class Speaker(models.Model):
         blank=True
     )
     third_area_of_expertise = models.CharField('Troisième domaine de compétence', max_length=255, null=True, blank=True)
+    teaching_expertise_level = models.PositiveSmallIntegerField("Niveau d'expertise en pédagogie", choices=LEVELS)
 
     class Meta:
         verbose_name = 'Intervenant'
@@ -140,7 +152,7 @@ class SchoolYear(models.Model):
         related_name='structure_school_year',
         on_delete=models.PROTECT
     )
-    year = models.CharField('Année', max_length=10, help_text='ex: M1')
+    year = models.CharField('Année', max_length=15, help_text='ex: M1')
     label = models.CharField('Nom', max_length=255, blank=True, null=True)
 
     class Meta:
@@ -273,15 +285,6 @@ class ContractRequest(TimeStampedModel):
         (ADD_SERVICE, 'Ajout de prestation'),
     )
 
-    BEGINNER = 1
-    INTERMEDIATE = 2
-    EXPERT = 3
-    LEVELS = (
-        (BEGINNER, 'Débutant'),
-        (INTERMEDIATE, 'Intermédiaire'),
-        (EXPERT, 'Expert')
-    )
-
     structure_campus = models.ForeignKey(
         StructureCampus,
         verbose_name='Structure ou campus',
@@ -330,8 +333,6 @@ class ContractRequest(TimeStampedModel):
     period = models.CharField('Période', choices=PERIOD, max_length=2)
     rp = models.ForeignKey(User, verbose_name='Responsable pédagogique', related_name='rp', on_delete=models.PROTECT)
     recruitment_type = models.PositiveSmallIntegerField('Type de recrutement', choices=RECRUITMENT_TYPE)
-    highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
-    teaching_expertise_level = models.PositiveSmallIntegerField("Niveau d'expertise en pédagogie", choices=LEVELS)
     professional_expertise_level = models.PositiveSmallIntegerField(
         "Niveau d'expertise en matière professionnelle",
         choices=LEVELS
