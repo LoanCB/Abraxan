@@ -1,0 +1,72 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% load static %}
+
+{% block title %}Liste des contrats{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/DataTables/datatables.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <table id="datatable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Date de la demande</th>
+                <th>Ecole</th>
+                <th>Intervenant</th>
+                <th>Commentaire</th>
+                <th>Status</th>
+                <th>Type de mission</th>
+                <th>Tarif</th>
+                <th>Type d'horaire</th>
+                <th>TVA</th>
+                <th>Volume horaire</th>
+                <th>Date début</th>
+                <th>Date fin</th>
+                <th>Matière</th>
+                <th>Promotion</th>
+                <th>Alternant</th>
+                <th>Période</th>
+                <th>RP</th>
+                <th>Type de recrutement</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contract in contract_requests %}
+                <tr>
+                    <td>{{ contract.created_at }}</td>
+                    <td>{{ contract.structure_campus }}</td>
+                    <td><a href="{{ contract.speaker.get_absolute_url }}">{{ contract.speaker }}</a></td>
+                    <td>{% if contract.comment %}{{ contract.comment }}{% endif %}</td>
+                    <td>{{ contract.get_status_display }}</td>
+                    <td>{{ contract.performance }}</td>
+                    <td>{{ contract.applied_rate }} €</td>
+                    <td>{{ contract.rate_type }}</td>
+                    <td>{{ contract.ttc|yesno:"TTC,SST," }}</td>
+                    <td>{{ contract.hourly_volume|floatformat:"0" }} {{ contract.get_unit_display }}</td>
+                    <td>{{ contract.started_at }}</td>
+                    <td>{{ contract.ended_at }}</td>
+                    <td>{{ contract.discipline }}</td>
+                    <td>{{ contract.school_year }}</td>
+                    <td>{% include 'nifleur/components/boolean_icon.html' with data=contract.alternating %}</td>
+                    <td>{{ contract.get_period_display }}</td>
+                    <td>{{ contract.rp.get_full_name }}</td>
+                    <td>{{ contract.get_recruitment_type_display }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block custom_javascript %}
+{#    <script rel="script" type="text/javascript" src="{% static 'vendors/DataTables/datatables.min.js' %}"></script>#}
+    <script rel="script" type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script rel="script" type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(() => {
+            $('#datatable').DataTable()
+        })
+    </script>
+{% endblock %}

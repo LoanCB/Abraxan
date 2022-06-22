@@ -49,10 +49,26 @@
                 </a>
             </li>
             <li class="has-subnav">
-                <a href="{# TODO contract list #}">
+                <a href="{% url 'contract_requests_list' %}">
                     <i class="fa fa-2x fa-solid fa-file-contract"></i>
                     <span class="nav-text">
                         Liste des contrats
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="{% url 'speakers_list' %}">
+                    <i class="fa fa-2x fa-solid fa-person-chalkboard"></i>
+                    <span class="nav-text">
+                        Liste des intervenants
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="{% url 'discipline_list' %}">
+                    <i class="fa fa-2x fa-solid fa-book-bookmark"></i>
+                    <span class="nav-text">
+                        Liste des matières
                     </span>
                 </a>
             </li>
