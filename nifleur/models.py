@@ -49,6 +49,9 @@ class StructureCampus(models.Model):
     def __str__(self):
         return self.label
 
+    def get_absolute_url(self):
+        return reverse('school_details', kwargs={'school_id': self.id})
+
 
 class Speaker(models.Model):
     """
@@ -177,7 +180,7 @@ class Discipline(models.Model):
     school_year = models.ForeignKey(
         SchoolYear,
         verbose_name='Classe',
-        related_name='school_year',
+        related_name='disciplines',
         on_delete=models.PROTECT,
         null=True
     )

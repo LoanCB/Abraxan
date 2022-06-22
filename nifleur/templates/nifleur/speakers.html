@@ -13,9 +13,9 @@
         <thead>
             <tr>
                 <th></th>
+                <th>Civilité</th>
                 <th>Prénom</th>
                 <th>Nom</th>
-                <th>Civilité</th>
                 <th>Compagnie</th>
                 <th>Mail</th>
                 <th>Numéro de téléphone</th>
@@ -29,20 +29,26 @@
             {% for speaker in speakers %}
                 <tr>
                     <td><a href="{% url 'speaker_details' speaker.id %}"><i class="fa-solid fa-eye"></i></a></td>
+                    <td>{{ speaker.get_civility_display }}</td>
                     <td>{{ speaker.first_name }}</td>
                     <td>{{ speaker.last_name }}</td>
-                    <td>{{ speaker.get_civility_display }}</td>
                     <td>{% if speaker.company_type %}{{ speaker.company_type }}{% endif %}</td>
                     <td>{{ speaker.mail }}</td>
                     <td>{% if speaker.phone_number %}{{ speaker.phone_number }}{% endif %}</td>
                     <td>{{ speaker.highest_degree }}</td>
                     <td>{{ speaker.main_area_of_expertise }}</td>
-                    <td>{{ speaker.second_area_of_expertise }}</td>
-                    <td>{{ speaker.third_area_of_expertise }}</td>
+                    <td>{% if speaker.second_area_of_expertise %}{{ speaker.second_area_of_expertise }}{% endif %}</td>
+                    <td>{% if speaker.third_area_of_expertise %}{{ speaker.third_area_of_expertise }}{% endif %}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Envoyer</button>
+    </form>
 {% endblock %}
 
 {% block custom_javascript %}
