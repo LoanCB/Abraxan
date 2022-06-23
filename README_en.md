@@ -109,7 +109,7 @@ Don't worry, Django does it for you !
 ## Support
 If you encounter an issue, yu can contact a member of the team :
 - Alexis Barreyre (Software Developer) : alexis.barreyre@gmail.com
-- Vincent Sausthene (System and Networks administrator) : vincent.sosthene74@gmail.com
+- Vincent Sosthene (System and Networks administrator) : vincent.sosthene74@gmail.com
 - Loan Courchinoux-Billonnet (Django Developer) : loanbillonnet@gmail.com
 
 

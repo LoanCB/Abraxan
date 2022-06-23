@@ -113,7 +113,7 @@ vous inquietez pas, django le fait automatiquement pour vous !
 ## Support
 Si vous rencontrez un problème, vous pouvez contacter un membre du groupe :
 - Alexis Barreyre (Développeur logiciel) : alexis.barreyre@gmail.com
-- Vincent Sausthene (Administrateur Systèmes & réseaux) : vincent.sosthene74@gmail.com
+- Vincent Sosthene (Administrateur Systèmes & réseaux) : vincent.sosthene74@gmail.com
 - Loan Courchinoux-Billonnet (Développeur Django) : loanbillonnet@gmail.com
 
 ## License
