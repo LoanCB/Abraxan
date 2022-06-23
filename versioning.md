@@ -1,5 +1,12 @@
 # Versioning Projet Abraxan
 
+## v 0.3.0 - 23 juin 2022
+- Ajout d'un README fr / en
+- Mise en place d'une base de donnée stable
+- Création des principale pages (sans styles)
+- Implémentation de certains formulaires (ajout de données)
+- Début d'écriture de tests sur le projet
+
 ## v 0.2.0 - 6 mai 2022
 - Ajout du principal module Nifleur
 - Initialisation des fichiers static
