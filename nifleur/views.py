@@ -38,6 +38,11 @@ def contract_requests_list(request):
     return render(request, 'nifleur/contract_requests.html', {'contract_requests': contract_requests})
 
 
+def contract_request_detail(request, contract_id):
+    contract = get_object_or_404(ContractRequest, id=contract_id)
+    return render(request, 'nifleur/contract_request_details.html', {'contract': contract})
+
+
 def speakers_list(request):
     speakers = Speaker.objects.all()
     form = SpeakerForm(request.POST or None)

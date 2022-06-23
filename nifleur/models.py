@@ -75,10 +75,21 @@ class Speaker(models.Model):
         (MEN, 'Mr'),
         (WOMEN, 'Mme')
     )
+    MICRO_ENTERPRISE = 1
+    SOCIETY = 2
+    PROFESSION = 3
+    WAGE_PORTAGE = 4
+    COMPANIES_TYPE = (
+        (MICRO_ENTERPRISE, 'Micro-entreprise'),
+        (SOCIETY, 'société'),
+        (PROFESSION, 'Profession libérale'),
+        (WAGE_PORTAGE, 'Portage salariale')
+    )
     first_name = models.CharField('Prénom', max_length=50)
     last_name = models.CharField('Nom', max_length=100)
     civility = models.CharField('Civilité', max_length=1, choices=CIVILITY, default=MEN)
-    company_type = models.CharField('Type de la société', max_length=255, blank=True, null=True)
+    company_type = models.PositiveSmallIntegerField('Type de la société', choices=COMPANIES_TYPE, blank=True, null=True)
+    company = models.CharField('société', max_length=255, blank=True, null=True)
     mail = models.EmailField()
     phone_number = PhoneNumberField(verbose_name='Numéro de téléphone', null=True, blank=True)
     highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
@@ -348,8 +359,7 @@ class ContractRequest(TimeStampedModel):
         verbose_name_plural = 'Demandes de contrat'
 
     def __str__(self):
-        return f"Demande de contrat de {self.speaker.civility} {self.speaker}"
+        return f"Demande de contrat de {self.speaker.get_civility_display()}. {self.speaker}"
 
-    # TODO get_absolute_url on ContractRequest model
     def get_absolute_url(self):
-        pass
+        return reverse('contract_request_detail', kwargs={'contract_id': self.id})

@@ -32,9 +32,12 @@
                     <td>{{ speaker.get_civility_display }}</td>
                     <td>{{ speaker.first_name }}</td>
                     <td>{{ speaker.last_name }}</td>
-                    <td>{% if speaker.company_type %}{{ speaker.company_type }}{% endif %}</td>
+                    <td>
+                        {% if speaker.company %}{{ speaker.company }}{% endif %}
+                        {% if speaker.company_type %}({{ speaker.get_company_type_display }}){% endif %}
+                    </td>
                     <td>{{ speaker.mail }}</td>
-                    <td>{% if speaker.phone_number %}{{ speaker.phone_number }}{% endif %}</td>
+                    <td>{% if speaker.phone_number %}{{ speaker.phone_number.as_national }}{% endif %}</td>
                     <td>{{ speaker.highest_degree }}</td>
                     <td>{{ speaker.main_area_of_expertise }}</td>
                     <td>{% if speaker.second_area_of_expertise %}{{ speaker.second_area_of_expertise }}{% endif %}</td>
