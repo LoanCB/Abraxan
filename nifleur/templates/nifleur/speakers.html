@@ -1,0 +1,67 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% load static %}
+
+{% block title %}Intervenants{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/DataTables/datatables.min.css' %}">
+{% endblock %}
+
+{% block content %}
+        <table id="datatable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Civilité</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Compagnie</th>
+                <th>Mail</th>
+                <th>Numéro de téléphone</th>
+                <th>Diplôme le plus élevé</th>
+                <th>Domaine de compétence<br>principal</th>
+                <th>Domaine de compétence<br>secondaire</th>
+                <th>Domaine de compétence<br>tertiaire</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for speaker in speakers %}
+                <tr>
+                    <td><a href="{% url 'speaker_details' speaker.id %}"><i class="fa-solid fa-eye"></i></a></td>
+                    <td>{{ speaker.get_civility_display }}</td>
+                    <td>{{ speaker.first_name }}</td>
+                    <td>{{ speaker.last_name }}</td>
+                    <td>
+                        {% if speaker.company %}{{ speaker.company }}{% endif %}
+                        {% if speaker.company_type %}({{ speaker.get_company_type_display }}){% endif %}
+                    </td>
+                    <td>{{ speaker.mail }}</td>
+                    <td>{% if speaker.phone_number %}{{ speaker.phone_number.as_national }}{% endif %}</td>
+                    <td>{{ speaker.highest_degree }}</td>
+                    <td>{{ speaker.main_area_of_expertise }}</td>
+                    <td>{% if speaker.second_area_of_expertise %}{{ speaker.second_area_of_expertise }}{% endif %}</td>
+                    <td>{% if speaker.third_area_of_expertise %}{{ speaker.third_area_of_expertise }}{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Envoyer</button>
+    </form>
+{% endblock %}
+
+{% block custom_javascript %}
+{#    <script rel="script" type="text/javascript" src="{% static 'vendors/DataTables/datatables.min.js' %}"></script>#}
+    <script rel="script" type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script rel="script" type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(() => {
+            $('#datatable').DataTable()
+        })
+    </script>
+{% endblock %}

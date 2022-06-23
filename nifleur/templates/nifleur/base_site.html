@@ -1,23 +1,115 @@
 {% load static %}
+{% load avatar_tags %}
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
+    <!-- Meta tags -->
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Title & favicon -->
     <title>{% block title %}{% endblock %} | Abraxan</title>
+    <link rel="icon" href="{% static 'images/logo_abraxan.svg' %}" type="image/x-icon">
 
     <!-- Main CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/colors.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/bootstrap/css/bootstrap.min.css' %}">
 
     <!-- Custom CSS -->
     {% block custom_css %}{% endblock %}
 
+    <!-- Fontawesome -->
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
 </head>
 <body>
-    {% block content %}{% endblock %}
+
+    <!-- Sidebar -->
+    <nav class="main-menu">
+        <ul>
+            <li>
+                <div class="header-menu">
+                    <a href="{# TODO edit profil #}">
+                        {% avatar user 55 class="img-avatar" %}
+                    </a>
+                    <span class="nav-text">
+                        Bienvenue, {{ request.user }}
+                    </span>
+                </div>
+            </li>
+            <li>
+                <a href="{% url 'home' %}">
+                    <i class="fa fa-home fa-2x"></i>
+                    <span class="nav-text">
+                        Accueil
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="{% url 'contract_requests_list' %}">
+                    <i class="fa fa-2x fa-solid fa-file-contract"></i>
+                    <span class="nav-text">
+                        Liste des contrats
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="{% url 'speakers_list' %}">
+                    <i class="fa fa-2x fa-solid fa-person-chalkboard"></i>
+                    <span class="nav-text">
+                        Liste des intervenants
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="{% url 'discipline_list' %}">
+                    <i class="fa fa-2x fa-solid fa-book-bookmark"></i>
+                    <span class="nav-text">
+                        Liste des matières
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="{# TODO educational model #}">
+                   <i class="fa fa-2x fa-solid fa-graduation-cap"></i>
+                    <span class="nav-text">
+                        Maquettes pedagogiques
+                    </span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="{# TODO parameters #}">
+                   <i class="fa fa-2x fa-solid fa-gear"></i>
+                    <span class="nav-text">
+                        Paramètres
+                    </span>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="logout">
+            <li>
+               <a href="{% url 'logout_user' %}">
+                     <i class="fa fa-power-off fa-2x"></i>
+                    <span class="nav-text">
+                        Déconnexion
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div style="margin-left: 4.5rem">
+        {% block content %}{% endblock %}
+    </div>
 
     <!-- Main JS -->
     <script rel="script" type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    <script rel="script" type="text/javascript" src="{% static 'vendors/bootstrap/js/bootstrap.min.js' %}"></script>
 
     <!-- Custom JS -->
     {% block custom_javascript %}{% endblock %}
