@@ -53,6 +53,45 @@ class StructureCampus(models.Model):
         return reverse('school_details', kwargs={'school_id': self.id})
 
 
+class CompanyType(models.Model):
+    """
+
+    Attributes:
+
+    - :class:`str` label
+    """
+    label = models.CharField('Nom', max_length=50)
+
+    class Meta:
+        verbose_name = 'Type de la compagnie'
+        verbose_name_plural = 'Types des compagnies'
+
+    def __str__(self):
+        return self.label
+
+
+class Company(models.Model):
+    """
+
+    """
+    label = models.CharField('Nom', max_length=255)
+    company_type = models.ForeignKey(
+        CompanyType,
+        verbose_name='Type de la compagnie',
+        related_name='speaker_company_type',
+        on_delete=models.PROTECT
+    )
+    relation_mail = models.EmailField(verbose_name='mail de la relation', null=True, blank=True)
+    relation_phone_number = PhoneNumberField(verbose_name='Numéro de téléphone de la relation', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Société'
+        verbose_name_plural = 'Sociétés'
+
+    def __str__(self):
+        return f"{self.label} ({self.company_type})"
+
+
 class Speaker(models.Model):
     """
     A speaker belong to a contract request
@@ -75,21 +114,17 @@ class Speaker(models.Model):
         (MEN, 'Mr'),
         (WOMEN, 'Mme')
     )
-    MICRO_ENTERPRISE = 1
-    SOCIETY = 2
-    PROFESSION = 3
-    WAGE_PORTAGE = 4
-    COMPANIES_TYPE = (
-        (MICRO_ENTERPRISE, 'Micro-entreprise'),
-        (SOCIETY, 'société'),
-        (PROFESSION, 'Profession libérale'),
-        (WAGE_PORTAGE, 'Portage salariale')
-    )
     first_name = models.CharField('Prénom', max_length=50)
     last_name = models.CharField('Nom', max_length=100)
     civility = models.CharField('Civilité', max_length=1, choices=CIVILITY, default=MEN)
-    company_type = models.PositiveSmallIntegerField('Type de la société', choices=COMPANIES_TYPE, blank=True, null=True)
-    company = models.CharField('société', max_length=255, blank=True, null=True)
+    company = models.ForeignKey(
+        Company,
+        verbose_name='Compagnie',
+        related_name='speaker_company',
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
     mail = models.EmailField()
     phone_number = PhoneNumberField(verbose_name='Numéro de téléphone', null=True, blank=True)
     highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
@@ -213,6 +248,60 @@ class Discipline(models.Model):
         return self.label
 
 
+class Status(models.Model):
+    """
+    A status is required for a contract request
+
+    Attributes:
+
+    - :class:`int` position
+    - :class:`str` label
+    """
+    position = models.PositiveSmallIntegerField('position')
+    label = models.CharField('Nom', max_length=50)
+
+    class Meta:
+        verbose_name = 'Statut'
+        verbose_name_plural = 'Statuts'
+
+    def __str__(self):
+        return f'{self.position} - {self.label}'
+
+
+class Unit(models.Model):
+    """
+
+    Attributes:
+
+    - :class:`str` label
+    """
+    label = models.CharField('Nom', max_length=50)
+
+    class Meta:
+        verbose_name = 'Unité'
+        verbose_name_plural = 'Unités'
+
+    def __str__(self):
+        return self.label
+
+
+class RecruitmentType(models.Model):
+    """
+
+    Attributes:
+
+    - :class:`str` label
+    """
+    label = models.CharField('Nom', max_length=50)
+
+    class Meta:
+        verbose_name = 'Type de recrutement'
+        verbose_name_plural = 'Types de recrutement'
+
+    def __str__(self):
+        return self.label
+
+
 class ContractRequest(TimeStampedModel):
     """
     Main model to list all contract requests
@@ -241,44 +330,6 @@ class ContractRequest(TimeStampedModel):
     - :class:`int` teaching_expertise_level
     - :class:`int` professional_expertise_level
     """
-    RH_DURING = 1
-    RH_TODO = 2
-    TO_DO = 3
-    WAITING_DOC = 4
-    GP_GAP = 5
-    INCOMPLETE_REQUEST = 6
-    DONE = 7
-    SEND = 8
-    SIGN = 9
-    SECOND_PERIOD = 10
-    CANCEL = 11
-    STATUS = (
-        (RH_DURING, 'RH en cours de traitement'),
-        (RH_TODO, 'RH dossier complet - à traiter'),
-        (TO_DO, 'Dossier complet - à faire'),
-        (WAITING_DOC, 'Attente de document'),
-        (GP_GAP, 'écart GP'),
-        (INCOMPLETE_REQUEST, 'Demande incomplète'),
-        (DONE, 'Fait'),
-        (SEND, 'Envoyé'),
-        (SIGN, 'Signé'),
-        (SECOND_PERIOD, 'Deuxième période'),
-        (CANCEL, 'Annulé')
-    )
-
-    HALF_DAY = 1
-    DAY = 2
-    FLAT_FEE = 3
-    HOUR = 4
-    OTHER = 5
-    UNIT = (
-        (HALF_DAY, 'demies-journées'),
-        (DAY, 'journées'),
-        (FLAT_FEE, 'forfaits'),
-        (HOUR, 'heures'),
-        (OTHER, 'autre')
-    )
-
     SEMESTER_1 = 'S1'
     SEMESTER_2 = 'S2'
     QUARTER_1 = 'Q1'
@@ -290,15 +341,6 @@ class ContractRequest(TimeStampedModel):
         (QUARTER_1, 'Trimestre 1'),
         (QUARTER_2, 'Trimestre 2'),
         (QUARTER_3, 'Trimestre 3')
-    )
-
-    RECRUITMENT = 1
-    RENEWAL = 2
-    ADD_SERVICE = 3
-    RECRUITMENT_TYPE = (
-        (RECRUITMENT, 'Recrutement'),
-        (RENEWAL, 'Reconduction'),
-        (ADD_SERVICE, 'Ajout de prestation'),
     )
 
     structure_campus = models.ForeignKey(
@@ -314,7 +356,12 @@ class ContractRequest(TimeStampedModel):
         on_delete=models.PROTECT
     )
     comment = models.CharField('Commentaire', max_length=255, null=True, blank=True)
-    status = models.PositiveSmallIntegerField('Statut', choices=STATUS, default=WAITING_DOC)
+    status = models.ForeignKey(
+        Status,
+        verbose_name='Status',
+        related_name='contract_request_status',
+        on_delete=models.PROTECT
+    )
     performance = models.ForeignKey(
         Performance,
         verbose_name='Prestation',
@@ -330,7 +377,7 @@ class ContractRequest(TimeStampedModel):
     )
     ttc = models.BooleanField('Toute Taxes Comprises', help_text='SST si faux', default=False)
     hourly_volume = models.FloatField('Volume horaire')
-    unit = models.PositiveSmallIntegerField('Unité', choices=UNIT)
+    unit = models.ForeignKey(Unit, verbose_name='Unité', related_name='contract_request_unit', on_delete=models.PROTECT)
     started_at = models.DateTimeField('Début du contrat')
     ended_at = models.DateTimeField('Fin du contrat')
     discipline = models.ForeignKey(
@@ -348,7 +395,12 @@ class ContractRequest(TimeStampedModel):
     alternating = models.BooleanField('Alternant', help_text="Est une classe d'alternants", default=False)
     period = models.CharField('Période', choices=PERIOD, max_length=2)
     rp = models.ForeignKey(User, verbose_name='Responsable pédagogique', related_name='rp', on_delete=models.PROTECT)
-    recruitment_type = models.PositiveSmallIntegerField('Type de recrutement', choices=RECRUITMENT_TYPE)
+    recruitment_type = models.ForeignKey(
+        RecruitmentType,
+        verbose_name='Type de recrutement',
+        related_name='contract_request_recrutement_type',
+        on_delete=models.PROTECT
+    )
     professional_expertise_level = models.PositiveSmallIntegerField(
         "Niveau d'expertise en matière professionnelle",
         choices=LEVELS

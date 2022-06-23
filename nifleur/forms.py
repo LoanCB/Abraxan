@@ -13,6 +13,6 @@ class SpeakerForm(ModelForm):
     class Meta:
         model = Speaker
         fields = [
-            'first_name', 'last_name', 'civility', 'company_type', 'mail', 'phone_number', 'highest_degree',
+            'first_name', 'last_name', 'civility', 'mail', 'phone_number', 'highest_degree',
             'main_area_of_expertise', 'second_area_of_expertise', 'third_area_of_expertise', 'teaching_expertise_level'
         ]
