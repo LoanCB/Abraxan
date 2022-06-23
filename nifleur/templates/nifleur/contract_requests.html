@@ -12,6 +12,7 @@
     <table id="datatable" class="display" style="width:100%">
         <thead>
             <tr>
+                <th></th>
                 <th>Date de la demande</th>
                 <th>Ecole</th>
                 <th>Intervenant</th>
@@ -35,8 +36,13 @@
         <tbody>
             {% for contract in contract_requests %}
                 <tr>
+                    <td>
+                        <a href="{{ contract.get_absolute_url }}"><i class="fa-solid fa-eye"></i></a>
+                    </td>
                     <td>{{ contract.created_at }}</td>
-                    <td>{{ contract.structure_campus }}</td>
+                    <td>
+                        <a href="{{ contract.structure_campus.get_absolute_url }}">{{ contract.structure_campus }}</a>
+                    </td>
                     <td><a href="{{ contract.speaker.get_absolute_url }}">{{ contract.speaker }}</a></td>
                     <td>{% if contract.comment %}{{ contract.comment }}{% endif %}</td>
                     <td>{{ contract.get_status_display }}</td>

@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from nifleur.forms import DisciplineForm
-from nifleur.models import ContractRequest, Speaker, Discipline
+from nifleur.forms import DisciplineForm, SpeakerForm
+from nifleur.models import ContractRequest, Speaker, Discipline, SchoolYear, StructureCampus
 
 
 @login_required
@@ -38,9 +38,24 @@ def contract_requests_list(request):
     return render(request, 'nifleur/contract_requests.html', {'contract_requests': contract_requests})
 
 
+def contract_request_detail(request, contract_id):
+    contract = get_object_or_404(ContractRequest, id=contract_id)
+    return render(request, 'nifleur/contract_request_details.html', {'contract': contract})
+
+
 def speakers_list(request):
     speakers = Speaker.objects.all()
-    return render(request, 'nifleur/speakers.html', {'speakers': speakers})
+    form = SpeakerForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(
+            request,
+            f"L'intervenant {form.cleaned_data['first_name']} {form.cleaned_data['last_name']} a bien été créé"
+        )
+    return render(request, 'nifleur/speakers.html', {
+        'speakers': speakers,
+        'form': form
+    })
 
 
 def speaker_details(request, speaker_id):
@@ -61,3 +76,8 @@ def discipline_list(request):
         'disciplines': disciplines,
         'form': form
     })
+
+
+def school_details(request, school_id):
+    school = get_object_or_404(StructureCampus, id=school_id)
+    return render(request, 'nifleur/school_details.html', {'school': school})
