@@ -4,44 +4,38 @@
 
 {% block title %}Promotion {{ school }}{% endblock %}
 
-{% block custom_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'vendors/DataTables/datatables.min.css' %}">
-{% endblock %}
-
 {% block content %}
-    <h1>Ecole {{ school }}</h1>
-    <table id="datatable" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>Promotion</th>
-                <th>Nom complet</th>
-                <th>Matières</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for school_year in school.structure_school_year.all %}
-                <tr>
-                    <td>{{ school_year.year }}</td>
-                    <td>{% if school_year.label %}{{ school_year.label }}{% endif %}</td>
-                    <td>
-                        {% for discipline in school_year.disciplines.all %}
-                            {{ discipline }}{% if not forloop.last %}, {% endif %}
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <h1>Ecole {{ school }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <thead>
+                        <tr>
+                            <th>Promotion</th>
+                            <th>Nom complet</th>
+                            <th>Matières</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for school_year in school.structure_school_year.all %}
+                            <tr>
+                                <td>{{ school_year.year }}</td>
+                                <td>{% if school_year.label %}{{ school_year.label }}{% endif %}</td>
+                                <td>
+                                    {% for discipline in school_year.disciplines.all %}
+                                        {{ discipline }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
                         {% endfor %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
-
-{% block custom_javascript %}
-{#    <script rel="script" type="text/javascript" src="{% static 'vendors/DataTables/datatables.min.js' %}"></script>#}
-    <script rel="script" type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script rel="script" type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
-    <script>
-        $(() => {
-            $('#datatable').DataTable()
-        })
-    </script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}
