@@ -4,9 +4,16 @@ from nifleur.models import Discipline, Speaker
 
 
 class DisciplineForm(ModelForm):
+    required_css_class = 'required'
+
     class Meta:
         model = Discipline
         fields = ['school_year', 'label', 'speaker']
+
+    def __init__(self, *args, **kwargs):
+        super(DisciplineForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 
 class SpeakerForm(ModelForm):

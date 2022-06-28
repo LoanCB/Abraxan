@@ -26,6 +26,17 @@
 {
     background-image: linear-gradient(to right, var(--main_salmon), var(--main_yellow));
     color: white;
+    border-color: var(--main_salmon) !important;
+}
+
+
+/*************************
+         SIDEBAR
+*************************/
+
+input:required
+{
+    font-weight: bold;
 }
 
 

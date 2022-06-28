@@ -6,7 +6,8 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-xl-8 col-md-12">
+        <div class="col-xl-8 col-md-12 mb-3">
+            <h2 class="d-flex justify-content-center">Liste des matières</h2>
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -36,13 +37,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-md-12">
+        <div class="offset-xl-0 col-xl-4 offset-md-3 col-md-6">
+            <h2 class="d-flex justify-content-center">Ajouter une nouvelle matière</h2>
             <div class="card">
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button type="submit">Envoyer</button>
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
                     </form>
                 </div>
             </div>
