@@ -31,12 +31,17 @@
 
 
 /*************************
-         SIDEBAR
+          FORM
 *************************/
 
-input:required
+.required
 {
     font-weight: bold;
+}
+
+form .row
+{
+    margin: 0.5rem 0;
 }
 
 
@@ -71,7 +76,7 @@ nav.main-menu.expanded
 {
     background: var(--main_blue);
     border-right: 1px solid #e5e5e5;
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     height: 100%;
