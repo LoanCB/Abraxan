@@ -6,37 +6,47 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-12">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-sm align-middle text-center">
-                    <thead>
-                        <tr>
-                            <th>Classe</th>
-                            <th>Nom</th>
-                            <th>Intervenant</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for discipline in disciplines %}
-                            <tr>
-                                <td>{{ discipline.school_year }}</td>
-                                <td>{{ discipline.label }}</td>
-                                <td>
-                                    {% if discipline.speaker %}
-                                        <a href="{% url 'speaker_details' discipline.speaker.id %}">{{ discipline.speaker }}</a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+        <div class="col-xl-8 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th>Classe</th>
+                                    <th>Nom</th>
+                                    <th>Intervenant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for discipline in disciplines %}
+                                    <tr>
+                                        <td>{{ discipline.school_year }}</td>
+                                        <td>{{ discipline.label }}</td>
+                                        <td>
+                                            {% if discipline.speaker %}
+                                                <a href="{% url 'speaker_details' discipline.speaker.id %}">{{ discipline.speaker }}</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">Envoyer</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Envoyer</button>
-    </form>
 {% endblock %}
