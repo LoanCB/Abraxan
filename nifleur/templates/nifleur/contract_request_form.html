@@ -1,0 +1,114 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% block title %}Créer une demande de contrat{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-xs-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.structure_campus.label }}
+                            {{ form.structure_campus }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.speaker.label }}
+                            {{ form.speaker }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.comment.label }}
+                            {{ form.comment }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.status.label }}
+                            {{ form.status }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.performance.label }}
+                            {{ form.performance }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.applied_rate.label }}
+                            {{ form.applied_rate }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.rate_type.label }}
+                            {{ form.rate_type }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.unit.label }}
+                            {{ form.unit }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.hourly_volume.label }}
+                            {{ form.hourly_volume }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.period.label }}
+                            {{ form.period }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.started_at.label }}
+                            {{ form.started_at }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.ended_at.label }}
+                            {{ form.ended_at }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.discipline.label }}
+                            {{ form.discipline }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.school_year.label }}
+                            {{ form.school_year }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.alternating.label }}
+                            {{ form.alternating }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.ttc.label }}
+                            {{ form.ttc }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.rp.label }}
+                            {{ form.rp }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form.recruitment_type.label }}
+                            {{ form.recruitment_type }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form.professional_expertise_level.label }}
+                        {{ form.professional_expertise_level }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

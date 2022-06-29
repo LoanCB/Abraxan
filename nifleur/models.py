@@ -107,6 +107,7 @@ class Speaker(models.Model):
     - :class:`str` main_area_of_expertise
     - :class:`str` second_area_of_expertise
     - :class:`str` third_area_of_expertise
+    - :class:`int` teaching_expertise_level
     """
     MEN = 'M'
     WOMEN = 'W'

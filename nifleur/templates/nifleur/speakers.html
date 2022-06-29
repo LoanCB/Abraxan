@@ -25,6 +25,7 @@
                                     <th>Domaine de compétence<br>principal</th>
                                     <th>Domaine de compétence<br>secondaire</th>
                                     <th>Domaine de compétence<br>tertiaire</th>
+                                    <th>Niveau de pédagogie</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -44,6 +45,7 @@
                                         <td>{{ speaker.main_area_of_expertise }}</td>
                                         <td>{% if speaker.second_area_of_expertise %}{{ speaker.second_area_of_expertise }}{% endif %}</td>
                                         <td>{% if speaker.third_area_of_expertise %}{{ speaker.third_area_of_expertise }}{% endif %}</td>
+                                        <td>{% include 'nifleur/components/expertise_level.html' with level=speaker.teaching_expertise_level display=speaker.get_teaching_expertise_level_display %}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

@@ -1,6 +1,6 @@
 from django import forms
 
-from nifleur.models import Discipline, Speaker
+from nifleur.models import Discipline, Speaker, ContractRequest
 
 
 class CustomModelForm(forms.ModelForm):
@@ -35,3 +35,18 @@ class SpeakerForm(CustomModelForm):
         widgets = {
             'phone_number': forms.TextInput(attrs={'placeholder': '0_ __ __ __ __', 'data-slots': '_'})
         }
+
+
+class ContractRequestForm(CustomModelForm):
+    class Meta:
+        model = ContractRequest
+        fields = [
+            'structure_campus', 'speaker', 'comment', 'status', 'performance', 'applied_rate', 'rate_type', 'ttc',
+            'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year', 'alternating', 'period',
+            'rp', 'recruitment_type', 'professional_expertise_level'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(ContractRequestForm, self).__init__(*args, **kwargs)
+        self.fields['ttc'].widget.attrs['class'] = 'form-check-input'
+        self.fields['alternating'].widget.attrs['class'] = 'form-check-input'
