@@ -1,5 +1,10 @@
 # Versioning Projet Abraxan
 
+## v 0.4.0
+- Premier refonte du visuel
+- Formulaire demandes de contrat
+- Export en CSV
+
 ## v 0.3.0 - 23 juin 2022
 - Ajout d'un README fr / en
 - Mise en place d'une base de donnée stable
