@@ -17,6 +17,7 @@
     <!-- Main CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/colors.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/notification.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'vendors/bootstrap/css/bootstrap.min.css' %}">
 
     <!-- Custom CSS -->
@@ -27,6 +28,18 @@
 
 </head>
 <body>
+
+    <!-- Notification -->
+    <div class="flashes">
+        {% for message in messages %}
+            <div class="flash flash-{{ message.tags }}">
+                <div class="close">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+    </div>
 
     <!-- Sidebar -->
     <nav class="main-menu">
@@ -103,13 +116,14 @@
         </ul>
     </nav>
 
-    <div style="margin-left: 4.5rem">
+    <div style="margin:  0.75rem 0.75rem 0 4.5rem">
         {% block content %}{% endblock %}
     </div>
 
     <!-- Main JS -->
     <script rel="script" type="text/javascript" src="{% static 'js/main.js' %}"></script>
-    <script rel="script" type="text/javascript" src="{% static 'vendors/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script rel="script" type="text/javascript" src="{% static 'js/notification.js' %}"></script>
+    <script rel="script" type="text/javascript" src="{% static 'vendors/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- Custom JS -->
     {% block custom_javascript %}{% endblock %}

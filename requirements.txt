@@ -6,3 +6,4 @@ coverage==6.3.2
 django-phonenumber-field[phonenumbers]==6.1.0
 git+https://github.com/Patais/django-avatar.git
 django-utils-six==2.0
+xlwt==1.3.0
