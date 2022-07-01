@@ -6,7 +6,17 @@
     <div class="row mb-3">
         <div class="col-12 d-flex justify-content-center">
             <h1>Liste des contrats</h1>
-            <a class="btn btn-primary d-flex align-items-center ml-3" href="{% url 'create_contract_request' %}">Créer une demande</a>
+            <a class="btn btn-primary d-flex align-items-center ml-3 mr-3" href="{% url 'create_contract_request' %}">Créer une demande</a>
+            <div class="dropdown d-flex align-items-center">
+                <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Exporter les données
+                </a>
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="{% url 'export_contract_requests' %}">CSV</a></li>
+                    <li><a class="dropdown-item" href="{% url 'export_contract_requests' %}?xls=True">Excel</a></li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="row">

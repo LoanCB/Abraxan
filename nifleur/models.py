@@ -303,6 +303,20 @@ class RecruitmentType(models.Model):
         return self.label
 
 
+SEMESTER_1 = 'S1'
+SEMESTER_2 = 'S2'
+QUARTER_1 = 'Q1'
+QUARTER_2 = 'Q2'
+QUARTER_3 = 'Q3'
+PERIOD = (
+    (SEMESTER_1, 'Semestre 1'),
+    (SEMESTER_2, 'Semestre 2'),
+    (QUARTER_1, 'Trimestre 1'),
+    (QUARTER_2, 'Trimestre 2'),
+    (QUARTER_3, 'Trimestre 3')
+)
+
+
 class ContractRequest(TimeStampedModel):
     """
     Main model to list all contract requests
@@ -331,19 +345,6 @@ class ContractRequest(TimeStampedModel):
     - :class:`int` teaching_expertise_level
     - :class:`int` professional_expertise_level
     """
-    SEMESTER_1 = 'S1'
-    SEMESTER_2 = 'S2'
-    QUARTER_1 = 'Q1'
-    QUARTER_2 = 'Q2'
-    QUARTER_3 = 'Q3'
-    PERIOD = (
-        (SEMESTER_1, 'Semestre 1'),
-        (SEMESTER_2, 'Semestre 2'),
-        (QUARTER_1, 'Trimestre 1'),
-        (QUARTER_2, 'Trimestre 2'),
-        (QUARTER_3, 'Trimestre 3')
-    )
-
     structure_campus = models.ForeignKey(
         StructureCampus,
         verbose_name='Structure ou campus',
