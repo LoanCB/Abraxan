@@ -1,6 +1,7 @@
 from django import forms
 
-from nifleur.models import Discipline, Speaker, ContractRequest
+from nifleur.models import Discipline, Speaker, ContractRequest, Performance, SchoolYear, Status, StructureCampus, \
+    RecruitmentType, RateType, CompanyType, Unit
 
 
 class CustomModelForm(forms.ModelForm):
@@ -50,3 +51,51 @@ class ContractRequestForm(CustomModelForm):
         super(ContractRequestForm, self).__init__(*args, **kwargs)
         self.fields['ttc'].widget.attrs['class'] = 'form-check-input'
         self.fields['alternating'].widget.attrs['class'] = 'form-check-input'
+
+
+class PerformanceForm(CustomModelForm):
+    class Meta:
+        model = Performance
+        fields = ['label']
+
+
+class SchoolYearForm(CustomModelForm):
+    class Meta:
+        model = SchoolYear
+        fields = ['structure_campus', 'year', 'label']
+
+
+class StatusForm(CustomModelForm):
+    class Meta:
+        model = Status
+        fields = ['position', 'label']
+
+
+class StructureCampusForm(CustomModelForm):
+    class Meta:
+        model = StructureCampus
+        fields = ['label', 'full_name']
+
+
+class RecruitmentTypeForm(CustomModelForm):
+    class Meta:
+        model = RecruitmentType
+        fields = ['label']
+
+
+class RateTypeForm(CustomModelForm):
+    class Meta:
+        model = RateType
+        fields = ['label']
+
+
+class CompanyTypeForm(CustomModelForm):
+    class Meta:
+        model = CompanyType
+        fields = ['label']
+
+
+class UnitForm(CustomModelForm):
+    class Meta:
+        model = Unit
+        fields = ['label']

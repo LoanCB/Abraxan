@@ -1,0 +1,194 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% block title %}Paramètre de l'application{% endblock %}
+
+{% block content %}
+    <h1 class="d-flex justify-content-center mb-4">Paramètres</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <h2 class="d-flex justify-content-center">Liste des prestations</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for performance in performances %}
+                                    <tr id="perf-{{ performance.id }}">
+                                        <td>{{ performance.label }}</td>
+                                        <td>
+                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <button onclick="delete_model_object(`{% url 'delete_model_object' 'Performance' performance.id %}`, `perf-{{ performance.id }}`)" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <h2 class="d-flex justify-content-center">Liste des status</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for s in status %}
+                                    <tr>
+                                        <td>{{ s.label }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <h2 class="d-flex justify-content-center">Liste des types de recrutement</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for recruitment_type in recruitment_types %}
+                                    <tr id="recruitmentT-{{ recruitment_type.id }}">
+                                        <td>{{ recruitment_type.label }}</td>
+                                        <td>
+                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <button onclick="delete_model_object(`{% url 'delete_model_object' 'RecruitmentType' recruitment_type.id %}`, 'recruitmentT-{{ recruitment_type.id }}')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <h2 class="d-flex justify-content-center">Liste des types de tarif</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rate_type in rate_types %}
+                                    <tr id="rateT-{{ rate_type.id }}">
+                                        <td>{{ rate_type.label }}</td>
+                                        <td>
+                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <button onclick="delete_model_object(`{% url 'delete_model_object' 'RateType' rate_type.id %}`, 'rateT-{{ rate_type.id }}')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <h2 class="d-flex justify-content-center">Liste des types de compagnie</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for company_type in company_types %}
+                                    <tr id="companyT-{{ company_type.id }}">
+                                        <td>{{ company_type.label }}</td>
+                                        <td>
+                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <button onclick="delete_model_object(`{% url 'delete_model_object' 'CompanyType' company_type.id %}`, 'companyT-{{ company_type.id }}')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <h2 class="d-flex justify-content-center">Liste des unités</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for unit in units %}
+                                    <tr id="unit-{{ unit.id }}">
+                                        <td>{{ unit.label }}</td>
+                                        <td>
+                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <button onclick="delete_model_object(`{% url 'delete_model_object' 'Unit' unit.id %}`, 'unit-{{ unit.id }}')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_javascript %}
+    <script>
+        function delete_model_object(url, tr) {
+            const request = new Request(url, {method: 'GET'})
+            fetch(request)
+                .then(response => response.text())
+                .then(result => {
+                    document.getElementById(tr).remove()
+                    notification("L'élément a bien été supprimée")
+                })
+        }
+    </script>
+{% endblock %}

@@ -1,4 +1,4 @@
-let boxFlashes = document.querySelectorAll(".flashes .flash")
+const boxFlashes = document.querySelectorAll(".flashes .flash")
 
 boxFlashes.forEach(box => {
     box.onclick = () => {close(box)}
@@ -10,4 +10,8 @@ let close = (box) => {
     setTimeout(() => {
         box.remove()
     }, 300)
+}
+
+function close_notification(element) {
+    element.parentNode.parentNode.parentNode.removeChild(element.parentNode.parentNode)
 }

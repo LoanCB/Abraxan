@@ -33,12 +33,11 @@
     position: relative;
 
     word-break: break-word;
-    text-align: justify;
+    text-align: left;
 
     cursor: pointer;
 
     padding: 40px;
-    opacity: 0.8;
 
     -moz-box-shadow: 0 0 12px #999999;
     -webkit-box-shadow: 0 0 12px #999999;

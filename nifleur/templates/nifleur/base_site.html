@@ -26,15 +26,19 @@
     <!-- Fontawesome -->
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
+    <!-- Main JS -->
+    <script rel="script" type="text/javascript" src="{% static 'js/notification.js' %}"></script>
+    <script rel="script" type="text/javascript" src="{% static 'js/main.js' %}"></script>
+
 </head>
 <body>
 
     <!-- Notification -->
-    <div class="flashes">
+    <div class="flashes" id="messages-section">
         {% for message in messages %}
             <div class="flash flash-{{ message.tags }}">
                 <div class="close">
-                    <i class="fa-solid fa-xmark"></i>
+                    <i class="fa-solid fa-xmark" onclick="close_notification(this)"></i>
                 </div>
                 <span>{{ message }}</span>
             </div>
@@ -94,14 +98,16 @@
                     </span>
                 </a>
             </li>
-            <li class="has-subnav">
-                <a href="{# TODO parameters #}">
-                   <i class="fa fa-2x fa-solid fa-gear"></i>
-                    <span class="nav-text">
-                        Paramètres
-                    </span>
-                </a>
-            </li>
+            {% if request.user.is_staff %}
+                <li class="has-subnav">
+                    <a href="{% url 'parameters' %}">
+                       <i class="fa fa-2x fa-solid fa-gear"></i>
+                        <span class="nav-text">
+                            Paramètres
+                        </span>
+                    </a>
+                </li>
+            {% endif %}
         </ul>
 
         <ul class="logout">
@@ -120,10 +126,8 @@
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Main JS -->
-    <script rel="script" type="text/javascript" src="{% static 'js/main.js' %}"></script>
-    <script rel="script" type="text/javascript" src="{% static 'js/notification.js' %}"></script>
-    <script rel="script" type="text/javascript" src="{% static 'vendors/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Bootstrap JS -->
+    <script rel="script" type="javascript" src="{% static 'vendors/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- Custom JS -->
     {% block custom_javascript %}{% endblock %}

@@ -1,10 +1,14 @@
+from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm
-from nifleur.models import ContractRequest, Speaker, Discipline, StructureCampus
+from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, StatusForm, \
+    StructureCampusForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm
+from nifleur.models import ContractRequest, Speaker, Discipline, StructureCampus, Performance, SchoolYear, Status, \
+    RecruitmentType, RateType, CompanyType, Unit
 from nifleur.utils import export_csv, short_datetime
 
 
@@ -32,6 +36,52 @@ def logout_user(request):
     logout(request)
     messages.success(request, "Vous avez bien été déconnecté")
     return redirect(login_user)
+
+
+def parameters(request):
+    performances = Performance.objects.all()
+    school_years = SchoolYear.objects.all()
+    status = Status.objects.all()
+    schools = StructureCampus.objects.all()
+    recruitment_types = RecruitmentType.objects.all()
+    rate_types = RateType.objects.all()
+    company_types = CompanyType.objects.all()
+    units = Unit.objects.all()
+
+    performance_form = PerformanceForm(request.POST or None)
+    school_year_form = SchoolYearForm(request.POST or None)
+    status_form = StatusForm(request.POST or None)
+    school_form = StructureCampusForm(request.POST or None)
+    recruitment_type_form = RecruitmentTypeForm(request.POST or None)
+    rate_type_form = RateTypeForm(request.POST or None)
+    company_type_form = CompanyTypeForm(request.POST or None)
+    unit_form = UnitForm(request.POST or None)
+
+    return render(request, 'nifleur/parameters.html', {
+        'performances': performances,
+        'school_years': school_years,
+        'status': status,
+        'schools': schools,
+        'recruitment_types': recruitment_types,
+        'rate_types': rate_types,
+        'company_types': company_types,
+        'units': units,
+        'performance_form': performance_form,
+        'school_year_form': school_year_form,
+        'status_form': status_form,
+        'school_form': school_form,
+        'recruitment_type_form': recruitment_type_form,
+        'rate_type_form': rate_type_form,
+        'company_type_form': company_type_form,
+        'unit_form': unit_form,
+    })
+
+
+def delete_model_object(request, model, object_id):
+    django_model = apps.get_model(app_label='nifleur', model_name=model)
+    model_object = get_object_or_404(django_model, id=object_id)
+    model_object.delete()
+    return JsonResponse({'success': True})
 
 
 def contract_requests_list(request):
@@ -109,7 +159,7 @@ def speaker_details(request, speaker_id):
 
 
 def discipline_list(request):
-    disciplines = Discipline.objects.all()
+    disciplines = Discipline.objects.all().order_by('school_year')
     form = DisciplineForm(request.POST or None)
     if form.is_valid():
         form.save()
