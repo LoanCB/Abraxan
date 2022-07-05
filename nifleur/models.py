@@ -149,6 +149,9 @@ class Speaker(models.Model):
     def get_absolute_url(self):
         return reverse('speaker_details', kwargs={'speaker_id': self.id})
 
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Performance(models.Model):
     """

@@ -13,7 +13,7 @@ def export_csv(filename: str, data: list, excel: bool = False):
         :params list (2 dimensional) data
         :params bool excel : return XLS instead of CSV file
     """
-    if excel:  # FIXME doesn't work
+    if excel:
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = f'attachment; filename="{filename}.xls'
 
