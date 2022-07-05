@@ -2,6 +2,7 @@ from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -39,7 +40,8 @@ def logout_user(request):
 
 
 def parameters(request):
-    performances = Performance.objects.all()
+    # models data
+    performances = Performance.objects.all().order_by('label')
     school_years = SchoolYear.objects.all()
     status = Status.objects.all()
     schools = StructureCampus.objects.all()
@@ -47,7 +49,9 @@ def parameters(request):
     rate_types = RateType.objects.all()
     company_types = CompanyType.objects.all()
     units = Unit.objects.all()
+    users = User.objects.all()
 
+    # Forms
     performance_form = PerformanceForm(request.POST or None)
     school_year_form = SchoolYearForm(request.POST or None)
     status_form = StatusForm(request.POST or None)
@@ -66,6 +70,7 @@ def parameters(request):
         'rate_types': rate_types,
         'company_types': company_types,
         'units': units,
+        'users': users,
         'performance_form': performance_form,
         'school_year_form': school_year_form,
         'status_form': status_form,
