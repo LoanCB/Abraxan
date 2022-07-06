@@ -2,12 +2,13 @@ from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, \
-    StructureCampusForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm
+    StructureCampusForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm
 from nifleur.models import ContractRequest, Speaker, Discipline, StructureCampus, Performance, SchoolYear, Status, \
     RecruitmentType, RateType, CompanyType, Unit
 from nifleur.utils import export_csv, short_datetime
@@ -59,6 +60,7 @@ def parameters(request):
     rate_type_form = RateTypeForm(request.POST or None, prefix='rate_type-form')
     company_type_form = CompanyTypeForm(request.POST or None, prefix='company_type-form')
     unit_form = UnitForm(request.POST or None, prefix='unit-form')
+    user_form = RegisterForm(request.POST or None, prefix='user-form')
 
     if performance_form.is_valid():
         performance_form.save()
@@ -95,6 +97,11 @@ def parameters(request):
         messages.success(request, "Une nouvelle unité a bien été créée")
         return redirect(parameters)
 
+    if user_form.is_valid():
+        user_form.save()
+        messages.success(request, "Une nouvel utilisateur a bien été créé")
+        return redirect(parameters)
+
     return render(request, 'nifleur/parameters.html', {
         'performances': performances,
         'school_years': school_years,
@@ -112,6 +119,7 @@ def parameters(request):
         'rate_type_form': rate_type_form,
         'company_type_form': company_type_form,
         'unit_form': unit_form,
+        'user_form': user_form
     })
 
 
