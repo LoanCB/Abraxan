@@ -55,6 +55,11 @@ h3 a
     border-color: var(--main_salmon) !important;
 }
 
+.clickable
+{
+    cursor: pointer;
+}
+
 
 /*************************
           FORM

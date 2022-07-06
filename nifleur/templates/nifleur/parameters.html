@@ -7,7 +7,10 @@
 
     <div class="row mb-4">
         <div class="col-md-4 col-sm-6 col-xs-12">
-            <h2 class="d-flex justify-content-center">Liste des prestations</h2>
+            <h2 class="d-flex justify-content-center">
+                Liste des prestations
+                <i class="fa-solid fa-circle-plus fa-xs text-success clickable" data-bs-toggle="modal" data-bs-target="#performanceModel" title="Ajouter une prestation"></i>
+            </h2>
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -31,6 +34,32 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#performanceModel">Ajouter une prestation</button>
+                    </div>
+                    <!-- Performance Modal -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="modal fade" id="performanceModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="performanceModelLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="performanceModelLabel">Ajouter une prestation</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ performance_form.as_p }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -60,7 +89,10 @@
         </div>
 
         <div class="col-md-4 col-sm-6 col-xs-12">
-            <h2 class="d-flex justify-content-center">Liste des types de recrutement</h2>
+            <h2 class="d-flex justify-content-center">
+                Liste des types de recrutement
+                <i class="fa-solid fa-circle-plus fa-xs text-success clickable" data-bs-toggle="modal" data-bs-target="#recruitmentTypeModal" title="Ajouter un type de recrutement"></i>
+            </h2>
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -84,6 +116,32 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#recruitmentTypeModal">Ajouter un type de recrutement</button>
+                    </div>
+                    <!-- recruitmentType Modal -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="modal fade" id="recruitmentTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="recruitmentTypeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="recruitmentTypeModalLabel">Ajouter un type de recrutement</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ recruitment_type_form.as_p }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -91,7 +149,10 @@
 
     <div class="row mb-4">
         <div class="col-md-4 col-sm-6 col-xs-12">
-            <h2 class="d-flex justify-content-center">Liste des types de tarif</h2>
+            <h2 class="d-flex justify-content-center">
+                Liste des types de tarif
+                <i class="fa-solid fa-circle-plus fa-xs text-success clickable" data-bs-toggle="modal" data-bs-target="#rateTypeModal" title="Ajouter un type de tarif"></i>
+            </h2>
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -115,12 +176,41 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#rateTypeModal">Ajouter un type de tarif</button>
+                    </div>
+                    <!-- Performance Modal -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="modal fade" id="rateTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="rateTypeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="rateTypeModalLabel">Ajouter un type de tarif</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ rate_type_form.as_p }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
 
         <div class="col-md-4 col-sm-6 col-xs-12">
-            <h2 class="d-flex justify-content-center">Liste des types de compagnie</h2>
+            <h2 class="d-flex justify-content-center">
+                Liste des types de société
+                <i class="fa-solid fa-circle-plus fa-xs text-success clickable" data-bs-toggle="modal" data-bs-target="#companyTypeModal" title="Ajouter un type de société"></i>
+            </h2>
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -144,12 +234,41 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#companyTypeModal">Ajouter un type de société</button>
+                    </div>
+                    <!-- Performance Modal -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="modal fade" id="companyTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="companyTypeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="companyTypeModalLabel">Ajouter un type de société</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ company_type_form.as_p }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
 
         <div class="col-md-4 col-sm-6 col-xs-12">
-            <h2 class="d-flex justify-content-center">Liste des unités</h2>
+            <h2 class="d-flex justify-content-center">
+                Liste des unités
+                <i class="fa-solid fa-circle-plus fa-xs text-success clickable" data-bs-toggle="modal" data-bs-target="#unitModal" title="Ajouter une unité"></i>
+            </h2>
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -173,6 +292,32 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#unitModal">Ajouter une unité</button>
+                    </div>
+                    <!-- Performance Modal -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="modal fade" id="unitModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="unitModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="unitModalLabel">Ajouter une unité</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ unit_form.as_p }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -219,6 +364,9 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a href="{# TODO add #}" class="btn btn-success">Créer un utilisateur</a>
                     </div>
                 </div>
             </div>

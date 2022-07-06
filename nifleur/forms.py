@@ -65,12 +65,6 @@ class SchoolYearForm(CustomModelForm):
         fields = ['structure_campus', 'year', 'label']
 
 
-class StatusForm(CustomModelForm):
-    class Meta:
-        model = Status
-        fields = ['position', 'label']
-
-
 class StructureCampusForm(CustomModelForm):
     class Meta:
         model = StructureCampus

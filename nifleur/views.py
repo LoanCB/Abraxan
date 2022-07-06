@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, StatusForm, \
+from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, \
     StructureCampusForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm
 from nifleur.models import ContractRequest, Speaker, Discipline, StructureCampus, Performance, SchoolYear, Status, \
     RecruitmentType, RateType, CompanyType, Unit
@@ -52,14 +52,48 @@ def parameters(request):
     users = User.objects.all()
 
     # Forms
-    performance_form = PerformanceForm(request.POST or None)
-    school_year_form = SchoolYearForm(request.POST or None)
-    status_form = StatusForm(request.POST or None)
-    school_form = StructureCampusForm(request.POST or None)
-    recruitment_type_form = RecruitmentTypeForm(request.POST or None)
-    rate_type_form = RateTypeForm(request.POST or None)
-    company_type_form = CompanyTypeForm(request.POST or None)
-    unit_form = UnitForm(request.POST or None)
+    performance_form = PerformanceForm(request.POST or None, prefix='performance-form')
+    school_year_form = SchoolYearForm(request.POST or None, prefix='shcool_year-form')
+    school_form = StructureCampusForm(request.POST or None, prefix='school-form')
+    recruitment_type_form = RecruitmentTypeForm(request.POST or None, prefix='recruitment_typ-form')
+    rate_type_form = RateTypeForm(request.POST or None, prefix='rate_type-form')
+    company_type_form = CompanyTypeForm(request.POST or None, prefix='company_type-form')
+    unit_form = UnitForm(request.POST or None, prefix='unit-form')
+
+    if performance_form.is_valid():
+        performance_form.save()
+        messages.success(request, "Une nouvelle performance a bien été créée")
+        return redirect(parameters)
+
+    if school_year_form.is_valid():
+        school_year_form.save()
+        messages.success(request, "Une nouvelle promotion a bien été créée")
+        return redirect(parameters)
+
+    if school_form.is_valid():
+        school_form.save()
+        messages.success(request, "Une nouvelle école a bien été créée")
+        return redirect(parameters)
+
+    if recruitment_type_form.is_valid():
+        recruitment_type_form.save()
+        messages.success(request, "Un nouveau type de recrutement a bien été créé")
+        return redirect(parameters)
+
+    if rate_type_form.is_valid():
+        rate_type_form.save()
+        messages.success(request, "Un nouveau type de tarif a bien été créé")
+        return redirect(parameters)
+
+    if company_type_form.is_valid():
+        company_type_form.save()
+        messages.success(request, "Un nouveau type de société a bien été créé")
+        return redirect(parameters)
+
+    if unit_form.is_valid():
+        unit_form.save()
+        messages.success(request, "Une nouvelle unité a bien été créée")
+        return redirect(parameters)
 
     return render(request, 'nifleur/parameters.html', {
         'performances': performances,
@@ -73,7 +107,6 @@ def parameters(request):
         'users': users,
         'performance_form': performance_form,
         'school_year_form': school_year_form,
-        'status_form': status_form,
         'school_form': school_form,
         'recruitment_type_form': recruitment_type_form,
         'rate_type_form': rate_type_form,
