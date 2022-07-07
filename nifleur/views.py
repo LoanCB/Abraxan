@@ -201,7 +201,20 @@ def speakers_list(request):
 
 def speaker_details(request, speaker_id):
     speaker = get_object_or_404(Speaker, id=speaker_id)
-    return render(request, 'nifleur/speaker_details.html', {'speaker': speaker})
+    campus = StructureCampus.objects.filter(structure_school_year__disciplines__speaker=speaker)
+    data = dict()
+
+    for school in campus.all():
+        if school in data:
+            data[school] += 1
+        else:
+            data[school] = 1
+    morris_data = [({'label': m_data.label, 'value': data[m_data]}) for m_data in data]
+
+    return render(request, 'nifleur/speaker_details.html', {
+        'speaker': speaker,
+        'morris_data': morris_data
+    })
 
 
 def discipline_list(request):

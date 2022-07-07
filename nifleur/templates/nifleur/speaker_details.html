@@ -4,6 +4,10 @@
 
 {% block title %}Intervenant{% endblock %}
 
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vendors/morris/morris.css' %}">
+{% endblock %}
+
 {% block content %}
     <h3><a href="{% url 'speakers_list' %}"><i class="fa-solid fa-circle-left"></i> Retour à la liste des intervenants</a></h3>
     <h1 class="d-flex justify-content-center">Contrats</h1>
@@ -90,5 +94,28 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <h1 class="d-flex justify-content-center">Répartition sur les classes</h1>
+            <div class="card">
+                <div class="card-body d-flex justify-content-center">
+                    <div id="statsDonut" style="width: 300px"></div>
+                </div>
+            </div>
+        </div>
     </div>
+{% endblock %}
+
+{% block custom_javascript %}
+    <script rel="script" src="{% static 'vendors/morris/raphael.min.js' %}"></script>
+    <script rel="script" src="{% static 'vendors/morris/morris.min.js' %}"></script>
+    <script>
+        $(() => {
+            Morris.Donut({
+                element: 'statsDonut',
+                data: {% autoescape on %}{{ morris_data|safe }}{% endautoescape %},
+                colors: ['#cc972d', '#06264c', '#e07f48', '#ebdcbd']
+            })
+        })
+    </script>
 {% endblock %}
