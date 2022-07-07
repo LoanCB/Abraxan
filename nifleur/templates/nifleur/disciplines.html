@@ -4,49 +4,51 @@
 
 {% block title %}Matières{% endblock %}
 
-{% block custom_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'vendors/DataTables/datatables.min.css' %}">
-{% endblock %}
-
 {% block content %}
-    <table id="datatable" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>Classe</th>
-                <th>Nom</th>
-                <th>Intervenant</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for discipline in disciplines %}
-                <tr>
-                    <td>{{ discipline.school_year }}</td>
-                    <td>{{ discipline.label }}</td>
-                    <td>
-                        {% if discipline.speaker %}
-                            <a href="{% url 'speaker_details' discipline.speaker.id %}">{{ discipline.speaker }}</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-xl-8 col-md-12 mb-3">
+            <h2 class="d-flex justify-content-center">Liste des matières</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th>Classe</th>
+                                    <th>Nom</th>
+                                    <th>Intervenant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for discipline in disciplines %}
+                                    <tr>
+                                        <td>{{ discipline.school_year }}</td>
+                                        <td>{{ discipline.label }}</td>
+                                        <td>
+                                            {% if discipline.speaker %}
+                                                <a href="{% url 'speaker_details' discipline.speaker.id %}">{{ discipline.speaker }}</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offset-xl-0 col-xl-4 offset-md-3 col-md-6">
+            <h2 class="d-flex justify-content-center">Ajouter une nouvelle matière</h2>
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Envoyer</button>
-    </form>
-{% endblock %}
-
-{% block custom_javascript %}
-{#    <script rel="script" type="text/javascript" src="{% static 'vendors/DataTables/datatables.min.js' %}"></script>#}
-    <script rel="script" type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script rel="script" type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
-    <script>
-        $(() => {
-            $('#datatable').DataTable()
-        })
-    </script>
 {% endblock %}

@@ -11,7 +11,33 @@
 
 
 /*************************
-         SIDEBAR
+          Spaces
+*************************/
+
+.ml-3
+{
+    margin-left: 1rem;
+}
+
+.mr-3
+{
+    margin-right: 1rem;
+}
+
+
+/*************************
+          Text
+*************************/
+
+h3 a
+{
+    text-decoration: none;
+    color: black;
+}
+
+
+/*************************
+          BUTTON
 *************************/
 
 .btn
@@ -26,6 +52,27 @@
 {
     background-image: linear-gradient(to right, var(--main_salmon), var(--main_yellow));
     color: white;
+    border-color: var(--main_salmon) !important;
+}
+
+.clickable
+{
+    cursor: pointer;
+}
+
+
+/*************************
+          FORM
+*************************/
+
+.required
+{
+    font-weight: bold;
+}
+
+form .row
+{
+    margin: 0.5rem 0;
 }
 
 
@@ -60,7 +107,7 @@ nav.main-menu.expanded
 {
     background: var(--main_blue);
     border-right: 1px solid #e5e5e5;
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     height: 100%;

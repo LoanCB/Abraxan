@@ -1,0 +1,143 @@
+:root {
+    --success-light-color: #75a985;
+    --success-color: #5e976f;
+    --success-dark-color: #4f7d5d;
+
+    --danger-light-color: #de3c4b;
+    --danger-color: #d12335;
+    --danger-dark-color: #ae1e2c;
+
+    --warning-light-color: #f8ef8c;
+    --warning-color: #f5e960;
+    --warning-dark-color: #f3e43f;
+
+    --info-light-color: #5cd1ff;
+    --info-color: #33c5ff;
+    --info-dark-color: #0abaff;
+}
+
+.flashes {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 9999;
+
+    transform: translateX(0);
+    opacity: 1;
+    transition: .3s all;
+}
+
+
+.flashes .flash {
+    position: relative;
+
+    word-break: break-word;
+    text-align: left;
+
+    cursor: pointer;
+
+    padding: 40px;
+
+    -moz-box-shadow: 0 0 12px #999999;
+    -webkit-box-shadow: 0 0 12px #999999;
+    box-shadow: 0 0 12px #999999;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+    filter: alpha(opacity=80);
+    transition: .3s all;
+}
+
+.flashes .flash:hover{
+    -moz-box-shadow: 0 0 12px #000000;
+    -webkit-box-shadow: 0 0 12px #000000;
+    box-shadow: 0 0 12px #000000;
+    opacity: 1;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+    filter: alpha(opacity=100);
+    cursor: pointer;
+}
+
+.flashes .flash .close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+
+    font-size: 24px;
+}
+
+
+.flashes .flash.flash-success {
+    background-color: var(--success-color);
+    color: white;
+    transition: .3s all;
+}
+
+.flashes .flash.flash-success:hover {
+    background-color: var(--success-light-color);
+}
+
+.flashes .flash.flash-success:focus {
+    background-color: var(--success-dark-color);
+}
+
+
+.flashes .flash.flash-warning {
+    background-color: var(--warning-color);
+    transition: .3s all;
+}
+
+.flashes .flash.flash-warning:hover {
+    background-color: var(--warning-light-color);
+}
+
+.flashes .flash.flash-warning:focus {
+    background-color: var(--warning-dark-color);
+}
+
+
+.flashes .flash.flash-error {
+    background-color: var(--danger-color);
+    color: white;
+    transition: .3s all;
+}
+
+.flashes .flash.flash-error:hover {
+    background-color: var(--danger-light-color);
+}
+
+.flashes .flash.flash-error:focus {
+    background-color: var(--danger-dark-color);
+}
+
+
+.flashes .flash.flash-info {
+    background-color: var(--info-color);
+    transition: .3s all;
+}
+
+.flashes .flash.flash-info:hover {
+    background-color: var(--info-light-color);
+}
+
+.flashes .flash.flash-info:focus {
+    background-color: var(--info-dark-color);
+}
+
+
+@media screen and (min-width: 992px) {
+    .flashes {
+        right: 15px;
+        top: 10px;
+        left: unset;
+
+        max-width: 400px;
+    }
+
+    .flash:not(:last-child) {
+        margin-bottom: 8px;
+    }
+
+    .flash {
+        border-radius: 10px;
+    }
+}
