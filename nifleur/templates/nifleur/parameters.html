@@ -1,6 +1,12 @@
 {% extends 'nifleur/base_site.html' %}
 
+{% load static %}
+
 {% block title %}Paramètre de l'application{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'vendors/datatables/jquery.dataTables.min.css' %}">
+{% endblock %}
 
 {% block content %}
     <h1 class="d-flex justify-content-center mb-4">Paramètres</h1>
@@ -13,8 +19,8 @@
             </h2>
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="performance_table">
                             <thead>
                                 <tr>
                                     <th>Nom</th>
@@ -69,7 +75,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="status_table">
                             <thead>
                                 <tr>
                                     <th>Nom</th>
@@ -95,8 +101,8 @@
             </h2>
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="recruitment_type_table">
                             <thead>
                                 <tr>
                                     <th>Nom</th>
@@ -155,8 +161,8 @@
             </h2>
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="rate_type_table">
                             <thead>
                                 <tr>
                                     <th>Nom</th>
@@ -180,7 +186,7 @@
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#rateTypeModal">Ajouter un type de tarif</button>
                     </div>
-                    <!-- Performance Modal -->
+                    <!-- Rate type Modal -->
                     <form method="post">
                         {% csrf_token %}
                         <div class="modal fade" id="rateTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="rateTypeModalLabel" aria-hidden="true">
@@ -213,8 +219,8 @@
             </h2>
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="company_type_table">
                             <thead>
                                 <tr>
                                     <th>Nom</th>
@@ -238,7 +244,7 @@
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#companyTypeModal">Ajouter un type de société</button>
                     </div>
-                    <!-- Performance Modal -->
+                    <!-- Company type Modal -->
                     <form method="post">
                         {% csrf_token %}
                         <div class="modal fade" id="companyTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="companyTypeModalLabel" aria-hidden="true">
@@ -271,8 +277,8 @@
             </h2>
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="unit_table">
                             <thead>
                                 <tr>
                                     <th>Nom</th>
@@ -296,7 +302,7 @@
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#unitModal">Ajouter une unité</button>
                     </div>
-                    <!-- Performance Modal -->
+                    <!-- Unit Modal -->
                     <form method="post">
                         {% csrf_token %}
                         <div class="modal fade" id="unitModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="unitModalLabel" aria-hidden="true">
@@ -328,8 +334,8 @@
             <h2 class="d-flex justify-content-center">Liste des utilisateurs</h2>
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="user_table">
                             <thead>
                                 <tr>
                                     <th>Nom d'utilisateur</th>
@@ -369,7 +375,7 @@
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#UserModal">Créer un utilisateur</button>
                     </div>
-                    <!-- Performance Modal -->
+                    <!-- User Modal -->
                     <form method="post">
                         {% csrf_token %}
                         <div class="modal fade" id="UserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="UserModalLabel" aria-hidden="true">
@@ -408,5 +414,17 @@
                     notification("L'élément a bien été supprimée")
                 })
         }
+    </script>
+    <script src="{% static 'vendors/datatables/jquery.dataTables.min.js' %}"></script>
+    <script>
+    $(() => {
+        $('#performance_table').DataTable()
+        $('#status_table').DataTable()
+        $('#recruitment_type_table').DataTable()
+        $('#rate_type_table').DataTable()
+        $('#company_type_table').DataTable()
+        $('#unit_table').DataTable()
+        $('#user_table').DataTable()
+    })
     </script>
 {% endblock %}

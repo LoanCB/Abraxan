@@ -143,9 +143,9 @@ def contract_request_detail(request, contract_id):
 def create_contract_request(request):
     form = ContractRequestForm(request.POST or None)
     if form.is_valid():
-        form.save()
+        contract_request = form.save()
         messages.success(request, "La demande de contrat a bien été créée")
-        return redirect(contract_request_detail)
+        return redirect(contract_request_detail, contract_request.id)
     return render(request, 'nifleur/contract_request_form.html', {'form': form})
 
 

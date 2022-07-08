@@ -4,6 +4,10 @@
 
 {% block title %}Matières{% endblock %}
 
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'vendors/datatables/jquery.dataTables.min.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-xl-8 col-md-12 mb-3">
@@ -11,7 +15,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="disiplines_table">
                             <thead>
                                 <tr>
                                     <th>Classe</th>
@@ -51,4 +55,13 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block custom_javascript %}
+    <script src="{% static 'vendors/datatables/jquery.dataTables.min.js' %}"></script>
+    <script>
+    $(() => {
+        $('#disiplines_table').DataTable()
+    })
+    </script>
 {% endblock %}
