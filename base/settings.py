@@ -14,6 +14,11 @@ import os.path
 from pathlib import Path
 from dotenv import load_dotenv
 
+# backwards compatibility
+import django
+from django.utils.encoding import force_str
+django.utils.encoding.force_text = force_str
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,6 +52,7 @@ INSTALLED_APPS = [
     'fontawesomefree',
     'phonenumber_field',
     'avatar',
+    'bootstrap_daterangepicker',
 
     # Modules
     'nifleur'

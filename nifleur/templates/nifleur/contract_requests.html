@@ -1,6 +1,12 @@
 {% extends 'nifleur/base_site.html' %}
 
+{% load static %}
+
 {% block title %}Liste des contrats{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'vendors/datatables/jquery.dataTables.min.css' %}">
+{% endblock %}
 
 {% block content %}
     <div class="row mb-3">
@@ -23,8 +29,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="contract_request_table">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -85,4 +91,13 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block custom_javascript %}
+    <script src="{% static 'vendors/datatables/jquery.dataTables.min.js' %}"></script>
+    <script>
+    $(() => {
+        $('#contract_request_table').DataTable()
+    })
+    </script>
 {% endblock %}

@@ -46,6 +46,8 @@ class ContractRequestForm(CustomModelForm):
         super(ContractRequestForm, self).__init__(*args, **kwargs)
         self.fields['ttc'].widget.attrs['class'] = 'form-check-input'
         self.fields['alternating'].widget.attrs['class'] = 'form-check-input'
+        self.fields['started_at'].widget.attrs['class'] += ' datepicker_input'
+        self.fields['ended_at'].widget.attrs['class'] += ' datepicker_input'
 
 
 class PerformanceForm(CustomModelForm):

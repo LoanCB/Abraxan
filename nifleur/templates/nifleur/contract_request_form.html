@@ -1,6 +1,12 @@
 {% extends 'nifleur/base_site.html' %}
 
+{% load static %}
+
 {% block title %}Créer une demande de contrat{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'vendors/datepicker/datepicker.min.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -113,4 +119,29 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block custom_javascript %}
+    <script src="{% static 'vendors/datepicker/datepicker-full.min.js' %}"></script>
+    <script>
+    const getDatePickerTitle = elem => {
+      // From the label or the aria-label
+      const label = elem.nextElementSibling;
+      let titleText = '';
+      if (label && label.tagName === 'LABEL') {
+        titleText = label.textContent;
+      } else {
+        titleText = elem.getAttribute('aria-label') || '';
+      }
+      return titleText;
+    }
+
+    const elems = document.querySelectorAll('.datepicker_input');
+    for (const elem of elems) {
+      const datepicker = new Datepicker(elem, {
+        'format': 'dd/mm/yyyy', // UK format
+        title: getDatePickerTitle(elem)
+      });
+    }
+    </script>
 {% endblock %}
