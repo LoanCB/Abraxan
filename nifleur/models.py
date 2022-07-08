@@ -39,7 +39,7 @@ class StructureCampus(models.Model):
     - :class:`str` label -> Name of the campus or structure
     - :class:`str` full_name -> Full name of the campus or structure
     """
-    label = models.CharField('Nom', max_length=20)
+    label = models.CharField('Nom', max_length=20, unique=True)
     full_name = models.CharField('Nom complet', max_length=255, blank=True, null=True)
 
     class Meta:
@@ -60,7 +60,7 @@ class CompanyType(models.Model):
 
     - :class:`str` label
     """
-    label = models.CharField('Nom', max_length=50)
+    label = models.CharField('Nom', max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Type de la compagnie'
@@ -74,15 +74,20 @@ class Company(models.Model):
     """
 
     """
-    label = models.CharField('Nom', max_length=255)
+    label = models.CharField('Nom', max_length=255, unique=True)
     company_type = models.ForeignKey(
         CompanyType,
         verbose_name='Type de la compagnie',
         related_name='speaker_company_type',
         on_delete=models.PROTECT
     )
-    relation_mail = models.EmailField(verbose_name='mail de la relation', null=True, blank=True)
-    relation_phone_number = PhoneNumberField(verbose_name='Numéro de téléphone de la relation', null=True, blank=True)
+    relation_mail = models.EmailField(verbose_name='mail de la relation', null=True, blank=True, unique=True)
+    relation_phone_number = PhoneNumberField(
+        verbose_name='Numéro de téléphone de la relation',
+        null=True,
+        blank=True,
+        unique=True
+    )
 
     class Meta:
         verbose_name = 'Société'
@@ -126,7 +131,7 @@ class Speaker(models.Model):
         null=True,
         blank=True
     )
-    mail = models.EmailField()
+    mail = models.EmailField(unique=True)
     phone_number = PhoneNumberField(verbose_name='Numéro de téléphone', null=True, blank=True)
     highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
     main_area_of_expertise = models.CharField('Domaine de compétence principal', max_length=255)
@@ -161,7 +166,7 @@ class Performance(models.Model):
 
     - :class:`str` label
     """
-    label = models.CharField('Nom', max_length=255)
+    label = models.CharField('Nom', max_length=255, unique=True)
 
     class Meta:
         verbose_name = 'Prestation'
@@ -179,7 +184,7 @@ class RateType(models.Model):
 
     - :class:`str` label
     """
-    label = models.CharField('Nom', max_length=255)
+    label = models.CharField('Nom', max_length=255, unique=True)
 
     class Meta:
         verbose_name = 'Type de tarif'
@@ -262,7 +267,7 @@ class Status(models.Model):
     - :class:`str` label
     """
     position = models.PositiveSmallIntegerField('position')
-    label = models.CharField('Nom', max_length=50)
+    label = models.CharField('Nom', max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Statut'
@@ -279,7 +284,7 @@ class Unit(models.Model):
 
     - :class:`str` label
     """
-    label = models.CharField('Nom', max_length=50)
+    label = models.CharField('Nom', max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Unité'
@@ -296,7 +301,7 @@ class RecruitmentType(models.Model):
 
     - :class:`str` label
     """
-    label = models.CharField('Nom', max_length=50)
+    label = models.CharField('Nom', max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Type de recrutement'

@@ -43,6 +43,7 @@
 
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#performanceModel">Ajouter une prestation</button>
+                        <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importPerformanceModel">Importer des prestations</button>
                     </div>
                     <!-- Performance Modal -->
                     <form method="post">
@@ -60,6 +61,30 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                         <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Import Performance Modal -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal fade" id="importPerformanceModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importPerformanceModelLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="importPerformanceModelLabel">Importer des Prestations</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="performance_csv">Choississez un fichier CSV</label>
+                                        <input type="file" id="performance_csv" name="performance_csv">
+                                        <small>Un nom de prestation par ligne</small>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Importer</button>
                                     </div>
                                 </div>
                             </div>
@@ -125,7 +150,9 @@
 
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#recruitmentTypeModal">Ajouter un type de recrutement</button>
+                        <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importRecruitmentTypeModal">Importer des types de recrutement</button>
                     </div>
+
                     <!-- recruitmentType Modal -->
                     <form method="post">
                         {% csrf_token %}
@@ -142,6 +169,30 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                         <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Import Recruitment type Modal -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal fade" id="importRecruitmentTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importRecruitmentTypeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="importRecruitmentTypeModalLabel">Importer des Types de recrutement</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="recruitment_type_csv">Choississez un fichier CSV</label>
+                                        <input type="file" id="recruitment_type_csv" name="recruitment_type_csv">
+                                        <small>Un nom de type de recrutement par ligne</small>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Importer</button>
                                     </div>
                                 </div>
                             </div>
@@ -185,7 +236,9 @@
 
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#rateTypeModal">Ajouter un type de tarif</button>
+                        <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importRateTypeModal">Importer un type de tarif</button>
                     </div>
+
                     <!-- Rate type Modal -->
                     <form method="post">
                         {% csrf_token %}
@@ -202,6 +255,30 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                         <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Import Rate type Modal -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal fade" id="importRateTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importRateTypeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="importRateTypeModalLabel">Importer des Types de tarif</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="rate_type_csv">Choississez un fichier CSV</label>
+                                        <input type="file" id="rate_type_csv" name="rate_type_csv">
+                                        <small>Un nom de type de tarif par ligne</small>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Importer</button>
                                     </div>
                                 </div>
                             </div>
@@ -243,7 +320,9 @@
 
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#companyTypeModal">Ajouter un type de société</button>
+                        <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importCompanyTypeModal">Importer un type de société</button>
                     </div>
+
                     <!-- Company type Modal -->
                     <form method="post">
                         {% csrf_token %}
@@ -260,6 +339,30 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                         <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Import Performance Modal -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal fade" id="importCompanyTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importCompanyTypeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="importCompanyTypeModalLabel">Importer des Types de société</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="company_type_csv">Choississez un fichier CSV</label>
+                                        <input type="file" id="company_type_csv" name="company_type_csv">
+                                        <small>Un nom de type de société par ligne</small>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Importer</button>
                                     </div>
                                 </div>
                             </div>
@@ -301,7 +404,9 @@
 
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#unitModal">Ajouter une unité</button>
+                        <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importUnitModal">Importer une unité</button>
                     </div>
+
                     <!-- Unit Modal -->
                     <form method="post">
                         {% csrf_token %}
@@ -318,6 +423,30 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                         <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Import Performance Modal -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal fade" id="importUnitModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importUnitModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="importUnitModalLabel">Importer des unités</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="unit_csv">Choississez un fichier CSV</label>
+                                        <input type="file" id="unit_csv" name="unit_csv">
+                                        <small>Un nom d'unité par ligne</small>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Importer</button>
                                     </div>
                                 </div>
                             </div>

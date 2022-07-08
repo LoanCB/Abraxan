@@ -1,11 +1,15 @@
+import codecs
+import csv
+
 from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.datastructures import MultiValueDictKeyError
 
 from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, \
     StructureCampusForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm
@@ -38,6 +42,17 @@ def logout_user(request):
     logout(request)
     messages.success(request, "Vous avez bien été déconnecté")
     return redirect(login_user)
+
+
+def import_data(request, file, model):
+    django_model = apps.get_model(app_label='nifleur', model_name=model)
+    csv_reader = csv.reader(codecs.iterdecode(file, 'utf-8'))
+    for row in csv_reader:
+        try:
+            django_model.objects.create(label=row[0])
+        except IntegrityError:
+            messages.error(request, f"la prestation {row[0]} existe déjà")
+    return messages.info(request, "Des prestations on été importée")
 
 
 def parameters(request):
@@ -101,6 +116,43 @@ def parameters(request):
         user_form.save()
         messages.success(request, "Une nouvel utilisateur a bien été créé")
         return redirect(parameters)
+
+    if request.method == 'POST':
+        try:
+            performance_csv = request.FILES['performance_csv']
+        except MultiValueDictKeyError:
+            performance_csv = None
+
+        try:
+            recruitment_type_csv = request.FILES['recruitment_type_csv']
+        except MultiValueDictKeyError:
+            recruitment_type_csv = None
+
+        try:
+            rate_type_csv = request.FILES['rate_type_csv']
+        except MultiValueDictKeyError:
+            rate_type_csv = None
+
+        try:
+            company_type_csv = request.FILES['company_type_csv']
+        except MultiValueDictKeyError:
+            company_type_csv = None
+
+        try:
+            unit_csv = request.FILES['unit_csv']
+        except MultiValueDictKeyError:
+            unit_csv = None
+
+        if performance_csv:
+            import_data(request, performance_csv, 'Performance')
+        elif recruitment_type_csv:
+            import_data(request, recruitment_type_csv, 'RecruitmentType')
+        elif rate_type_csv:
+            import_data(request, rate_type_csv, 'RateType')
+        elif company_type_csv:
+            import_data(request, company_type_csv, 'CompanyType')
+        elif unit_csv:
+            import_data(request, unit_csv, 'Unit')
 
     return render(request, 'nifleur/parameters.html', {
         'performances': performances,
