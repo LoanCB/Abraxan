@@ -18,6 +18,7 @@
                         <table class="table table-striped table-hover table-sm align-middle text-center" id="school_table">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Nom</th>
                                     <th>Nom complet</th>
                                 </tr>
@@ -25,6 +26,7 @@
                             <tbody>
                                 {% for school in schools %}
                                     <tr>
+                                        <td><a href="{% url 'school_details' school.id %}"><i class="fa-solid fa-eye"></i></a></td>
                                         <td>{{ school.label }}</td>
                                         <td>{{ school.full_name }}</td>
                                     </tr>
