@@ -582,7 +582,8 @@
         function CustomDataTable(tables){
             for (let i = 0; i < tables.length; i++) {
                 tables[i].DataTable({
-                    'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+                    'columnDefs': [{'className': 'text-center', 'targets': '_all'}],
+                    'language': {'url': "{% static 'vendors/datatables/translate_fr.json' %}"}
                 })
             }
         }
@@ -594,7 +595,8 @@
 
             $('#status_table').DataTable({
                 'ordering': false,
-                'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+                'columnDefs': [{'className': 'text-center', 'targets': '_all'}],
+                'language': {'url': "{% static 'vendors/datatables/translate_fr.json' %}"}
             })
         })
     </script>

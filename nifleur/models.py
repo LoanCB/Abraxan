@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.translation import gettext_lazy as _
 
 
 BEGINNER = 1
@@ -11,6 +13,19 @@ LEVELS = (
     (BEGINNER, 'Débutant'),
     (INTERMEDIATE, 'Intermédiaire'),
     (EXPERT, 'Expert')
+)
+
+SEMESTER_1 = 'S1'
+SEMESTER_2 = 'S2'
+QUARTER_1 = 'Q1'
+QUARTER_2 = 'Q2'
+QUARTER_3 = 'Q3'
+PERIOD = (
+    (SEMESTER_1, 'Semestre 1'),
+    (SEMESTER_2, 'Semestre 2'),
+    (QUARTER_1, 'Trimestre 1'),
+    (QUARTER_2, 'Trimestre 2'),
+    (QUARTER_3, 'Trimestre 3')
 )
 
 
@@ -30,21 +45,21 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
-class StructureCampus(models.Model):
+class School(models.Model):
     """
-    Value of structure or campus
+    Value of school
 
     Attributes:
 
-    - :class:`str` label -> Name of the campus or structure
-    - :class:`str` full_name -> Full name of the campus or structure
+    - :class:`str` label -> Name of the school
+    - :class:`str` full_name -> Full name of the school
     """
     label = models.CharField('Nom', max_length=20, unique=True)
     full_name = models.CharField('Nom complet', max_length=255, blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Structure & campus'
-        verbose_name_plural = 'Structures & campus'
+        verbose_name = 'Ecole'
+        verbose_name_plural = 'Ecoles'
 
     def __str__(self):
         return self.label
@@ -196,22 +211,30 @@ class RateType(models.Model):
 
 class SchoolYear(models.Model):
     """
-    A school year reattached to a structure campus. A contract request need a school year
+    A school year reattached to a school. A contract request need a school year
 
     Attributes:
 
-    - :class:`StructureCampus` structure_campus
+    - :class:`School` school
     - :class:`str` year -> Year of the school year (ex: M1, L2, B3...)
     - :class:`str` label
+    - :class:`bool` initial
+    - :class:`bool` alternating
     """
-    structure_campus = models.ForeignKey(
-        StructureCampus,
+    school = models.ForeignKey(
+        School,
         verbose_name='Ecole',
-        related_name='structure_school_year',
+        related_name='school_year',
         on_delete=models.PROTECT
     )
     year = models.CharField('Année', max_length=15, help_text='ex: M1')
     label = models.CharField('Nom', max_length=255, blank=True, null=True)
+    initial = models.BooleanField('Initiale', default=False, help_text="Est une classe avec des élèves en initial")
+    alternating = models.BooleanField(
+        'Alternant',
+        default=False,
+        help_text="Est une classe avec des élèves en alternance"
+    )
 
     class Meta:
         verbose_name = 'Promotion'
@@ -219,8 +242,20 @@ class SchoolYear(models.Model):
 
     def __str__(self):
         if self.label:
-            return f'{self.structure_campus} - {self.year} - {self.label}'
-        return f'{self.structure_campus} - {self.year}'
+            return f'{self.school} - {self.year} - {self.label}'
+        return f'{self.school} - {self.year}'
+
+    def clean(self, *args, **kwargs):
+        if not self.initial and not self.alternating:
+            raise ValidationError(
+                _("Une classe doit possède au moins des initiaux ou des alternants ou les deux"),
+                code='invalid'
+            )
+        super().clean()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class Discipline(models.Model):
@@ -231,6 +266,8 @@ class Discipline(models.Model):
 
     - :class:`SchoolYear` school_year
     - :class:`str` label
+    - :class:`Speaker` speaker
+    - :class:`str` period
     """
     school_year = models.ForeignKey(
         SchoolYear,
@@ -248,6 +285,7 @@ class Discipline(models.Model):
         null=True,
         blank=True
     )
+    period = models.CharField('Période', choices=PERIOD, max_length=2)
 
     class Meta:
         verbose_name = 'Matière'
@@ -311,18 +349,22 @@ class RecruitmentType(models.Model):
         return self.label
 
 
-SEMESTER_1 = 'S1'
-SEMESTER_2 = 'S2'
-QUARTER_1 = 'Q1'
-QUARTER_2 = 'Q2'
-QUARTER_3 = 'Q3'
-PERIOD = (
-    (SEMESTER_1, 'Semestre 1'),
-    (SEMESTER_2, 'Semestre 2'),
-    (QUARTER_1, 'Trimestre 1'),
-    (QUARTER_2, 'Trimestre 2'),
-    (QUARTER_3, 'Trimestre 3')
-)
+class LegalStructure(models.Model):
+    """
+    A legal structure is required for a contract request
+
+    Attributes:
+
+    - :class:`str` label
+    """
+    label = models.CharField('Nom', max_length=50, unique=True)
+
+    class Meta:
+        verbose_name = 'Structure juridique'
+        verbose_name_plural = 'Structures juridique'
+
+    def __str__(self):
+        return self.label
 
 
 class ContractRequest(TimeStampedModel):
@@ -331,7 +373,8 @@ class ContractRequest(TimeStampedModel):
 
     Attributes:
 
-    - :class:`StructureCampus` structure_campus
+    - :class:`School` school
+    - :class:`LegalStructure` legal_structure
     - :class:`Speaker` speaker
     - :class:`str` comment
     - :class:`int` status
@@ -353,9 +396,15 @@ class ContractRequest(TimeStampedModel):
     - :class:`int` teaching_expertise_level
     - :class:`int` professional_expertise_level
     """
-    structure_campus = models.ForeignKey(
-        StructureCampus,
-        verbose_name='Structure ou campus',
+    school = models.ForeignKey(
+        School,
+        verbose_name='Ecole',
+        related_name='contract_request_school',
+        on_delete=models.PROTECT
+    )
+    legal_structure = models.ForeignKey(
+        LegalStructure,
+        verbose_name='Structure juridique',
         related_name='contract_request_structure',
         on_delete=models.PROTECT
     )
@@ -402,8 +451,6 @@ class ContractRequest(TimeStampedModel):
         related_name='contract_request_year',
         on_delete=models.PROTECT
     )
-    alternating = models.BooleanField('Alternant', help_text="Est une classe d'alternants", default=False)
-    period = models.CharField('Période', choices=PERIOD, max_length=2)
     rp = models.ForeignKey(User, verbose_name='Responsable pédagogique', related_name='rp', on_delete=models.PROTECT)
     recruitment_type = models.ForeignKey(
         RecruitmentType,

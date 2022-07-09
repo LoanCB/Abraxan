@@ -12,8 +12,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 
 from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, \
-    StructureCampusForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm
-from nifleur.models import ContractRequest, Speaker, Discipline, StructureCampus, Performance, SchoolYear, Status, \
+    SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm
+from nifleur.models import ContractRequest, Speaker, Discipline, School, Performance, SchoolYear, Status, \
     RecruitmentType, RateType, CompanyType, Unit
 from nifleur.utils import export_csv, short_datetime
 
@@ -46,15 +46,18 @@ def logout_user(request):
 
 def import_data(request, file, model, status=False):
     django_model = apps.get_model(app_label='nifleur', model_name=model)
-    csv_reader = csv.reader(codecs.iterdecode(file, 'utf-8'))
+    csv_reader = csv.reader(codecs.iterdecode(file, 'utf-8'), delimiter=';')
     for row in csv_reader:
         try:
             if status:
                 django_model.objects.create(label=row[0], position=row[1])
             else:
                 django_model.objects.create(label=row[0])
-        except IntegrityError:
-            messages.error(request, f"La donnée nomée {row[0]} existe déjà")
+        except IntegrityError as e:
+            if request.user.is_superuser:
+                messages.error(request, e)
+            else:
+                messages.error(request, f"La donnée nomée {row[0]} existe déjà")
     return messages.info(request, f"Des données on été importées")
 
 
@@ -63,7 +66,7 @@ def parameters(request):
     performances = Performance.objects.all().order_by('label')
     school_years = SchoolYear.objects.all()
     status = Status.objects.all().order_by('position')
-    schools = StructureCampus.objects.all()
+    schools = School.objects.all()
     recruitment_types = RecruitmentType.objects.all()
     rate_types = RateType.objects.all()
     company_types = CompanyType.objects.all()
@@ -73,7 +76,7 @@ def parameters(request):
     # Forms
     performance_form = PerformanceForm(request.POST or None, prefix='performance-form')
     school_year_form = SchoolYearForm(request.POST or None, prefix='shcool_year-form')
-    school_form = StructureCampusForm(request.POST or None, prefix='school-form')
+    school_form = SchoolForm(request.POST or None, prefix='school-form')
     recruitment_type_form = RecruitmentTypeForm(request.POST or None, prefix='recruitment_typ-form')
     rate_type_form = RateTypeForm(request.POST or None, prefix='rate_type-form')
     company_type_form = CompanyTypeForm(request.POST or None, prefix='company_type-form')
@@ -162,7 +165,7 @@ def parameters(request):
         elif unit_csv:
             import_data(request, unit_csv, 'Unit')
         elif status_csv:
-            import_data(request, status_csv, 'Status')
+            import_data(request, status_csv, 'Status', True)
 
     return render(request, 'nifleur/parameters.html', {
         'performances': performances,
@@ -231,7 +234,7 @@ def export_contract_requests(request):
             company = ''
             company_type = ''
         data.append([
-            short_datetime(contract.created_at), contract.structure_campus.label, contract.speaker.get_civility_display(),
+            short_datetime(contract.created_at), contract.school.label, contract.speaker.get_civility_display(),
             contract.speaker.last_name, contract.speaker.first_name, company_type, company, contract.comment,
             contract.status.label, contract.performance.label, contract.applied_rate, ttc, contract.rate_type.label,
             contract.hourly_volume, contract.unit.label, short_datetime(contract.started_at),
@@ -263,7 +266,7 @@ def speakers_list(request):
 
 def speaker_details(request, speaker_id):
     speaker = get_object_or_404(Speaker, id=speaker_id)
-    campus = StructureCampus.objects.filter(structure_school_year__disciplines__speaker=speaker)
+    campus = School.objects.filter(structure_school_year__disciplines__speaker=speaker)
     data = dict()
 
     for school in campus.all():
@@ -300,5 +303,5 @@ def discipline_list(request):
 
 
 def school_details(request, school_id):
-    school = get_object_or_404(StructureCampus, id=school_id)
+    school = get_object_or_404(School, id=school_id)
     return render(request, 'nifleur/school_details.html', {'school': school})

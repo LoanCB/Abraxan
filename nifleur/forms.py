@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from nifleur.models import Discipline, Speaker, ContractRequest, Performance, SchoolYear, Status, StructureCampus, \
+from nifleur.models import Discipline, Speaker, ContractRequest, Performance, SchoolYear, Status, School, \
     RecruitmentType, RateType, CompanyType, Unit
 
 
@@ -37,15 +37,14 @@ class ContractRequestForm(CustomModelForm):
     class Meta:
         model = ContractRequest
         fields = (
-            'structure_campus', 'speaker', 'comment', 'status', 'performance', 'applied_rate', 'rate_type', 'ttc',
-            'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year', 'alternating', 'period',
-            'rp', 'recruitment_type', 'professional_expertise_level'
+            'school', 'legal_structure', 'speaker', 'comment', 'status', 'performance', 'applied_rate', 'rate_type',
+            'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year', 'rp',
+            'recruitment_type', 'professional_expertise_level'
         )
 
     def __init__(self, *args, **kwargs):
         super(ContractRequestForm, self).__init__(*args, **kwargs)
         self.fields['ttc'].widget.attrs['class'] = 'form-check-input'
-        self.fields['alternating'].widget.attrs['class'] = 'form-check-input'
         self.fields['started_at'].widget.attrs['class'] += ' datepicker_input'
         self.fields['ended_at'].widget.attrs['class'] += ' datepicker_input'
 
@@ -59,12 +58,12 @@ class PerformanceForm(CustomModelForm):
 class SchoolYearForm(CustomModelForm):
     class Meta:
         model = SchoolYear
-        fields = ('structure_campus', 'year', 'label')
+        fields = ('school', 'year', 'label')
 
 
-class StructureCampusForm(CustomModelForm):
+class SchoolForm(CustomModelForm):
     class Meta:
-        model = StructureCampus
+        model = School
         fields = ('label', 'full_name')
 
 

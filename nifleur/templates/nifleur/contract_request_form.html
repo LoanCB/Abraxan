@@ -18,18 +18,18 @@
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-sm-6 col-xs-12">
-                            {{ form.structure_campus.label }}
-                            {{ form.structure_campus }}
+                            {{ form.school.label }}
+                            {{ form.school }}
                         </div>
                         <div class="col-sm-6 col-xs-12">
-                            {{ form.speaker.label }}
-                            {{ form.speaker }}
+                            {{ form.legal_structure.label }}
+                            {{ form.legal_structure }}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6 col-xs-12">
-                            {{ form.comment.label }}
-                            {{ form.comment }}
+                            {{ form.speaker.label }}
+                            {{ form.speaker }}
                         </div>
                         <div class="col-sm-6 col-xs-12">
                             {{ form.status.label }}
@@ -62,8 +62,8 @@
                             {{ form.hourly_volume }}
                         </div>
                         <div class="col-sm-6 col-xs-12">
-                            {{ form.period.label }}
-                            {{ form.period }}
+                            {{ form.comment.label }}
+                            {{ form.comment }}
                         </div>
                     </div>
                     <div class="row">
@@ -87,10 +87,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6 col-xs-12">
-                            {{ form.alternating.label }}<br>
-                            {{ form.alternating }}
-                        </div>
                         <div class="col-sm-6 col-xs-12">
                             {{ form.ttc.label }}<br>
                             {{ form.ttc }}

@@ -131,7 +131,8 @@
     <script>
     $(() => {
         $('#speakers_table').DataTable({
-            'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+            'columnDefs': [{'className': 'text-center', 'targets': '_all'}],
+            'language': {'url': "{% static 'vendors/datatables/translate_fr.json' %}"}
         })
     })
     </script>

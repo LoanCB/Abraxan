@@ -21,6 +21,7 @@
                                     <th>Classe</th>
                                     <th>Nom</th>
                                     <th>Intervenant</th>
+                                    <th>Période</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -33,6 +34,7 @@
                                                 <a href="{% url 'speaker_details' discipline.speaker.id %}">{{ discipline.speaker }}</a>
                                             {% endif %}
                                         </td>
+                                        <td>{{ discipline.period }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -62,7 +64,8 @@
     <script>
     $(() => {
         $('#disiplines_table').DataTable({
-            'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+            'columnDefs': [{'className': 'text-center', 'targets': '_all'}],
+            'language': {'url': "{% static 'vendors/datatables/translate_fr.json' %}"}
         })
     })
     </script>

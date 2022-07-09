@@ -43,7 +43,7 @@
                                 {% for contract in speaker.contract_request_speaker.all %}
                                     <tr>
                                         <td>{{ contract.created_at }}</td>
-                                        <td>{{ contract.structure_campus }}</td>
+                                        <td>{{ contract.school }}</td>
                                         <td>{% if contract.comment %}{{ contract.comment }}{% endif %}</td>
                                         <td>{{ contract.get_status_display }}</td>
                                         <td>{{ contract.performance }}</td>
@@ -121,7 +121,8 @@
             })
 
             $('#speaker_table').DataTable({
-            'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+            'columnDefs': [{'className': 'text-center', 'targets': '_all'}],
+            'language': {'url': "{% static 'vendors/datatables/translate_fr.json' %}"}
         })
         })
     </script>
