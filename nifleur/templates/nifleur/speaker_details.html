@@ -6,6 +6,7 @@
 
 {% block custom_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'vendors/morris/morris.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/datatables/jquery.dataTables.min.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -15,8 +16,8 @@
         <div class="col-12 mb-3">
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="speaker_table">
                             <thead>
                                 <tr>
                                     <th>Date de la demande</th>
@@ -93,6 +94,7 @@
                     </div>
                 </div>
             </div>
+            <p>Nombre d'heures contractualisées : {{ speaker_hours }}</p>
         </div>
 
         <div class="col-md-6 col-sm-8 col-xs-12">
@@ -109,6 +111,7 @@
 {% block custom_javascript %}
     <script rel="script" src="{% static 'vendors/morris/raphael.min.js' %}"></script>
     <script rel="script" src="{% static 'vendors/morris/morris.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables/jquery.dataTables.min.js' %}"></script>
     <script>
         $(() => {
             Morris.Donut({
@@ -116,6 +119,10 @@
                 data: {% autoescape on %}{{ morris_data|safe }}{% endautoescape %},
                 colors: ['#cc972d', '#06264c', '#e07f48', '#ebdcbd']
             })
+
+            $('#speaker_table').DataTable({
+            'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+        })
         })
     </script>
 {% endblock %}

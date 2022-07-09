@@ -104,17 +104,50 @@
                             <thead>
                                 <tr>
                                     <th>Nom</th>
+                                    <th>Position</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for s in status %}
                                     <tr>
                                         <td>{{ s.label }}</td>
+                                        <td>{{ s.position }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
+
+                    {% if request.user.is_superuser %}
+                        <div class="d-flex justify-content-center">
+                            <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importStatusModel">Importer des status</button>
+                        </div>
+
+                        <!-- Import Status Modal -->
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="modal fade" id="importStatusModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importStatusModelLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="importStatusModelLabel">Importer des status</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <label for="status_csv">Choississez un fichier CSV</label>
+                                            <input type="file" id="status_csv" name="status_csv">
+                                            <small>nom du statue ; position</small>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                            <button type="submit" class="btn btn-primary">Importer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
@@ -546,14 +579,23 @@
     </script>
     <script src="{% static 'vendors/datatables/jquery.dataTables.min.js' %}"></script>
     <script>
-    $(() => {
-        $('#performance_table').DataTable()
-        $('#status_table').DataTable()
-        $('#recruitment_type_table').DataTable()
-        $('#rate_type_table').DataTable()
-        $('#company_type_table').DataTable()
-        $('#unit_table').DataTable()
-        $('#user_table').DataTable()
-    })
+        function CustomDataTable(tables){
+            for (let i = 0; i < tables.length; i++) {
+                tables[i].DataTable({
+                    'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+                })
+            }
+        }
+        $(() => {
+            CustomDataTable([
+                $('#performance_table'), $('#recruitment_type_table'), $('#rate_type_table'),$('#company_type_table'),
+                $('#unit_table'), $('#user_table')
+            ])
+
+            $('#status_table').DataTable({
+                'ordering': false,
+                'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+            })
+        })
     </script>
 {% endblock %}

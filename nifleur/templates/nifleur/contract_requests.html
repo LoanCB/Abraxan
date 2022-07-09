@@ -97,7 +97,9 @@
     <script src="{% static 'vendors/datatables/jquery.dataTables.min.js' %}"></script>
     <script>
     $(() => {
-        $('#contract_request_table').DataTable()
+        $('#contract_request_table').DataTable({
+            'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+        })
     })
     </script>
 {% endblock %}

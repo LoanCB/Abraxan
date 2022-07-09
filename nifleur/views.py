@@ -44,22 +44,25 @@ def logout_user(request):
     return redirect(login_user)
 
 
-def import_data(request, file, model):
+def import_data(request, file, model, status=False):
     django_model = apps.get_model(app_label='nifleur', model_name=model)
     csv_reader = csv.reader(codecs.iterdecode(file, 'utf-8'))
     for row in csv_reader:
         try:
-            django_model.objects.create(label=row[0])
+            if status:
+                django_model.objects.create(label=row[0], position=row[1])
+            else:
+                django_model.objects.create(label=row[0])
         except IntegrityError:
-            messages.error(request, f"la prestation {row[0]} existe déjà")
-    return messages.info(request, "Des prestations on été importée")
+            messages.error(request, f"La donnée nomée {row[0]} existe déjà")
+    return messages.info(request, f"Des données on été importées")
 
 
 def parameters(request):
     # models data
     performances = Performance.objects.all().order_by('label')
     school_years = SchoolYear.objects.all()
-    status = Status.objects.all()
+    status = Status.objects.all().order_by('position')
     schools = StructureCampus.objects.all()
     recruitment_types = RecruitmentType.objects.all()
     rate_types = RateType.objects.all()
@@ -143,6 +146,11 @@ def parameters(request):
         except MultiValueDictKeyError:
             unit_csv = None
 
+        try:
+            status_csv = request.FILES['status_csv']
+        except MultiValueDictKeyError:
+            status_csv = None
+
         if performance_csv:
             import_data(request, performance_csv, 'Performance')
         elif recruitment_type_csv:
@@ -153,6 +161,8 @@ def parameters(request):
             import_data(request, company_type_csv, 'CompanyType')
         elif unit_csv:
             import_data(request, unit_csv, 'Unit')
+        elif status_csv:
+            import_data(request, status_csv, 'Status')
 
     return render(request, 'nifleur/parameters.html', {
         'performances': performances,
@@ -263,9 +273,14 @@ def speaker_details(request, speaker_id):
             data[school] = 1
     morris_data = [({'label': m_data.label, 'value': data[m_data]}) for m_data in data]
 
+    speaker_hours = 0
+    for contract in speaker.contract_request_speaker.all():
+        speaker_hours += contract.hourly_volume
+
     return render(request, 'nifleur/speaker_details.html', {
         'speaker': speaker,
-        'morris_data': morris_data
+        'morris_data': morris_data,
+        'speaker_hours': speaker_hours
     })
 
 

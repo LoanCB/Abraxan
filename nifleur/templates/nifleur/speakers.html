@@ -130,7 +130,9 @@
     <script src="{% static 'vendors/datatables/jquery.dataTables.min.js' %}"></script>
     <script>
     $(() => {
-        $('#speakers_table').DataTable()
+        $('#speakers_table').DataTable({
+            'columnDefs': [{'className': 'text-center', 'targets': '_all'}]
+        })
     })
     </script>
 {% endblock %}
