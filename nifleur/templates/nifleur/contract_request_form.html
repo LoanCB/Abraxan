@@ -1,9 +1,16 @@
 {% extends 'nifleur/base_site.html' %}
 
+{% load static %}
+
 {% block title %}Créer une demande de contrat{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'vendors/datepicker/datepicker.min.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="row">
+    <h2 class="d-flex justify-content-center mb-3">Créer une demande de contrat</h2>
     <div class="col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-xs-12">
         <div class="card">
             <div class="card-body">
@@ -11,18 +18,18 @@
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-sm-6 col-xs-12">
-                            {{ form.structure_campus.label }}
-                            {{ form.structure_campus }}
+                            {{ form.school.label }}
+                            {{ form.school }}
                         </div>
                         <div class="col-sm-6 col-xs-12">
-                            {{ form.speaker.label }}
-                            {{ form.speaker }}
+                            {{ form.legal_structure.label }}
+                            {{ form.legal_structure }}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6 col-xs-12">
-                            {{ form.comment.label }}
-                            {{ form.comment }}
+                            {{ form.speaker.label }}
+                            {{ form.speaker }}
                         </div>
                         <div class="col-sm-6 col-xs-12">
                             {{ form.status.label }}
@@ -55,8 +62,8 @@
                             {{ form.hourly_volume }}
                         </div>
                         <div class="col-sm-6 col-xs-12">
-                            {{ form.period.label }}
-                            {{ form.period }}
+                            {{ form.comment.label }}
+                            {{ form.comment }}
                         </div>
                     </div>
                     <div class="row">
@@ -80,10 +87,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6 col-xs-12">
-                            {{ form.alternating.label }}<br>
-                            {{ form.alternating }}
-                        </div>
                         <div class="col-sm-6 col-xs-12">
                             {{ form.ttc.label }}<br>
                             {{ form.ttc }}
@@ -112,4 +115,29 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block custom_javascript %}
+    <script src="{% static 'vendors/datepicker/datepicker-full.min.js' %}"></script>
+    <script>
+    const getDatePickerTitle = elem => {
+      // From the label or the aria-label
+      const label = elem.nextElementSibling;
+      let titleText = '';
+      if (label && label.tagName === 'LABEL') {
+        titleText = label.textContent;
+      } else {
+        titleText = elem.getAttribute('aria-label') || '';
+      }
+      return titleText;
+    }
+
+    const elems = document.querySelectorAll('.datepicker_input');
+    for (const elem of elems) {
+      const datepicker = new Datepicker(elem, {
+        'format': 'dd/mm/yyyy', // UK format
+        title: getDatePickerTitle(elem)
+      });
+    }
+    </script>
 {% endblock %}

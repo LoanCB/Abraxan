@@ -6,6 +6,8 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('login', views.login_user, name='login_user'),
     path('logout', views.logout_user, name='logout_user'),
+    path('parameters', views.parameters, name='parameters'),
+    path('parameters/<str:model>/<int:object_id>/delete', views.delete_model_object, name='delete_model_object'),
     path('contract_requests', views.contract_requests_list, name='contract_requests_list'),
     path('contract_requests/new', views.create_contract_request, name='create_contract_request'),
     path('contract_requests/download', views.export_contract_requests, name='export_contract_requests'),
@@ -13,5 +15,6 @@ urlpatterns = [
     path('speakers', views.speakers_list, name='speakers_list'),
     path('speakers/<int:speaker_id>/details', views.speaker_details, name='speaker_details'),
     path('disciplines', views.discipline_list, name='discipline_list'),
+    path('schools', views.school_list, name='school_list'),
     path('schools/<int:school_id>/details', views.school_details, name='school_details')
 ]

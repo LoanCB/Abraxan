@@ -1,6 +1,11 @@
 # Versioning Projet Abraxan
 
-## v 0.4.0
+## v 0.5.0 - 9 juillet 2022
+- Export en XLS
+- Pages paramètres, liste des écoles
+- Statistiques sur le détail d'un intervenant
+
+## v 0.4.0 - 1er juillet 2022
 - Premier refonte du visuel
 - Formulaire demandes de contrat
 - Export en CSV

@@ -1,6 +1,12 @@
 {% extends 'nifleur/base_site.html' %}
 
+{% load static %}
+
 {% block title %}Liste des contrats{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'vendors/datatables/jquery.dataTables.min.css' %}">
+{% endblock %}
 
 {% block content %}
     <div class="row mb-3">
@@ -23,13 +29,14 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-sm align-middle text-center">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="contract_request_table">
                             <thead>
                                 <tr>
                                     <th></th>
                                     <th>Date de la demande</th>
                                     <th>Ecole</th>
+                                    <th>Structure juridique</th>
                                     <th>Intervenant</th>
                                     <th>Commentaire</th>
                                     <th>Status</th>
@@ -57,11 +64,12 @@
                                         </td>
                                         <td>{{ contract.created_at }}</td>
                                         <td>
-                                            <a href="{{ contract.structure_campus.get_absolute_url }}">{{ contract.structure_campus }}</a>
+                                            <a href="{{ contract.school.get_absolute_url }}">{{ contract.school }}</a>
                                         </td>
+                                        <td>{{ contract.legal_structure }}</td>
                                         <td><a href="{{ contract.speaker.get_absolute_url }}">{{ contract.speaker }}</a></td>
                                         <td>{% if contract.comment %}{{ contract.comment }}{% endif %}</td>
-                                        <td>{{ contract.get_status_display }}</td>
+                                        <td>{{ contract.status }}</td>
                                         <td>{{ contract.performance }}</td>
                                         <td>{{ contract.applied_rate }} €</td>
                                         <td>{{ contract.rate_type }}</td>
@@ -85,4 +93,16 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block custom_javascript %}
+    <script src="{% static 'vendors/datatables/jquery.dataTables.min.js' %}"></script>
+    <script>
+    $(() => {
+        $('#contract_request_table').DataTable({
+            'columnDefs': [{'className': 'text-center', 'targets': '_all'}],
+            'language': {'url': "{% static 'vendors/datatables/translate_fr.json' %}"}
+        })
+    })
+    </script>
 {% endblock %}

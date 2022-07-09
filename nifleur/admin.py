@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from nifleur.models import StructureCampus, CompanyType, Company, Speaker, Performance, RateType, SchoolYear, \
+from nifleur.models import School, CompanyType, Company, Speaker, Performance, RateType, SchoolYear, \
     Discipline, Status, Unit, RecruitmentType, ContractRequest
 
 
-@admin.register(StructureCampus)
-class StructureCampusAdmin(admin.ModelAdmin):
+@admin.register(School)
+class SchoolAdmin(admin.ModelAdmin):
     list_display = ('label', 'full_name')
 
 
@@ -40,12 +40,12 @@ class RateTypeAdmin(admin.ModelAdmin):
 
 @admin.register(SchoolYear)
 class SchoolYearAdmin(admin.ModelAdmin):
-    list_display = ('structure_campus', 'year', 'label')
+    list_display = ('school', 'year', 'label', 'initial', 'alternating')
 
 
 @admin.register(Discipline)
 class DisciplineAdmin(admin.ModelAdmin):
-    list_display = ('school_year', 'label', 'speaker')
+    list_display = ('school_year', 'label', 'speaker', 'period')
 
 
 @admin.register(Status)
@@ -66,7 +66,7 @@ class RecruitmentTypeAdmin(admin.ModelAdmin):
 @admin.register(ContractRequest)
 class ContractRequestAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'structure_campus', 'speaker', 'created_at', 'comment', 'status', 'performance', 'applied_rate',
+        'id', 'school', 'speaker', 'created_at', 'comment', 'status', 'performance', 'applied_rate',
         'rate_type', 'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year',
-        'alternating', 'period', 'rp', 'recruitment_type', 'professional_expertise_level'
+        'rp', 'recruitment_type', 'professional_expertise_level'
     )
