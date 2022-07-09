@@ -1,5 +1,7 @@
 # Projet Abraxan
 
+**English translation below**
+
 ## Description
 Projet annuel de deuxième année à l'ESGI Lyon, Abraxan a pour but de répondre à une réelle problématique de l'école : 
 la gestion des contrats formateurs. <br>
@@ -117,7 +119,13 @@ Si vous rencontrez un problème, vous pouvez contacter un membre du groupe :
 - Loan Courchinoux-Billonnet (Développeur Django) : loanbillonnet@gmail.com
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+Abraxan est sous licence [MIT](https://choosealicense.com/licenses/mit/). C'est à dire qu'il est gratuit, libre d'usage,
+de modification, d'adaptation, d'intégration. Cependant, Patais est l'autheur originel du projet. Un clin d'oeil ne fait
+jamais de mal (☞ﾟヮﾟ)☞
+
+
+
+
 
 # Abraxan Project
 
@@ -235,4 +243,6 @@ If you encounter an issue, yu can contact a member of the team :
 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+Abraxan is licensed under the [MIT](https://choosealicense.com/licenses/mit/) license. This means that it is free to use,
+modification, adaptation, integration. However, Patais is the original author of the project. A wink never hurts
+(☞ﾟヮﾟ)☞
