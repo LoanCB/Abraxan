@@ -57,7 +57,7 @@ def import_data(request, file, model, status=False):
             if request.user.is_superuser:
                 messages.error(request, e)
             else:
-                messages.error(request, f"La donnée nomée {row[0]} existe déjà")
+                messages.error(request, f"La donnée nommée {row[0]} existe déjà")
     return messages.info(request, f"Des données on été importées")
 
 
@@ -76,7 +76,6 @@ def parameters(request):
     # Forms
     performance_form = PerformanceForm(request.POST or None, prefix='performance-form')
     school_year_form = SchoolYearForm(request.POST or None, prefix='shcool_year-form')
-    school_form = SchoolForm(request.POST or None, prefix='school-form')
     recruitment_type_form = RecruitmentTypeForm(request.POST or None, prefix='recruitment_typ-form')
     rate_type_form = RateTypeForm(request.POST or None, prefix='rate_type-form')
     company_type_form = CompanyTypeForm(request.POST or None, prefix='company_type-form')
@@ -91,11 +90,6 @@ def parameters(request):
     if school_year_form.is_valid():
         school_year_form.save()
         messages.success(request, "Une nouvelle promotion a bien été créée")
-        return redirect(parameters)
-
-    if school_form.is_valid():
-        school_form.save()
-        messages.success(request, "Une nouvelle école a bien été créée")
         return redirect(parameters)
 
     if recruitment_type_form.is_valid():
@@ -179,7 +173,6 @@ def parameters(request):
         'users': users,
         'performance_form': performance_form,
         'school_year_form': school_year_form,
-        'school_form': school_form,
         'recruitment_type_form': recruitment_type_form,
         'rate_type_form': rate_type_form,
         'company_type_form': company_type_form,
@@ -298,6 +291,38 @@ def discipline_list(request):
         )
     return render(request, 'nifleur/disciplines.html', {
         'disciplines': disciplines,
+        'form': form
+    })
+
+
+def school_list(request):
+    schools = School.objects.all()
+    form = SchoolForm(request.POST or None)
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, f"L'école {form.cleaned_data['label']} a bien été créée")
+
+    if request.method == 'POST':
+        try:
+            school_csv = request.FILES['school_csv']
+        except MultiValueDictKeyError:
+            pass
+        else:
+            csv_reader = csv.reader(codecs.iterdecode(school_csv, 'utf-8'), delimiter=';')
+            for row in csv_reader:
+                try:
+                    School.objects.create(label=row[0], full_name=row[1])
+                except IntegrityError as e:
+                    if request.user.is_superuser:
+                        messages.error(request, e)
+                    else:
+                        messages.error(request, f"L'école {row[0]} existe déjà")
+            messages.info(request, f"Des écoles ont été importées")
+            return redirect(school_list)
+
+    return render(request, 'nifleur/schools.html', {
+        'schools': schools,
         'form': form
     })
 

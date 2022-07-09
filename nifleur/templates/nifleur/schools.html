@@ -1,0 +1,94 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% load static %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'vendors/datatables/jquery.dataTables.min.css' %}">
+{% endblock %}
+
+{% block title %}Liste des écoles{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-8 col-md-12 mb-3">
+            <h2 class="d-flex justify-content-center">Liste des écoles</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="school_table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Nom complet</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for school in schools %}
+                                    <tr>
+                                        <td>{{ school.label }}</td>
+                                        <td>{{ school.full_name }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if request.user.is_staff %}
+            <div class="offset-xl-0 col-xl-4 offset-md-3 col-md-6">
+                <h2 class="d-flex justify-content-center">Ajouter une nouvelle école</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                                <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importSchoolModal">Importer des écoles</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Import school Modal -->
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal fade" id="importSchoolModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importSchoolModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="importSchoolModalLabel">Importer des écoles</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="school_csv">Choississez un fichier CSV</label>
+                                    <input type="file" id="school_csv" name="school_csv">
+                                    <small>Nom de l'école (Initiales) ; nom complet (facultatif)</small>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                    <button type="submit" class="btn btn-primary">Importer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block custom_javascript %}
+    <script src="{% static 'vendors/datatables/jquery.dataTables.min.js' %}"></script>
+    <script>
+    $(() => {
+        $('#school_table').DataTable({
+            'columnDefs': [{'className': 'text-center', 'targets': '_all'}],
+            'language': {'url': "{% static 'vendors/datatables/translate_fr.json' %}"}
+        })
+    })
+    </script>
+{% endblock %}
