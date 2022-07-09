@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 from nifleur.models import Discipline, Speaker, ContractRequest, Performance, SchoolYear, Status, School, \
-    RecruitmentType, RateType, CompanyType, Unit
+    RecruitmentType, RateType, CompanyType, Unit, LegalStructure
 
 
 class CustomModelForm(forms.ModelForm):
@@ -88,6 +88,12 @@ class CompanyTypeForm(CustomModelForm):
 class UnitForm(CustomModelForm):
     class Meta:
         model = Unit
+        fields = ('label',)
+
+
+class LegalStructureForm(CustomModelForm):
+    class Meta:
+        model = LegalStructure
         fields = ('label',)
 
 
