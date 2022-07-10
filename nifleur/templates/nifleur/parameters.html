@@ -492,6 +492,91 @@
     </div>
 
     <div class="row mb-4">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <h2 class="d-flex justify-content-center">
+                Liste des structures juridiques
+                <i class="fa-solid fa-circle-plus fa-xs text-success clickable" data-bs-toggle="modal" data-bs-target="#legalStructureModel" title="Ajouter une structure juridique"></i>
+            </h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-striped table-hover table-sm align-middle text-center" id="legal_structure_table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for legal_structure in legal_structures %}
+                                    <tr id="legal-struct-{{ legal_structure.id }}">
+                                        <td>{{ legal_structure.label }}</td>
+                                        <td>
+                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <button onclick="delete_model_object(`{% url 'delete_model_object' 'LegalStructure' legal_structure.id %}`, `legal-struct-{{ legal_structure.id }}`)" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#legalStructureModel">Ajouter une structure juridique</button>
+                        <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importlegalStructureModel">Importer des structure juridique</button>
+                    </div>
+                    <!-- Performance Modal -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="modal fade" id="legalStructureModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="legalStructureModelLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="legalStructureModelLabel">Ajouter une structure juridique</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ legal_structure_form.as_p }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Créer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Import Performance Modal -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal fade" id="importlegalStructureModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importlegalStructureModelLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="importlegalStructureModelLabel">Importer des structures juridiques</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="legal_structure_csv">Choississez un fichier CSV</label>
+                                        <input type="file" id="legal_structure_csv" name="legal_structure_csv">
+                                        <small>Un nom de structure juridique par ligne</small>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Importer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
         <div class="col-xs-12">
             <h2 class="d-flex justify-content-center">Liste des utilisateurs</h2>
             <div class="card">
@@ -590,7 +675,7 @@
         $(() => {
             CustomDataTable([
                 $('#performance_table'), $('#recruitment_type_table'), $('#rate_type_table'),$('#company_type_table'),
-                $('#unit_table'), $('#user_table')
+                $('#unit_table'), $('#user_table'), $('#legal_structure_table')
             ])
 
             $('#status_table').DataTable({

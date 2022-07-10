@@ -12,9 +12,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 
 from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, \
-    SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm
+    SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm, LegalStructureForm
 from nifleur.models import ContractRequest, Speaker, Discipline, School, Performance, SchoolYear, Status, \
-    RecruitmentType, RateType, CompanyType, Unit
+    RecruitmentType, RateType, CompanyType, Unit, LegalStructure
 from nifleur.utils import export_csv, short_datetime
 
 
@@ -71,6 +71,7 @@ def parameters(request):
     rate_types = RateType.objects.all()
     company_types = CompanyType.objects.all()
     units = Unit.objects.all()
+    legal_structures = LegalStructure.objects.all()
     users = User.objects.all()
 
     # Forms
@@ -81,6 +82,7 @@ def parameters(request):
     company_type_form = CompanyTypeForm(request.POST or None, prefix='company_type-form')
     unit_form = UnitForm(request.POST or None, prefix='unit-form')
     user_form = RegisterForm(request.POST or None, prefix='user-form')
+    legal_structure_form = LegalStructureForm(request.POST or None, prefix='legal-structure-form')
 
     if performance_form.is_valid():
         performance_form.save()
@@ -110,6 +112,11 @@ def parameters(request):
     if unit_form.is_valid():
         unit_form.save()
         messages.success(request, "Une nouvelle unité a bien été créée")
+        return redirect(parameters)
+
+    if legal_structure_form.is_valid():
+        legal_structure_form.save()
+        messages.success(request, "Une nouvelle structure juridique a bien été créée")
         return redirect(parameters)
 
     if user_form.is_valid():
@@ -148,6 +155,11 @@ def parameters(request):
         except MultiValueDictKeyError:
             status_csv = None
 
+        try:
+            legal_structure_csv = request.FILES['legal_structure_csv']
+        except MultiValueDictKeyError:
+            legal_structure_csv = None
+
         if performance_csv:
             import_data(request, performance_csv, 'Performance')
         elif recruitment_type_csv:
@@ -158,6 +170,8 @@ def parameters(request):
             import_data(request, company_type_csv, 'CompanyType')
         elif unit_csv:
             import_data(request, unit_csv, 'Unit')
+        elif legal_structure_csv:
+            import_data(request, legal_structure_csv, 'LegalStructure')
         elif status_csv:
             import_data(request, status_csv, 'Status', True)
 
@@ -170,6 +184,7 @@ def parameters(request):
         'rate_types': rate_types,
         'company_types': company_types,
         'units': units,
+        'legal_structures': legal_structures,
         'users': users,
         'performance_form': performance_form,
         'school_year_form': school_year_form,
@@ -177,6 +192,7 @@ def parameters(request):
         'rate_type_form': rate_type_form,
         'company_type_form': company_type_form,
         'unit_form': unit_form,
+        'legal_structure_form': legal_structure_form,
         'user_form': user_form
     })
 
