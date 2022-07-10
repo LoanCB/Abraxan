@@ -12,7 +12,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 
 from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, \
-    SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm, LegalStructureForm
+    SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm, LegalStructureForm, \
+    SchoolYearDetailForm
 from nifleur.models import ContractRequest, Speaker, Discipline, School, Performance, SchoolYear, Status, \
     RecruitmentType, RateType, CompanyType, Unit, LegalStructure
 from nifleur.utils import export_csv, short_datetime
@@ -64,9 +65,7 @@ def import_data(request, file, model, status=False):
 def parameters(request):
     # models data
     performances = Performance.objects.all().order_by('label')
-    school_years = SchoolYear.objects.all()
     status = Status.objects.all().order_by('position')
-    schools = School.objects.all()
     recruitment_types = RecruitmentType.objects.all()
     rate_types = RateType.objects.all()
     company_types = CompanyType.objects.all()
@@ -76,7 +75,6 @@ def parameters(request):
 
     # Forms
     performance_form = PerformanceForm(request.POST or None, prefix='performance-form')
-    school_year_form = SchoolYearForm(request.POST or None, prefix='shcool_year-form')
     recruitment_type_form = RecruitmentTypeForm(request.POST or None, prefix='recruitment_typ-form')
     rate_type_form = RateTypeForm(request.POST or None, prefix='rate_type-form')
     company_type_form = CompanyTypeForm(request.POST or None, prefix='company_type-form')
@@ -87,11 +85,6 @@ def parameters(request):
     if performance_form.is_valid():
         performance_form.save()
         messages.success(request, "Une nouvelle performance a bien été créée")
-        return redirect(parameters)
-
-    if school_year_form.is_valid():
-        school_year_form.save()
-        messages.success(request, "Une nouvelle promotion a bien été créée")
         return redirect(parameters)
 
     if recruitment_type_form.is_valid():
@@ -177,9 +170,7 @@ def parameters(request):
 
     return render(request, 'nifleur/parameters.html', {
         'performances': performances,
-        'school_years': school_years,
         'status': status,
-        'schools': schools,
         'recruitment_types': recruitment_types,
         'rate_types': rate_types,
         'company_types': company_types,
@@ -187,7 +178,6 @@ def parameters(request):
         'legal_structures': legal_structures,
         'users': users,
         'performance_form': performance_form,
-        'school_year_form': school_year_form,
         'recruitment_type_form': recruitment_type_form,
         'rate_type_form': rate_type_form,
         'company_type_form': company_type_form,
@@ -313,11 +303,16 @@ def discipline_list(request):
 
 def school_list(request):
     schools = School.objects.all()
-    form = SchoolForm(request.POST or None)
+    form = SchoolForm(request.POST or None, prefix='school-form')
+    school_year_form = SchoolYearForm(request.POST or None, prefix='school-year-form')
 
     if form.is_valid():
         form.save()
         messages.success(request, f"L'école {form.cleaned_data['label']} a bien été créée")
+
+    if school_year_form.is_valid():
+        promotion = school_year_form.save()
+        messages.success(request, f"La classe {promotion.year} {promotion.school} a bien été créée")
 
     if request.method == 'POST':
         try:
@@ -335,14 +330,65 @@ def school_list(request):
                     else:
                         messages.error(request, f"L'école {row[0]} existe déjà")
             messages.info(request, f"Des écoles ont été importées")
-            return redirect(school_list)
+
+        try:
+            school_year_csv = request.FILES['school_year_csv']
+        except MultiValueDictKeyError:
+            pass
+        else:
+            csv_reader = csv.reader(codecs.iterdecode(school_year_csv, 'utf-8'), delimiter=';')
+            total_school_year = 0
+            total_school_year_imported = 0
+            for row in csv_reader:
+                try:
+                    school = get_object_or_404(School, label=row[0])
+                    initial = True if row[3] in ('oui', '1') else False
+                    alternating = True if row[4] in ('oui', '1') else False
+
+                    if SchoolYear.objects.filter(year=row[1]).exists():
+                        messages.error(request, f"La promotion {row[1]} existe déjà dans l'école {row[0]}")
+                        continue
+
+                    SchoolYear.objects.create(
+                        school=school,
+                        year=row[1],
+                        label=row[2],
+                        initial=initial,
+                        alternating=alternating
+                    )
+                except IntegrityError as e:
+                    if request.user.is_superuser:
+                        messages.error(request, e)
+                    else:
+                        messages.error(
+                            request,
+                            f"Une erreur est survenue sur l'import de la promotion {row[1]} ({row[0]})"
+                        )
+                else:
+                    total_school_year_imported += 1
+                finally:
+                    total_school_year += 1
+
+            messages.info(request, f"{total_school_year_imported} promotions on été importée sur {total_school_year}")
 
     return render(request, 'nifleur/schools.html', {
         'schools': schools,
-        'form': form
+        'form': form,
+        'school_year_form': school_year_form
     })
 
 
 def school_details(request, school_id):
     school = get_object_or_404(School, id=school_id)
-    return render(request, 'nifleur/school_details.html', {'school': school})
+    form = SchoolYearDetailForm(request.POST or None)
+
+    if form.is_valid():
+        school_year = form.save(commit=False)
+        school_year.school = school
+        school_year.save()
+        messages.success(request, f"La promotion {school_year.year} vient d'être créée")
+
+    return render(request, 'nifleur/school_details.html', {
+        'school': school,
+        'form': form
+    })

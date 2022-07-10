@@ -58,7 +58,23 @@ class PerformanceForm(CustomModelForm):
 class SchoolYearForm(CustomModelForm):
     class Meta:
         model = SchoolYear
-        fields = ('school', 'year', 'label')
+        fields = ('school', 'year', 'label', 'initial', 'alternating')
+
+    def __init__(self, *args, **kwargs):
+        super(SchoolYearForm, self).__init__(*args, **kwargs)
+        self.fields['initial'].widget.attrs['class'] = 'form-check-input'
+        self.fields['alternating'].widget.attrs['class'] = 'form-check-input'
+
+
+class SchoolYearDetailForm(CustomModelForm):
+    class Meta:
+        model = SchoolYear
+        fields = ('year', 'label', 'initial', 'alternating')
+
+    def __init__(self, *args, **kwargs):
+        super(SchoolYearDetailForm, self).__init__(*args, **kwargs)
+        self.fields['initial'].widget.attrs['class'] = 'form-check-input'
+        self.fields['alternating'].widget.attrs['class'] = 'form-check-input'
 
 
 class SchoolForm(CustomModelForm):

@@ -77,6 +77,48 @@
                     </div>
                 </form>
 
+                <h2 class="d-flex justify-content-center">Ajouter une nouvelle promotion</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ school_year_form.as_p }}
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                                <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importSchoolYearModal">Importer des promotions</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Import school year Modal -->
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal fade" id="importSchoolYearModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importSchoolYearModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="importSchoolYearModalLabel">Importer des promotions</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="school_year_csv">Choississez un fichier CSV</label>
+                                    <input type="file" id="school_year_csv" name="school_year_csv">
+                                    <small>
+                                        Nom de l'école (Initiales) ; année ; Nom de la classe (facultatif) ; initiaux
+                                        ; alternants <br>Pour les deux dernières colonnes, merci de mettre 'oui' ou '1'
+                                        si c'est le cas
+                                    </small>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                    <button type="submit" class="btn btn-primary">Importer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
             </div>
         {% endif %}
     </div>
