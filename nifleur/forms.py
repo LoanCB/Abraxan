@@ -18,7 +18,7 @@ class CustomModelForm(forms.ModelForm):
 class DisciplineForm(CustomModelForm):
     class Meta:
         model = Discipline
-        fields = ('school_year', 'label', 'period')
+        fields = ('school_year', 'label')
 
 
 class SpeakerForm(CustomModelForm):
@@ -26,11 +26,18 @@ class SpeakerForm(CustomModelForm):
         model = Speaker
         fields = (
             'first_name', 'last_name', 'civility', 'mail', 'phone_number', 'highest_degree', 'company',
-            'main_area_of_expertise', 'second_area_of_expertise', 'third_area_of_expertise', 'teaching_expertise_level'
+            'main_area_of_expertise', 'second_area_of_expertise', 'third_area_of_expertise', 'teaching_expertise_level',
+            'professional_expertise_level'
         )
         widgets = {
             'phone_number': forms.TextInput(attrs={'placeholder': '0_ __ __ __ __', 'data-slots': '_'})
         }
+
+
+TTC_CHOICES = (
+    (True, 'TTC'),
+    (False, 'SST')
+)
 
 
 class ContractRequestForm(CustomModelForm):
@@ -38,13 +45,15 @@ class ContractRequestForm(CustomModelForm):
         model = ContractRequest
         fields = (
             'school', 'legal_structure', 'speaker', 'comment', 'status', 'performance', 'applied_rate', 'rate_type',
-            'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year', 'rp',
-            'recruitment_type', 'professional_expertise_level'
+            'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year', 'rp', 'period',
+            'recruitment_type'
         )
+        widgets = {
+            'ttc': forms.Select(choices=TTC_CHOICES)
+        }
 
     def __init__(self, *args, **kwargs):
         super(ContractRequestForm, self).__init__(*args, **kwargs)
-        self.fields['ttc'].widget.attrs['class'] = 'form-check-input'
         self.fields['started_at'].widget.attrs['class'] += ' datepicker_input'
         self.fields['ended_at'].widget.attrs['class'] += ' datepicker_input'
 

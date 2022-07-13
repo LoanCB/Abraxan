@@ -40,7 +40,7 @@
                                     <th>Intervenant</th>
                                     <th>Société</th>
                                     <th>Commentaire</th>
-                                    <th>Status</th>
+                                    <th>Statut</th>
                                     <th>Type de mission</th>
                                     <th>Tarif</th>
                                     <th>Type d'horaire</th>
@@ -50,6 +50,7 @@
                                     <th>Date fin</th>
                                     <th>Matière</th>
                                     <th>Promotion</th>
+                                    <th>Initial</th>
                                     <th>Alternant</th>
                                     <th>Période</th>
                                     <th>RP</th>
@@ -81,7 +82,8 @@
                                         <td>{{ contract.ended_at }}</td>
                                         <td>{{ contract.discipline }}</td>
                                         <td>{{ contract.school_year }}</td>
-                                        <td>{% include 'nifleur/components/boolean_icon.html' with data=contract.alternating %}</td>
+                                        <td>{% include 'nifleur/components/boolean_icon.html' with data=contract.school_year.initial %}</td>
+                                        <td>{% include 'nifleur/components/boolean_icon.html' with data=contract.school_year.alternating %}</td>
                                         <td>{{ contract.get_period_display }}</td>
                                         <td>{{ contract.rp.get_full_name }}</td>
                                         <td>{{ contract.get_recruitment_type_display }}</td>

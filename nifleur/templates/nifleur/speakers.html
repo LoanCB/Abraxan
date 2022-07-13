@@ -65,7 +65,7 @@
                 </div>
             </div>
         </div>
-        <div class="offset-md-3 col-md-6 offset-sm-2 col-sm-8 col-xs-12">
+        <div class="offset-md-2 col-md-8 offset-sm-2 col-sm-8 col-xs-12">
             <h1 class="d-flex justify-content-center">
                 {% if edit_instance %}Modifier{% else %}Ajouter{% endif %} un Intervenant
             </h1>
@@ -75,17 +75,21 @@
                         {% csrf_token %}
                         {% include 'nifleur/components/errors_form.html' %}
                         <div class="row">
-                            <div class="col-sm-2 col-xs-12">
+                            <div class="col-sm-1 col-xs-12">
                                 {{ form.civility.label }}
                                 {{ form.civility }}
                             </div>
-                            <div class="col-sm-5 col-xs-12">
+                            <div class="col-sm-4 col-xs-12">
                                 {{ form.first_name.label }}
                                 {{ form.first_name }}
                             </div>
-                            <div class="col-sm-5 col-xs-12">
+                            <div class="col-sm-4 col-xs-12">
                                 {{ form.last_name.label }}
                                 {{ form.last_name }}
+                            </div>
+                            <div class="col-sm-3 col-xs-12">
+                                {{ form.company.label }}
+                                {{ form.company }}
                             </div>
                         </div>
                         <div class="row">
@@ -124,8 +128,8 @@
                                 {{ form.teaching_expertise_level }}
                             </div>
                             <div class="col-sm-6 col-xs-12">
-                                {{ form.company.label }}
-                                {{ form.company }}
+                                {{ form.professional_expertise_level.label }}
+                                {{ form.professional_expertise_level }}
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">
