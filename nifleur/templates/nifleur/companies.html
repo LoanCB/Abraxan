@@ -32,7 +32,7 @@
                                         <td>{% if company.relation_mail %}{{ company.relation_mail }}{% endif %}</td>
                                         <td>
                                             {% if company.relation_phone_number %}
-                                                {{ company.relation_phone_number }}
+                                                {{ company.relation_phone_number.as_national }}
                                             {% endif %}
                                         </td>
                                     </tr>
