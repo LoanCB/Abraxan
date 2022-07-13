@@ -255,16 +255,20 @@ def export_contract_requests(request):
 
 def speakers_list(request):
     speakers = Speaker.objects.all()
-    form = SpeakerForm(request.POST or None)
+    edit_instance = request.GET.get('edit_instance', None)
+    instance = Speaker.objects.get(id=edit_instance) if edit_instance else None
+    form = SpeakerForm(request.POST or None, instance=instance)
     if form.is_valid():
         form.save()
         messages.success(
             request,
-            f"L'intervenant {form.cleaned_data['first_name']} {form.cleaned_data['last_name']} a bien été créé"
+            f"L'intervenant {form.cleaned_data['first_name']} {form.cleaned_data['last_name']} a bien été "
+            f"{'modifié' if instance else 'créé'}"
         )
     return render(request, 'nifleur/speakers.html', {
         'speakers': speakers,
-        'form': form
+        'form': form,
+        'edit_instance': edit_instance
     })
 
 
