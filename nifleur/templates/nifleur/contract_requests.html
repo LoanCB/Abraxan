@@ -38,6 +38,7 @@
                                     <th>Ecole</th>
                                     <th>Structure juridique</th>
                                     <th>Intervenant</th>
+                                    <th>Société</th>
                                     <th>Commentaire</th>
                                     <th>Status</th>
                                     <th>Type de mission</th>
@@ -68,6 +69,7 @@
                                         </td>
                                         <td>{{ contract.legal_structure }}</td>
                                         <td><a href="{{ contract.speaker.get_absolute_url }}">{{ contract.speaker }}</a></td>
+                                        <td>{% if contract.company %}{{ contract.company }}{% endif %}</td>
                                         <td>{% if contract.comment %}{{ contract.comment }}{% endif %}</td>
                                         <td>{{ contract.status }}</td>
                                         <td>{{ contract.performance }}</td>
