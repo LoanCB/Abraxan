@@ -44,6 +44,7 @@
                     <div class="card-body">
                         <form method="post">
                             {% csrf_token %}
+                            {% include 'nifleur/components/errors_form.html' %}
                             {{ form.as_p }}
                             <div class="d-flex justify-content-center">
                                 <button type="submit" class="btn btn-primary">Envoyer</button>
@@ -82,6 +83,7 @@
                     <div class="card-body">
                         <form method="post">
                             {% csrf_token %}
+                            {% include 'nifleur/components/errors_form.html' with form=school_year_form %}
                             {{ school_year_form.as_p }}
                             <div class="d-flex justify-content-center">
                                 <button type="submit" class="btn btn-primary">Envoyer</button>

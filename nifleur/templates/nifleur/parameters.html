@@ -48,6 +48,7 @@
                     <!-- Performance Modal -->
                     <form method="post">
                         {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' with form=performance_form %}
                         <div class="modal fade" id="performanceModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="performanceModelLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -189,6 +190,7 @@
                     <!-- recruitmentType Modal -->
                     <form method="post">
                         {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' with form=recruitment_type_form %}
                         <div class="modal fade" id="recruitmentTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="recruitmentTypeModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -275,6 +277,7 @@
                     <!-- Rate type Modal -->
                     <form method="post">
                         {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' with form=rate_type_form %}
                         <div class="modal fade" id="rateTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="rateTypeModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -359,6 +362,7 @@
                     <!-- Company type Modal -->
                     <form method="post">
                         {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' with form=company_type_form %}
                         <div class="modal fade" id="companyTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="companyTypeModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -443,6 +447,7 @@
                     <!-- Unit Modal -->
                     <form method="post">
                         {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' with form=unit_form %}
                         <div class="modal fade" id="unitModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="unitModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -528,6 +533,7 @@
                     <!-- Performance Modal -->
                     <form method="post">
                         {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' with form=legal_structure_form %}
                         <div class="modal fade" id="legalStructureModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="legalStructureModelLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -625,6 +631,7 @@
                     <!-- User Modal -->
                     <form method="post">
                         {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' with form=user_form %}
                         <div class="modal fade" id="UserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="UserModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">

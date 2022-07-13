@@ -60,6 +60,7 @@
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' %}
                         <div class="row">
                             <div class="col-sm-6 col-xs-12">
                                 <p class="required">{{ form.year.label }}</p>

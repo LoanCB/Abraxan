@@ -49,6 +49,7 @@
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' %}
                         {{ form.as_p }}
                         <button type="submit" class="btn btn-primary">Envoyer</button>
                     </form>
