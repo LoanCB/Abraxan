@@ -13,9 +13,9 @@ from django.utils.datastructures import MultiValueDictKeyError
 
 from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, \
     SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm, LegalStructureForm, \
-    SchoolYearDetailForm
+    SchoolYearDetailForm, CompanyForm
 from nifleur.models import ContractRequest, Speaker, Discipline, School, Performance, SchoolYear, Status, \
-    RecruitmentType, RateType, CompanyType, Unit, LegalStructure
+    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company
 from nifleur.utils import export_csv, short_datetime
 
 
@@ -207,7 +207,9 @@ def contract_request_detail(request, contract_id):
 def create_contract_request(request):
     form = ContractRequestForm(request.POST or None)
     if form.is_valid():
-        contract_request = form.save()
+        contract_request = form.save(commit=False)
+        contract_request.company = contract_request.speaker.company
+        contract_request.save()
         messages.success(request, "La demande de contrat a bien été créée")
         return redirect(contract_request_detail, contract_request.id)
     return render(request, 'nifleur/contract_request_form.html', {'form': form})
@@ -390,5 +392,17 @@ def school_details(request, school_id):
 
     return render(request, 'nifleur/school_details.html', {
         'school': school,
+        'form': form
+    })
+
+
+def company_list(request):
+    companies = Company.objects.all()
+    form = CompanyForm(request.POST or None)
+    if form.is_valid():
+        company = form.save()
+        messages.success(request, f"La société {company.label} vient d'être créée")
+    return render(request, 'nifleur/companies.html', {
+        'companies': companies,
         'form': form
     })

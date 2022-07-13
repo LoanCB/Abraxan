@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 from nifleur.models import Discipline, Speaker, ContractRequest, Performance, SchoolYear, Status, School, \
-    RecruitmentType, RateType, CompanyType, Unit, LegalStructure
+    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company
 
 
 class CustomModelForm(forms.ModelForm):
@@ -124,3 +124,12 @@ class RegisterForm(CustomModelForm, UserCreationForm):
 
         for field_name in ['username', 'password1', 'password2']:
             self.fields[field_name].help_text = None
+
+
+class CompanyForm(CustomModelForm):
+    class Meta:
+        model = Company
+        fields = ('label', 'company_type', 'relation_mail', 'relation_phone_number')
+        widgets = {
+            'relation_phone_number': forms.TextInput(attrs={'placeholder': '0_ __ __ __ __', 'data-slots': '_'})
+        }

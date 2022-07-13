@@ -414,6 +414,12 @@ class ContractRequest(TimeStampedModel):
         related_name='contract_request_speaker',
         on_delete=models.PROTECT
     )
+    company = models.ForeignKey(
+        Company,
+        verbose_name='Société',
+        related_name='contract_request_company',
+        on_delete=models.PROTECT
+    )
     comment = models.CharField('Commentaire', max_length=255, null=True, blank=True)
     status = models.ForeignKey(
         Status,
