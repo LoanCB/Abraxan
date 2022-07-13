@@ -265,7 +265,7 @@ def speakers_list(request):
 
 def speaker_details(request, speaker_id):
     speaker = get_object_or_404(Speaker, id=speaker_id)
-    campus = School.objects.filter(structure_school_year__disciplines__speaker=speaker)
+    campus = School.objects.filter(school_year__disciplines__speaker=speaker)
     data = dict()
 
     for school in campus.all():
