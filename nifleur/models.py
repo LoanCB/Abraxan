@@ -70,6 +70,7 @@ class School(models.Model):
 
 class CompanyType(models.Model):
     """
+    A company have a type
 
     Attributes:
 
@@ -87,7 +88,14 @@ class CompanyType(models.Model):
 
 class Company(models.Model):
     """
+    A speaker can have a company
 
+    Attributes:
+
+    - :class:`str` label
+    - :class:`CompanyType` company_type
+    - :class:`str` relation_mail
+    - :class:`str` relation_phone_number
     """
     label = models.CharField('Nom', max_length=255, unique=True)
     company_type = models.ForeignKey(

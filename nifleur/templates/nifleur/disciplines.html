@@ -51,7 +51,9 @@
                         {% csrf_token %}
                         {% include 'nifleur/components/errors_form.html' %}
                         {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                        </div>
                     </form>
                 </div>
             </div>

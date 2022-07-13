@@ -18,7 +18,7 @@ class CustomModelForm(forms.ModelForm):
 class DisciplineForm(CustomModelForm):
     class Meta:
         model = Discipline
-        fields = ['school_year', 'label', 'speaker']
+        fields = ('school_year', 'label')
 
 
 class SpeakerForm(CustomModelForm):

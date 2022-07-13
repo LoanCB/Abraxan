@@ -210,6 +210,9 @@ def create_contract_request(request):
         contract_request = form.save(commit=False)
         contract_request.company = contract_request.speaker.company
         contract_request.save()
+        discipline = get_object_or_404(Discipline, id=contract_request.discipline.id)
+        discipline.speaker = contract_request.speaker
+        discipline.save()
         messages.success(request, "La demande de contrat a bien été créée")
         return redirect(contract_request_detail, contract_request.id)
     return render(request, 'nifleur/contract_request_form.html', {'form': form})
