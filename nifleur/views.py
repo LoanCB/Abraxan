@@ -295,6 +295,18 @@ def speaker_details(request, speaker_id):
     })
 
 
+def speaker_form(request):
+    form = SpeakerForm(request.POST or None)
+    created = False
+    if form.is_valid():
+        form.save()
+        created = True
+    return render(request, 'nifleur/add_speaker.html', {
+        'form': form,
+        'created': created
+    })
+
+
 def discipline_list(request):
     disciplines = Discipline.objects.all().order_by('school_year')
     form = DisciplineForm(request.POST or None)
