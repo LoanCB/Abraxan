@@ -14,6 +14,10 @@ class CustomModelForm(forms.ModelForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
+        for bound_field in self:
+            if hasattr(bound_field, "field") and bound_field.field.required:
+                bound_field.field.widget.attrs["oninvalid"] = "this.setCustomValidity('Ce champ est obligatoire')"
+
 
 class DisciplineForm(CustomModelForm):
     class Meta:
