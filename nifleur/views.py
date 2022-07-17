@@ -5,7 +5,7 @@ from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -45,6 +45,7 @@ def logout_user(request):
     return redirect(login_user)
 
 
+@login_required
 def import_data(request, file, model, status=False):
     django_model = apps.get_model(app_label='nifleur', model_name=model)
     csv_reader = csv.reader(codecs.iterdecode(file, 'utf-8'), delimiter=';')
@@ -62,6 +63,7 @@ def import_data(request, file, model, status=False):
     return messages.info(request, f"Des données on été importées")
 
 
+@login_required
 def parameters(request):
     # models data
     performances = Performance.objects.all().order_by('label')
@@ -187,6 +189,7 @@ def parameters(request):
     })
 
 
+@login_required
 def delete_model_object(request, model, object_id):
     django_model = apps.get_model(app_label='nifleur', model_name=model)
     model_object = get_object_or_404(django_model, id=object_id)
@@ -194,16 +197,19 @@ def delete_model_object(request, model, object_id):
     return JsonResponse({'success': True})
 
 
+@login_required
 def contract_requests_list(request):
     contract_requests = ContractRequest.objects.all()
     return render(request, 'nifleur/contract_requests.html', {'contract_requests': contract_requests})
 
 
+@login_required
 def contract_request_detail(request, contract_id):
     contract = get_object_or_404(ContractRequest, id=contract_id)
     return render(request, 'nifleur/contract_request_details.html', {'contract': contract})
 
 
+@login_required
 def create_contract_request(request):
     form = ContractRequestForm(request.POST or None)
     if form.is_valid():
@@ -218,6 +224,7 @@ def create_contract_request(request):
     return render(request, 'nifleur/contract_request_form.html', {'form': form})
 
 
+@login_required
 def export_contract_requests(request):
     contract_requests = ContractRequest.objects.all()
     data = [[
@@ -253,6 +260,7 @@ def export_contract_requests(request):
     return export_csv('demandes_de_contrat', data, True if xls else False)
 
 
+@login_required
 def speakers_list(request):
     speakers = Speaker.objects.all()
     edit_instance = request.GET.get('edit_instance', None)
@@ -265,6 +273,8 @@ def speakers_list(request):
             f"L'intervenant {form.cleaned_data['first_name']} {form.cleaned_data['last_name']} a bien été "
             f"{'modifié' if instance else 'créé'}"
         )
+        return redirect(speakers_list)
+
     return render(request, 'nifleur/speakers.html', {
         'speakers': speakers,
         'form': form,
@@ -272,6 +282,7 @@ def speakers_list(request):
     })
 
 
+@login_required
 def speaker_details(request, speaker_id):
     speaker = get_object_or_404(Speaker, id=speaker_id)
     campus = School.objects.filter(school_year__disciplines__speaker=speaker)
@@ -295,18 +306,22 @@ def speaker_details(request, speaker_id):
     })
 
 
+@login_required
 def speaker_form(request):
     form = SpeakerForm(request.POST or None)
     created = False
     if form.is_valid():
         form.save()
         created = True
+        return redirect(speaker_form)
+
     return render(request, 'nifleur/add_speaker.html', {
         'form': form,
         'created': created
     })
 
 
+@login_required
 def discipline_list(request):
     disciplines = Discipline.objects.all().order_by('school_year')
     form = DisciplineForm(request.POST or None)
@@ -316,24 +331,32 @@ def discipline_list(request):
             request,
             f"La matière {form.cleaned_data['label']} a bien été créée pour la classe {form.cleaned_data['school_year']}"
         )
+        return redirect(discipline_list)
+
     return render(request, 'nifleur/disciplines.html', {
         'disciplines': disciplines,
         'form': form
     })
 
 
+@login_required
 def school_list(request):
     schools = School.objects.all()
     form = SchoolForm(request.POST or None, prefix='school-form')
     school_year_form = SchoolYearForm(request.POST or None, prefix='school-year-form')
+    permissions = Permission.objects.filter(group__user=request.user)
 
-    if form.is_valid():
-        form.save()
-        messages.success(request, f"L'école {form.cleaned_data['label']} a bien été créée")
+    if permissions.get(codename='add_school'):
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"L'école {form.cleaned_data['label']} a bien été créée")
+            return redirect(school_list)
 
-    if school_year_form.is_valid():
-        promotion = school_year_form.save()
-        messages.success(request, f"La classe {promotion.year} {promotion.school} a bien été créée")
+    if permissions.get(codename='add_schoolyear'):
+        if school_year_form.is_valid():
+            promotion = school_year_form.save()
+            messages.success(request, f"La classe {promotion.year} {promotion.school} a bien été créée")
+            return redirect(school_list)
 
     if request.method == 'POST':
         try:
@@ -399,6 +422,7 @@ def school_list(request):
     })
 
 
+@login_required
 def school_details(request, school_id):
     school = get_object_or_404(School, id=school_id)
     form = SchoolYearDetailForm(request.POST or None)
@@ -408,6 +432,7 @@ def school_details(request, school_id):
         school_year.school = school
         school_year.save()
         messages.success(request, f"La promotion {school_year.year} vient d'être créée")
+        return redirect(school_details, school_id)
 
     return render(request, 'nifleur/school_details.html', {
         'school': school,
@@ -415,12 +440,15 @@ def school_details(request, school_id):
     })
 
 
+@login_required
 def company_list(request):
     companies = Company.objects.all()
     form = CompanyForm(request.POST or None)
     if form.is_valid():
         company = form.save()
         messages.success(request, f"La société {company.label} vient d'être créée")
+        return redirect(company_list)
+
     return render(request, 'nifleur/companies.html', {
         'companies': companies,
         'form': form
