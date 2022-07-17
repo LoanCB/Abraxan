@@ -499,7 +499,9 @@ def company_list(request):
 def company_details(request, company_id):
     company = get_object_or_404(Company, id=company_id)
     speakers = Speaker.objects.filter(company=company)
+    contracts = ContractRequest.objects.filter(company=company)
     return render(request, 'nifleur/company_details.html', {
         'company': company,
-        'speakers': speakers
+        'speakers': speakers,
+        'contracts': contracts
     })
