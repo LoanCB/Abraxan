@@ -106,6 +106,8 @@
                                 <tr>
                                     <th>Nom</th>
                                     <th>Position</th>
+                                    <th>Couleur</th>
+                                    <th>Type</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -113,6 +115,8 @@
                                     <tr>
                                         <td>{{ s.label }}</td>
                                         <td>{{ s.position }}</td>
+                                        <td>{{ s.color }}</td>
+                                        <td>{{ s.get_type_display }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -137,7 +141,7 @@
                                         <div class="modal-body">
                                             <label for="status_csv">Choississez un fichier CSV</label>
                                             <input type="file" id="status_csv" name="status_csv">
-                                            <small>nom du statue ; position</small>
+                                            <small>nom du statue ; position ; couleur (hex) ; type</small>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>

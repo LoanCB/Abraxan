@@ -306,6 +306,16 @@ class Discipline(models.Model):
         return self.label
 
 
+OPEN = 1
+ON_GOING = 2
+CLOSE = 3
+STATUS_CHOICES = (
+    (OPEN, 'ouvert'),
+    (ON_GOING, 'en cours'),
+    (CLOSE, 'fermé')
+)
+
+
 class Status(models.Model):
     """
     A status is required for a contract request
@@ -314,9 +324,18 @@ class Status(models.Model):
 
     - :class:`int` position
     - :class:`str` label
+    - :class:`str` color
+    - :class:`int` type
     """
     position = models.PositiveSmallIntegerField('position')
     label = models.CharField('Nom', max_length=50, unique=True)
+    color = models.CharField(
+        'couleur',
+        max_length=9,
+        unique=True,
+        help_text="Couleur hexadécimale du status (avec le #)"
+    )
+    type = models.PositiveSmallIntegerField('type', choices=STATUS_CHOICES, default=OPEN)
 
     class Meta:
         verbose_name = 'Statut'
@@ -487,7 +506,7 @@ class ContractRequest(TimeStampedModel):
         verbose_name_plural = 'Demandes de contrat'
 
     def __str__(self):
-        return f"Demande de contrat de {self.speaker.get_civility_display()}. {self.speaker}"
+        return f"Demande de contrat de {self.speaker.get_civility_display()} {self.speaker}"
 
     def get_absolute_url(self):
         return reverse('contract_request_detail', kwargs={'contract_id': self.id})

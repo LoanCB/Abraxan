@@ -60,7 +60,7 @@
                             </thead>
                             <tbody>
                                 {% for contract in contract_requests %}
-                                    <tr>
+                                    <tr style="background-color: {{ contract.status.color }}">
                                         <td>
                                             <a href="{{ contract.get_absolute_url }}"><i class="fa-solid fa-eye"></i></a>
                                         </td>

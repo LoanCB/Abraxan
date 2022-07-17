@@ -15,7 +15,7 @@ from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, Perf
     SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm, LegalStructureForm, \
     SchoolYearDetailForm, CompanyForm
 from nifleur.models import ContractRequest, Speaker, Discipline, School, Performance, SchoolYear, Status, \
-    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company
+    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company, STATUS_CHOICES
 from nifleur.utils import export_csv, short_datetime
 
 
@@ -51,10 +51,24 @@ def import_data(request, file, model, status=False):
     csv_reader = csv.reader(codecs.iterdecode(file, 'utf-8'), delimiter=';')
     for row in csv_reader:
         try:
+            name = row[0]
             if status:
-                django_model.objects.create(label=row[0], position=row[1])
+                color = row[2] if row[2][0] == '#' else f'#{row[2]}'
+                s_type = row[3]
+                status_type = None
+                for index, l_type in enumerate(STATUS_CHOICES):
+                    if s_type == l_type[0]:
+                        status_type = s_type
+                        break
+                    elif s_type == l_type[1]:
+                        status_type = STATUS_CHOICES[index][0]
+                        break
+                if not s_type:
+                    messages.error(request, f"Le statut {name} contient un type erroné : {s_type}")
+                    continue
+                django_model.objects.create(label=name, position=row[1], color=color, type=status_type)
             else:
-                django_model.objects.create(label=row[0])
+                django_model.objects.create(label=name)
         except IntegrityError as e:
             if request.user.is_superuser:
                 messages.error(request, e)
@@ -346,17 +360,21 @@ def school_list(request):
     school_year_form = SchoolYearForm(request.POST or None, prefix='school-year-form')
     permissions = Permission.objects.filter(group__user=request.user)
 
-    if permissions.get(codename='add_school'):
+    if permissions.filter(codename='add_school').exists() or request.user.is_staff:
         if form.is_valid():
             form.save()
             messages.success(request, f"L'école {form.cleaned_data['label']} a bien été créée")
             return redirect(school_list)
+    else:
+        messages.error(request, "Vous n'avez pas la permission d'ajouter des écoles")
 
-    if permissions.get(codename='add_schoolyear'):
+    if permissions.filter(codename='add_schoolyear').exists() or request.user.is_staff:
         if school_year_form.is_valid():
             promotion = school_year_form.save()
             messages.success(request, f"La classe {promotion.year} {promotion.school} a bien été créée")
             return redirect(school_list)
+    else:
+        messages.error(request, "Vous n'avez pas la permission d'ajouter des promotions")
 
     if request.method == 'POST':
         try:

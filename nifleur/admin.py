@@ -50,7 +50,7 @@ class DisciplineAdmin(admin.ModelAdmin):
 
 @admin.register(Status)
 class StatusAdmin(admin.ModelAdmin):
-    list_display = ('position', 'label')
+    list_display = ('position', 'label', 'color', 'type')
 
 
 @admin.register(Unit)
