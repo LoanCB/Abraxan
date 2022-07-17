@@ -224,3 +224,133 @@ nav.main-menu li.active>a,
 {
     background-color: var(--main_salmon);
 }
+
+
+/*************************
+         TIMELINE
+*************************/
+
+.wrapper
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.steps
+{
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.step
+{
+  display: flex;
+  position: relative;
+}
+
+.step:after
+{
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  height: 0;
+  width: 2px;
+  background-color: #007EA7;
+}
+
+.step .info
+{
+  margin: 8px 0 20px;
+}
+
+.step .title
+{
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: black;
+}
+
+.step .text
+{
+  font-size: 12px;
+  color: black;
+  padding-bottom: 0;
+  margin: 0;
+}
+
+.step:not(:last-child):after
+{
+  height: 50%;
+}
+
+.number
+{
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border-radius: 50%;
+  border: 2px solid #007EA7;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-size: 15px;
+  font-weight: 600;
+  margin-right: 14px;
+}
+
+.number.completed
+{
+  background-color: #007EA7;
+}
+
+.number svg
+{
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.number svg path
+{
+  fill: white;
+}
+
+.btn-timeline-group
+{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.btn-timeline
+{
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    background-image: linear-gradient(to right, var(--main_yellow), var(--main_salmon));
+    border: none;
+    border-radius: 10px;
+    color: white;
+    margin: 1rem 0.5rem;
+    text-decoration: none;
+}
+
+.btn-timeline:hover
+{
+    color: white;
+}
+
+.btn-disabled
+{
+    pointer-events: none;
+    background: gray;
+}

@@ -1,7 +1,56 @@
 {% extends 'nifleur/base_site.html' %}
 
+{% load static %}
+
 {% block title %}Detail de contrat{% endblock %}
 
 {% block content %}
-    {{ contract }}
+    <div class="row">
+        <!-- Timeline -->
+        <div class="col-md-6 col-sm-12">
+            <div class='wrapper'>
+                <div class='steps' id='steps'></div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="col-md-6 col-sm-12">
+            <div class="btn-timeline-group">
+                <a href="{% url 'change_contract_status' contract.id 'reset' %}" class="btn-timeline">
+                    <i class="fa-2x fa-solid fa-backward-fast"></i>Revenir au début
+                </a>
+                <a href="{% url 'change_contract_status' contract.id 'back' %}" class="btn-timeline {% if not contract.status.can_back %}btn-disabled{% endif %}">
+                    <i class="fa-2x fa-solid fa-backward"></i>Précédent
+                </a>
+                <a href="{% url 'change_contract_status' contract.id 'next' %}" class="btn-timeline {% if not contract.status.can_next %}btn-disabled{% endif %}">
+                    <i class="fa-2x fa-solid fa-forward"></i>Suivant
+                </a>
+                <a href="{% url 'change_contract_status' contract.id 'finish' %}" class="btn-timeline">
+                    <i class="fa-2x fa-solid fa-forward-fast"></i>Terminer le contrat
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_javascript %}
+    <script>
+        let wizards = [
+            {% for s in status %}
+                {
+                    {% if s.position < contract.status.position %}
+                        complete: true,
+                    {% elif s.position == contract.status.position %}
+                        complete: false,
+                        text: "Statut actuel",
+                    {% else %}
+                        complete: false,
+                    {% endif %}
+                    number: {{ s.position }},
+                    title: "{{ s.label }}"
+                },
+            {% endfor %}
+        ]
+    </script>
+    <script src="{% static 'js/timeline.js' %}"></script>
 {% endblock %}

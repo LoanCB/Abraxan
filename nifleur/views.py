@@ -15,7 +15,7 @@ from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, Perf
     SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm, LegalStructureForm, \
     SchoolYearDetailForm, CompanyForm
 from nifleur.models import ContractRequest, Speaker, Discipline, School, Performance, SchoolYear, Status, \
-    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company, STATUS_CHOICES
+    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company, STATUS_CHOICES, CLOSE
 from nifleur.utils import export_csv, short_datetime
 
 
@@ -242,7 +242,35 @@ def contract_requests_list(request):
 @login_required
 def contract_request_detail(request, contract_id):
     contract = get_object_or_404(ContractRequest, id=contract_id)
-    return render(request, 'nifleur/contract_request_details.html', {'contract': contract})
+    status = Status.objects.all().order_by('position')
+    return render(request, 'nifleur/contract_request_details.html', {
+        'contract': contract,
+        'status': status
+    })
+
+
+@login_required
+def change_contract_status(request, contract_id, action):
+    contract = get_object_or_404(ContractRequest, id=contract_id)
+    if action == 'reset':
+        status = Status.objects.get(position=1)
+        contract.status = status
+        contract.save()
+    elif action == 'back' and contract.status.can_back:
+        status = Status.objects.get(position=contract.status.position - 1)
+        contract.status = status
+        contract.save()
+    elif action == 'next' and contract.status.can_next:
+        status = Status.objects.get(position=contract.status.position + 1)
+        contract.status = status
+        contract.save()
+    elif action == 'finish':
+        status = Status.objects.filter(type=CLOSE).first()
+        contract.status = status
+        contract.save()
+    else:
+        messages.error(request, "Une erreur est survenue")
+    return redirect(contract_request_detail, contract_id)
 
 
 @login_required

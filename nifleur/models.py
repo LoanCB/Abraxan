@@ -360,6 +360,14 @@ class Status(models.Model):
     def get_verbose_name(self):
         return 'un statut'
 
+    @property
+    def can_back(self):
+        return self.position > 1
+
+    @property
+    def can_next(self):
+        return self.position < Status.objects.all().count()
+
 
 class Unit(models.Model):
     """
