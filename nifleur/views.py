@@ -212,6 +212,28 @@ def delete_model_object(request, model, object_id):
 
 
 @login_required
+def edit_simple_form(request, model, object_id):
+    django_model = apps.get_model(app_label='nifleur', model_name=model)
+    model_object = get_object_or_404(django_model, id=object_id)
+    all_forms = [PerformanceForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, LegalStructureForm]
+    form = None
+    for value in all_forms:
+        if model in str(value):
+            form = value
+
+    if form:
+        form = form(request.POST or None, instance=model_object)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Les données ont bien été mise à jour")
+            return redirect(parameters)
+        return render(request, 'nifleur/edit_simple_form.html', {'form': form, 'title': model_object.get_verbose_name})
+    else:
+        messages.error(request, "Une erreur est survenue lors de la recherche du formulaire")
+        return redirect(parameters)
+
+
+@login_required
 def contract_requests_list(request):
     contract_requests = ContractRequest.objects.all()
     return render(request, 'nifleur/contract_requests.html', {'contract_requests': contract_requests})

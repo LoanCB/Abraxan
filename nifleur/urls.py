@@ -7,6 +7,7 @@ urlpatterns = [
     path('login', views.login_user, name='login_user'),
     path('logout', views.logout_user, name='logout_user'),
     path('parameters', views.parameters, name='parameters'),
+    path('parameters/<str:model>/<int:object_id>/edit', views.edit_simple_form, name='edit_simple_form'),
     path('parameters/<str:model>/<int:object_id>/delete', views.delete_model_object, name='delete_model_object'),
     path('contract_requests', views.contract_requests_list, name='contract_requests_list'),
     path('contract_requests/new', views.create_contract_request, name='create_contract_request'),

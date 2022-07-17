@@ -32,7 +32,7 @@
                                     <tr id="perf-{{ performance.id }}">
                                         <td>{{ performance.label }}</td>
                                         <td>
-                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="{% url 'edit_simple_form' 'Performance' performance.id %}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <button onclick="delete_model_object(`{% url 'delete_model_object' 'Performance' performance.id %}`, `perf-{{ performance.id }}`)" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
                                         </td>
                                     </tr>
@@ -177,7 +177,7 @@
                                     <tr id="recruitmentT-{{ recruitment_type.id }}">
                                         <td>{{ recruitment_type.label }}</td>
                                         <td>
-                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="{% url 'edit_simple_form' 'RecruitmentType' recruitment_type.id %}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <button onclick="delete_model_object(`{% url 'delete_model_object' 'RecruitmentType' recruitment_type.id %}`, 'recruitmentT-{{ recruitment_type.id }}')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
                                         </td>
                                     </tr>
@@ -264,7 +264,7 @@
                                     <tr id="rateT-{{ rate_type.id }}">
                                         <td>{{ rate_type.label }}</td>
                                         <td>
-                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="{% url 'edit_simple_form' 'RateType' rate_type.id %}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <button onclick="delete_model_object(`{% url 'delete_model_object' 'RateType' rate_type.id %}`, 'rateT-{{ rate_type.id }}')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
                                         </td>
                                     </tr>
@@ -349,7 +349,7 @@
                                     <tr id="companyT-{{ company_type.id }}">
                                         <td>{{ company_type.label }}</td>
                                         <td>
-                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="{% url 'edit_simple_form' 'CompanyType' company_type.id %}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <button onclick="delete_model_object(`{% url 'delete_model_object' 'CompanyType' company_type.id %}`, 'companyT-{{ company_type.id }}')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
                                         </td>
                                     </tr>
@@ -434,7 +434,7 @@
                                     <tr id="unit-{{ unit.id }}">
                                         <td>{{ unit.label }}</td>
                                         <td>
-                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="{% url 'edit_simple_form' 'Unit' unit.id %}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <button onclick="delete_model_object(`{% url 'delete_model_object' 'Unit' unit.id %}`, 'unit-{{ unit.id }}')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
                                         </td>
                                     </tr>
@@ -521,7 +521,7 @@
                                     <tr id="legal-struct-{{ legal_structure.id }}">
                                         <td>{{ legal_structure.label }}</td>
                                         <td>
-                                            <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="{% url 'edit_simple_form' 'LegalStructure' legal_structure.id %}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <button onclick="delete_model_object(`{% url 'delete_model_object' 'LegalStructure' legal_structure.id %}`, `legal-struct-{{ legal_structure.id }}`)" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
                                         </td>
                                     </tr>
@@ -621,7 +621,7 @@
                                         <td>{{ user.date_joined }}</td>
                                         <td>
                                             <a href="{# TODO edit #}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <button onclick="{# TODO #}" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
+                                            <button onclick="{# TODO delete #}" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></button>
                                         </td>
                                     </tr>
                                 {% endfor %}
