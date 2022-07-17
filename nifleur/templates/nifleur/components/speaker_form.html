@@ -1,0 +1,66 @@
+<form method="post">
+    {% csrf_token %}
+    {% include 'nifleur/components/errors_form.html' %}
+    <div class="row">
+        <div class="col-sm-1 col-xs-12">
+            {{ form.civility.label }}
+            {{ form.civility }}
+        </div>
+        <div class="col-sm-4 col-xs-12">
+            {{ form.first_name.label }}
+            {{ form.first_name }}
+        </div>
+        <div class="col-sm-4 col-xs-12">
+            {{ form.last_name.label }}
+            {{ form.last_name }}
+        </div>
+        <div class="col-sm-3 col-xs-12">
+            {{ form.company.label }}
+            {{ form.company }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            {{ form.mail.label }}
+            {{ form.mail }}
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            {{ form.phone_number.label }}
+            {{ form.phone_number }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            {{ form.highest_degree.label }}
+            {{ form.highest_degree }}
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            {{ form.main_area_of_expertise.label }}
+            {{ form.main_area_of_expertise }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            {{ form.second_area_of_expertise.label }}
+            {{ form.second_area_of_expertise }}
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            {{ form.third_area_of_expertise.label }}
+            {{ form.third_area_of_expertise }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            {{ form.teaching_expertise_level.label }}
+            {{ form.teaching_expertise_level }}
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            {{ form.professional_expertise_level.label }}
+            {{ form.professional_expertise_level }}
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        {% if edit %}<a class="btn btn-danger" href="{% url 'speakers_list' %}">Annuler</a>{% endif %}
+        <button type="submit" class="btn btn-primary ml-3">Envoyer</button>
+    </div>
+</form>

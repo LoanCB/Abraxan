@@ -1,8 +1,11 @@
 # Versioning Projet Abraxan
 
-## v 0.5.1 - 10 juillet 2022
-- Fix django faille de sécurité 
-- Formulaire ajout de structure juridique
+## v 0.6.0 - 17 juillet 2022
+- Nouveaux import sur les écoles & promotion
+- Page liste des sociétés
+- Affichage des erreurs de formulaire + traduction
+- Amélioration de la sécurité avec les permissions
+- Affichage correcte des statuts des demandes de contrat
 
 ## v 0.5.0 - 9 juillet 2022
 - Export en XLS

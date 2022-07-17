@@ -15,8 +15,9 @@
             <h1>Ecole {{ school }}</h1>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-12">
+            <h2 class="d-flex justify-content-center">Liste des promotions</h2>
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive pb-3">
@@ -25,14 +26,18 @@
                                 <tr>
                                     <th>Promotion</th>
                                     <th>Nom complet</th>
+                                    <th>Initiaux</th>
+                                    <th>Alternant</th>
                                     <th>Matières</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for school_year in school.structure_school_year.all %}
+                                {% for school_year in school.school_year.all %}
                                     <tr>
                                         <td>{{ school_year.year }}</td>
                                         <td>{% if school_year.label %}{{ school_year.label }}{% endif %}</td>
+                                        <td>{% include 'nifleur/components/boolean_icon.html' with data=school_year.initial %}</td>
+                                        <td>{% include 'nifleur/components/boolean_icon.html' with data=school_year.alternating %}</td>
                                         <td>
                                             {% for discipline in school_year.disciplines.all %}
                                                 {{ discipline }}{% if not forloop.last %}, {% endif %}
@@ -47,6 +52,47 @@
             </div>
         </div>
     </div>
+
+    {% if perms.nifleur.add_schoolyear %}
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <h2 class="d-flex justify-content-center">Ajouter une promotion</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            {% include 'nifleur/components/errors_form.html' %}
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-12">
+                                    <p class="required">{{ form.year.label }}</p>
+                                    {{ form.year }}
+                                </div>
+                                <div class="col-sm-6 col-xs-12">
+                                    {{ form.label.label }}
+                                    {{ form.label }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-12">
+                                    {{ form.initial.label }}
+                                    {{ form.initial }} <br>
+                                    {{ form.initial.help_text }}
+                                </div>
+                                <div class="col-sm-6 col-xs-12">
+                                    {{ form.alternating.label }}
+                                    {{ form.alternating }} <br>
+                                    {{ form.alternating.help_text }}
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block custom_javascript %}

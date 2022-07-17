@@ -5,16 +5,17 @@ from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 
 from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, PerformanceForm, SchoolYearForm, \
-    SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm, LegalStructureForm
+    SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm, LegalStructureForm, \
+    SchoolYearDetailForm, CompanyForm
 from nifleur.models import ContractRequest, Speaker, Discipline, School, Performance, SchoolYear, Status, \
-    RecruitmentType, RateType, CompanyType, Unit, LegalStructure
+    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company, STATUS_CHOICES
 from nifleur.utils import export_csv, short_datetime
 
 
@@ -44,15 +45,30 @@ def logout_user(request):
     return redirect(login_user)
 
 
+@login_required
 def import_data(request, file, model, status=False):
     django_model = apps.get_model(app_label='nifleur', model_name=model)
     csv_reader = csv.reader(codecs.iterdecode(file, 'utf-8'), delimiter=';')
     for row in csv_reader:
         try:
+            name = row[0]
             if status:
-                django_model.objects.create(label=row[0], position=row[1])
+                color = row[2] if row[2][0] == '#' else f'#{row[2]}'
+                s_type = row[3]
+                status_type = None
+                for index, l_type in enumerate(STATUS_CHOICES):
+                    if s_type == l_type[0]:
+                        status_type = s_type
+                        break
+                    elif s_type == l_type[1]:
+                        status_type = STATUS_CHOICES[index][0]
+                        break
+                if not s_type:
+                    messages.error(request, f"Le statut {name} contient un type erroné : {s_type}")
+                    continue
+                django_model.objects.create(label=name, position=row[1], color=color, type=status_type)
             else:
-                django_model.objects.create(label=row[0])
+                django_model.objects.create(label=name)
         except IntegrityError as e:
             if request.user.is_superuser:
                 messages.error(request, e)
@@ -61,12 +77,11 @@ def import_data(request, file, model, status=False):
     return messages.info(request, f"Des données on été importées")
 
 
+@login_required
 def parameters(request):
     # models data
     performances = Performance.objects.all().order_by('label')
-    school_years = SchoolYear.objects.all()
     status = Status.objects.all().order_by('position')
-    schools = School.objects.all()
     recruitment_types = RecruitmentType.objects.all()
     rate_types = RateType.objects.all()
     company_types = CompanyType.objects.all()
@@ -76,7 +91,6 @@ def parameters(request):
 
     # Forms
     performance_form = PerformanceForm(request.POST or None, prefix='performance-form')
-    school_year_form = SchoolYearForm(request.POST or None, prefix='shcool_year-form')
     recruitment_type_form = RecruitmentTypeForm(request.POST or None, prefix='recruitment_typ-form')
     rate_type_form = RateTypeForm(request.POST or None, prefix='rate_type-form')
     company_type_form = CompanyTypeForm(request.POST or None, prefix='company_type-form')
@@ -87,11 +101,6 @@ def parameters(request):
     if performance_form.is_valid():
         performance_form.save()
         messages.success(request, "Une nouvelle performance a bien été créée")
-        return redirect(parameters)
-
-    if school_year_form.is_valid():
-        school_year_form.save()
-        messages.success(request, "Une nouvelle promotion a bien été créée")
         return redirect(parameters)
 
     if recruitment_type_form.is_valid():
@@ -177,9 +186,7 @@ def parameters(request):
 
     return render(request, 'nifleur/parameters.html', {
         'performances': performances,
-        'school_years': school_years,
         'status': status,
-        'schools': schools,
         'recruitment_types': recruitment_types,
         'rate_types': rate_types,
         'company_types': company_types,
@@ -187,7 +194,6 @@ def parameters(request):
         'legal_structures': legal_structures,
         'users': users,
         'performance_form': performance_form,
-        'school_year_form': school_year_form,
         'recruitment_type_form': recruitment_type_form,
         'rate_type_form': rate_type_form,
         'company_type_form': company_type_form,
@@ -197,6 +203,7 @@ def parameters(request):
     })
 
 
+@login_required
 def delete_model_object(request, model, object_id):
     django_model = apps.get_model(app_label='nifleur', model_name=model)
     model_object = get_object_or_404(django_model, id=object_id)
@@ -204,25 +211,56 @@ def delete_model_object(request, model, object_id):
     return JsonResponse({'success': True})
 
 
+@login_required
+def edit_simple_form(request, model, object_id):
+    django_model = apps.get_model(app_label='nifleur', model_name=model)
+    model_object = get_object_or_404(django_model, id=object_id)
+    all_forms = [PerformanceForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, LegalStructureForm]
+    form = None
+    for value in all_forms:
+        if model in str(value):
+            form = value
+
+    if form:
+        form = form(request.POST or None, instance=model_object)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Les données ont bien été mise à jour")
+            return redirect(parameters)
+        return render(request, 'nifleur/edit_simple_form.html', {'form': form, 'title': model_object.get_verbose_name})
+    else:
+        messages.error(request, "Une erreur est survenue lors de la recherche du formulaire")
+        return redirect(parameters)
+
+
+@login_required
 def contract_requests_list(request):
     contract_requests = ContractRequest.objects.all()
     return render(request, 'nifleur/contract_requests.html', {'contract_requests': contract_requests})
 
 
+@login_required
 def contract_request_detail(request, contract_id):
     contract = get_object_or_404(ContractRequest, id=contract_id)
     return render(request, 'nifleur/contract_request_details.html', {'contract': contract})
 
 
+@login_required
 def create_contract_request(request):
     form = ContractRequestForm(request.POST or None)
     if form.is_valid():
-        contract_request = form.save()
+        contract_request = form.save(commit=False)
+        contract_request.company = contract_request.speaker.company
+        contract_request.save()
+        discipline = get_object_or_404(Discipline, id=contract_request.discipline.id)
+        discipline.speaker = contract_request.speaker
+        discipline.save()
         messages.success(request, "La demande de contrat a bien été créée")
         return redirect(contract_request_detail, contract_request.id)
     return render(request, 'nifleur/contract_request_form.html', {'form': form})
 
 
+@login_required
 def export_contract_requests(request):
     contract_requests = ContractRequest.objects.all()
     data = [[
@@ -258,24 +296,32 @@ def export_contract_requests(request):
     return export_csv('demandes_de_contrat', data, True if xls else False)
 
 
+@login_required
 def speakers_list(request):
     speakers = Speaker.objects.all()
-    form = SpeakerForm(request.POST or None)
+    edit_instance = request.GET.get('edit_instance', None)
+    instance = Speaker.objects.get(id=edit_instance) if edit_instance else None
+    form = SpeakerForm(request.POST or None, instance=instance)
     if form.is_valid():
         form.save()
         messages.success(
             request,
-            f"L'intervenant {form.cleaned_data['first_name']} {form.cleaned_data['last_name']} a bien été créé"
+            f"L'intervenant {form.cleaned_data['first_name']} {form.cleaned_data['last_name']} a bien été "
+            f"{'modifié' if instance else 'créé'}"
         )
+        return redirect(speakers_list)
+
     return render(request, 'nifleur/speakers.html', {
         'speakers': speakers,
-        'form': form
+        'form': form,
+        'edit_instance': edit_instance
     })
 
 
+@login_required
 def speaker_details(request, speaker_id):
     speaker = get_object_or_404(Speaker, id=speaker_id)
-    campus = School.objects.filter(structure_school_year__disciplines__speaker=speaker)
+    campus = School.objects.filter(school_year__disciplines__speaker=speaker)
     data = dict()
 
     for school in campus.all():
@@ -296,6 +342,22 @@ def speaker_details(request, speaker_id):
     })
 
 
+@login_required
+def speaker_form(request):
+    form = SpeakerForm(request.POST or None)
+    created = False
+    if form.is_valid():
+        form.save()
+        created = True
+        return redirect(speaker_form)
+
+    return render(request, 'nifleur/add_speaker.html', {
+        'form': form,
+        'created': created
+    })
+
+
+@login_required
 def discipline_list(request):
     disciplines = Discipline.objects.all().order_by('school_year')
     form = DisciplineForm(request.POST or None)
@@ -305,19 +367,36 @@ def discipline_list(request):
             request,
             f"La matière {form.cleaned_data['label']} a bien été créée pour la classe {form.cleaned_data['school_year']}"
         )
+        return redirect(discipline_list)
+
     return render(request, 'nifleur/disciplines.html', {
         'disciplines': disciplines,
         'form': form
     })
 
 
+@login_required
 def school_list(request):
     schools = School.objects.all()
-    form = SchoolForm(request.POST or None)
+    form = SchoolForm(request.POST or None, prefix='school-form')
+    school_year_form = SchoolYearForm(request.POST or None, prefix='school-year-form')
+    permissions = Permission.objects.filter(group__user=request.user)
 
-    if form.is_valid():
-        form.save()
-        messages.success(request, f"L'école {form.cleaned_data['label']} a bien été créée")
+    if permissions.filter(codename='add_school').exists() or request.user.is_staff:
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"L'école {form.cleaned_data['label']} a bien été créée")
+            return redirect(school_list)
+    else:
+        messages.error(request, "Vous n'avez pas la permission d'ajouter des écoles")
+
+    if permissions.filter(codename='add_schoolyear').exists() or request.user.is_staff:
+        if school_year_form.is_valid():
+            promotion = school_year_form.save()
+            messages.success(request, f"La classe {promotion.year} {promotion.school} a bien été créée")
+            return redirect(school_list)
+    else:
+        messages.error(request, "Vous n'avez pas la permission d'ajouter des promotions")
 
     if request.method == 'POST':
         try:
@@ -335,14 +414,82 @@ def school_list(request):
                     else:
                         messages.error(request, f"L'école {row[0]} existe déjà")
             messages.info(request, f"Des écoles ont été importées")
-            return redirect(school_list)
+
+        try:
+            school_year_csv = request.FILES['school_year_csv']
+        except MultiValueDictKeyError:
+            pass
+        else:
+            csv_reader = csv.reader(codecs.iterdecode(school_year_csv, 'utf-8'), delimiter=';')
+            total_school_year = 0
+            total_school_year_imported = 0
+            for row in csv_reader:
+                try:
+                    school = get_object_or_404(School, label=row[0])
+                    initial = True if row[3] in ('oui', '1') else False
+                    alternating = True if row[4] in ('oui', '1') else False
+
+                    if SchoolYear.objects.filter(year=row[1]).exists():
+                        messages.error(request, f"La promotion {row[1]} existe déjà dans l'école {row[0]}")
+                        continue
+
+                    SchoolYear.objects.create(
+                        school=school,
+                        year=row[1],
+                        label=row[2],
+                        initial=initial,
+                        alternating=alternating
+                    )
+                except IntegrityError as e:
+                    if request.user.is_superuser:
+                        messages.error(request, e)
+                    else:
+                        messages.error(
+                            request,
+                            f"Une erreur est survenue sur l'import de la promotion {row[1]} ({row[0]})"
+                        )
+                else:
+                    total_school_year_imported += 1
+                finally:
+                    total_school_year += 1
+
+            messages.info(request, f"{total_school_year_imported} promotions on été importée sur {total_school_year}")
 
     return render(request, 'nifleur/schools.html', {
         'schools': schools,
+        'form': form,
+        'school_year_form': school_year_form
+    })
+
+
+@login_required
+def school_details(request, school_id):
+    school = get_object_or_404(School, id=school_id)
+    form = SchoolYearDetailForm(request.POST or None)
+
+    if form.is_valid():
+        school_year = form.save(commit=False)
+        school_year.school = school
+        school_year.save()
+        messages.success(request, f"La promotion {school_year.year} vient d'être créée")
+        return redirect(school_details, school_id)
+
+    return render(request, 'nifleur/school_details.html', {
+        'school': school,
         'form': form
     })
 
 
-def school_details(request, school_id):
-    school = get_object_or_404(School, id=school_id)
-    return render(request, 'nifleur/school_details.html', {'school': school})
+@login_required
+def company_list(request):
+    companies = Company.objects.all()
+    form = CompanyForm(request.POST or None)
+    if form.is_valid():
+        company = form.save()
+        messages.success(request, f"La société {company.label} vient d'être créée")
+        return redirect(company_list)
+
+    return render(request, 'nifleur/companies.html', {
+        'companies': companies,
+        'form': form
+    })

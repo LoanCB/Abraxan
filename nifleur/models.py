@@ -70,6 +70,7 @@ class School(models.Model):
 
 class CompanyType(models.Model):
     """
+    A company have a type
 
     Attributes:
 
@@ -84,10 +85,21 @@ class CompanyType(models.Model):
     def __str__(self):
         return self.label
 
+    @property
+    def get_verbose_name(self):
+        return 'un type de société'
+
 
 class Company(models.Model):
     """
+    A speaker can have a company
 
+    Attributes:
+
+    - :class:`str` label
+    - :class:`CompanyType` company_type
+    - :class:`str` relation_mail
+    - :class:`str` relation_phone_number
     """
     label = models.CharField('Nom', max_length=255, unique=True)
     company_type = models.ForeignKey(
@@ -128,11 +140,12 @@ class Speaker(models.Model):
     - :class:`str` second_area_of_expertise
     - :class:`str` third_area_of_expertise
     - :class:`int` teaching_expertise_level
+    - :class:`int` professional_expertise_level
     """
     MEN = 'M'
     WOMEN = 'W'
     CIVILITY = (
-        (MEN, 'Mr'),
+        (MEN, 'M.'),
         (WOMEN, 'Mme')
     )
     first_name = models.CharField('Prénom', max_length=50)
@@ -140,7 +153,7 @@ class Speaker(models.Model):
     civility = models.CharField('Civilité', max_length=1, choices=CIVILITY, default=MEN)
     company = models.ForeignKey(
         Company,
-        verbose_name='Compagnie',
+        verbose_name='Société',
         related_name='speaker_company',
         on_delete=models.PROTECT,
         null=True,
@@ -151,13 +164,17 @@ class Speaker(models.Model):
     highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
     main_area_of_expertise = models.CharField('Domaine de compétence principal', max_length=255)
     second_area_of_expertise = models.CharField(
-        'Deuximème domaine de compétence',
+        'Deuxième domaine de compétence',
         max_length=255,
         null=True,
         blank=True
     )
     third_area_of_expertise = models.CharField('Troisième domaine de compétence', max_length=255, null=True, blank=True)
     teaching_expertise_level = models.PositiveSmallIntegerField("Niveau d'expertise en pédagogie", choices=LEVELS)
+    professional_expertise_level = models.PositiveSmallIntegerField(
+        "Niveau d'expertise en matière professionnelle",
+        choices=LEVELS
+    )
 
     class Meta:
         verbose_name = 'Intervenant'
@@ -190,6 +207,10 @@ class Performance(models.Model):
     def __str__(self):
         return self.label
 
+    @property
+    def get_verbose_name(self):
+        return 'une prestation'
+
 
 class RateType(models.Model):
     """
@@ -207,6 +228,10 @@ class RateType(models.Model):
 
     def __str__(self):
         return self.label
+
+    @property
+    def get_verbose_name(self):
+        return 'un type de tarif'
 
 
 class SchoolYear(models.Model):
@@ -267,7 +292,6 @@ class Discipline(models.Model):
     - :class:`SchoolYear` school_year
     - :class:`str` label
     - :class:`Speaker` speaker
-    - :class:`str` period
     """
     school_year = models.ForeignKey(
         SchoolYear,
@@ -285,7 +309,6 @@ class Discipline(models.Model):
         null=True,
         blank=True
     )
-    period = models.CharField('Période', choices=PERIOD, max_length=2)
 
     class Meta:
         verbose_name = 'Matière'
@@ -293,6 +316,16 @@ class Discipline(models.Model):
 
     def __str__(self):
         return self.label
+
+
+OPEN = 1
+ON_GOING = 2
+CLOSE = 3
+STATUS_CHOICES = (
+    (OPEN, 'ouvert'),
+    (ON_GOING, 'en cours'),
+    (CLOSE, 'fermé')
+)
 
 
 class Status(models.Model):
@@ -303,9 +336,18 @@ class Status(models.Model):
 
     - :class:`int` position
     - :class:`str` label
+    - :class:`str` color
+    - :class:`int` type
     """
     position = models.PositiveSmallIntegerField('position')
     label = models.CharField('Nom', max_length=50, unique=True)
+    color = models.CharField(
+        'couleur',
+        max_length=9,
+        unique=True,
+        help_text="Couleur hexadécimale du status (avec le #)"
+    )
+    type = models.PositiveSmallIntegerField('type', choices=STATUS_CHOICES, default=OPEN)
 
     class Meta:
         verbose_name = 'Statut'
@@ -313,6 +355,10 @@ class Status(models.Model):
 
     def __str__(self):
         return f'{self.position} - {self.label}'
+
+    @property
+    def get_verbose_name(self):
+        return 'un statut'
 
 
 class Unit(models.Model):
@@ -331,6 +377,10 @@ class Unit(models.Model):
     def __str__(self):
         return self.label
 
+    @property
+    def get_verbose_name(self):
+        return 'une unité'
+
 
 class RecruitmentType(models.Model):
     """
@@ -347,6 +397,10 @@ class RecruitmentType(models.Model):
 
     def __str__(self):
         return self.label
+
+    @property
+    def get_verbose_name(self):
+        return 'un  type de recrutement'
 
 
 class LegalStructure(models.Model):
@@ -366,6 +420,10 @@ class LegalStructure(models.Model):
     def __str__(self):
         return self.label
 
+    @property
+    def get_verbose_name(self):
+        return 'une structure juridique'
+
 
 class ContractRequest(TimeStampedModel):
     """
@@ -376,6 +434,7 @@ class ContractRequest(TimeStampedModel):
     - :class:`School` school
     - :class:`LegalStructure` legal_structure
     - :class:`Speaker` speaker
+    - :class:`Company` company
     - :class:`str` comment
     - :class:`int` status
     - :class:`Performance` performance
@@ -388,13 +447,8 @@ class ContractRequest(TimeStampedModel):
     - :class:`datetime` ended_at
     - :class:`Discipline` discipline
     - :class:`SchoolYear` school_year
-    - :class:`bool` alternating
-    - :class:`str` period
     - :class:`User` rp
     - :class:`int` recruitment_type
-    - :class:`str` highest_degree
-    - :class:`int` teaching_expertise_level
-    - :class:`int` professional_expertise_level
     """
     school = models.ForeignKey(
         School,
@@ -414,10 +468,18 @@ class ContractRequest(TimeStampedModel):
         related_name='contract_request_speaker',
         on_delete=models.PROTECT
     )
+    company = models.ForeignKey(
+        Company,
+        verbose_name='Société',
+        related_name='contract_request_company',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
     comment = models.CharField('Commentaire', max_length=255, null=True, blank=True)
     status = models.ForeignKey(
         Status,
-        verbose_name='Status',
+        verbose_name='Statut',
         related_name='contract_request_status',
         on_delete=models.PROTECT
     )
@@ -430,13 +492,20 @@ class ContractRequest(TimeStampedModel):
     applied_rate = models.FloatField('Tarif à appliquer')
     rate_type = models.ForeignKey(
         RateType,
-        verbose_name="Type d'horaire",
+        verbose_name="Horaire ou forfait",
         related_name='contract_request_rate',
         on_delete=models.PROTECT
     )
-    ttc = models.BooleanField('Toute Taxes Comprises', help_text='SST si faux', default=False)
+    ttc = models.BooleanField('TVA', help_text='SST si faux', default=False)
     hourly_volume = models.FloatField('Volume horaire')
-    unit = models.ForeignKey(Unit, verbose_name='Unité', related_name='contract_request_unit', on_delete=models.PROTECT)
+    unit = models.ForeignKey(
+        Unit,
+        verbose_name='Unité',
+        related_name='contract_request_unit',
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
     started_at = models.DateTimeField('Début du contrat')
     ended_at = models.DateTimeField('Fin du contrat')
     discipline = models.ForeignKey(
@@ -451,6 +520,7 @@ class ContractRequest(TimeStampedModel):
         related_name='contract_request_year',
         on_delete=models.PROTECT
     )
+    period = models.CharField('Période', choices=PERIOD, max_length=2)
     rp = models.ForeignKey(User, verbose_name='Responsable pédagogique', related_name='rp', on_delete=models.PROTECT)
     recruitment_type = models.ForeignKey(
         RecruitmentType,
@@ -458,17 +528,13 @@ class ContractRequest(TimeStampedModel):
         related_name='contract_request_recrutement_type',
         on_delete=models.PROTECT
     )
-    professional_expertise_level = models.PositiveSmallIntegerField(
-        "Niveau d'expertise en matière professionnelle",
-        choices=LEVELS
-    )
 
     class Meta:
         verbose_name = 'Demande de contrat'
         verbose_name_plural = 'Demandes de contrat'
 
     def __str__(self):
-        return f"Demande de contrat de {self.speaker.get_civility_display()}. {self.speaker}"
+        return f"Demande de contrat de {self.speaker.get_civility_display()} {self.speaker}"
 
     def get_absolute_url(self):
         return reverse('contract_request_detail', kwargs={'contract_id': self.id})

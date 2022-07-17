@@ -38,8 +38,9 @@
                                     <th>Ecole</th>
                                     <th>Structure juridique</th>
                                     <th>Intervenant</th>
+                                    <th>Société</th>
                                     <th>Commentaire</th>
-                                    <th>Status</th>
+                                    <th>Statut</th>
                                     <th>Type de mission</th>
                                     <th>Tarif</th>
                                     <th>Type d'horaire</th>
@@ -49,16 +50,16 @@
                                     <th>Date fin</th>
                                     <th>Matière</th>
                                     <th>Promotion</th>
+                                    <th>Initial</th>
                                     <th>Alternant</th>
                                     <th>Période</th>
                                     <th>RP</th>
                                     <th>Type de recrutement</th>
-                                    <th>Expertise professionnelle</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for contract in contract_requests %}
-                                    <tr>
+                                    <tr style="background-color: {{ contract.status.color }}">
                                         <td>
                                             <a href="{{ contract.get_absolute_url }}"><i class="fa-solid fa-eye"></i></a>
                                         </td>
@@ -68,6 +69,7 @@
                                         </td>
                                         <td>{{ contract.legal_structure }}</td>
                                         <td><a href="{{ contract.speaker.get_absolute_url }}">{{ contract.speaker }}</a></td>
+                                        <td>{% if contract.company %}{{ contract.company }}{% endif %}</td>
                                         <td>{% if contract.comment %}{{ contract.comment }}{% endif %}</td>
                                         <td>{{ contract.status }}</td>
                                         <td>{{ contract.performance }}</td>
@@ -79,11 +81,11 @@
                                         <td>{{ contract.ended_at }}</td>
                                         <td>{{ contract.discipline }}</td>
                                         <td>{{ contract.school_year }}</td>
-                                        <td>{% include 'nifleur/components/boolean_icon.html' with data=contract.alternating %}</td>
+                                        <td>{% include 'nifleur/components/boolean_icon.html' with data=contract.school_year.initial %}</td>
+                                        <td>{% include 'nifleur/components/boolean_icon.html' with data=contract.school_year.alternating %}</td>
                                         <td>{{ contract.get_period_display }}</td>
                                         <td>{{ contract.rp.get_full_name }}</td>
                                         <td>{{ contract.get_recruitment_type_display }}</td>
-                                        <td>{% include 'nifleur/components/expertise_level.html' with level=contract.professional_expertise_level display=contract.get_professional_expertise_level_display %}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

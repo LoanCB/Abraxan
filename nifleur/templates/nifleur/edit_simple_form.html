@@ -1,0 +1,23 @@
+{% extends 'nifleur/base_site.html' %}
+
+{% block title %}Modifier {{ title }}{% endblock %}
+
+{% block content %}
+    <h2 class="d-flex justify-content-center mb-3">Modifier {{ title }}</h2>
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-flex justify-content-center mt-3">
+                            <a href="{% url 'parameters' %}" class="btn btn-danger">Annuler</a>
+                            <button type="submit" class="btn btn-success ml-3">Modifier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

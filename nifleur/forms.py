@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 from nifleur.models import Discipline, Speaker, ContractRequest, Performance, SchoolYear, Status, School, \
-    RecruitmentType, RateType, CompanyType, Unit, LegalStructure
+    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company
 
 
 class CustomModelForm(forms.ModelForm):
@@ -14,23 +14,34 @@ class CustomModelForm(forms.ModelForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
+        for bound_field in self:
+            if hasattr(bound_field, "field") and bound_field.field.required:
+                bound_field.field.widget.attrs["oninvalid"] = "this.setCustomValidity('Ce champ est obligatoire')"
+
 
 class DisciplineForm(CustomModelForm):
     class Meta:
         model = Discipline
-        fields = ['school_year', 'label', 'speaker']
+        fields = ('school_year', 'label')
 
 
 class SpeakerForm(CustomModelForm):
     class Meta:
         model = Speaker
         fields = (
-            'first_name', 'last_name', 'civility', 'mail', 'phone_number', 'highest_degree',
-            'main_area_of_expertise', 'second_area_of_expertise', 'third_area_of_expertise', 'teaching_expertise_level'
+            'first_name', 'last_name', 'civility', 'mail', 'phone_number', 'highest_degree', 'company',
+            'main_area_of_expertise', 'second_area_of_expertise', 'third_area_of_expertise', 'teaching_expertise_level',
+            'professional_expertise_level'
         )
         widgets = {
             'phone_number': forms.TextInput(attrs={'placeholder': '0_ __ __ __ __', 'data-slots': '_'})
         }
+
+
+TTC_CHOICES = (
+    (True, 'TTC'),
+    (False, 'SST')
+)
 
 
 class ContractRequestForm(CustomModelForm):
@@ -38,13 +49,15 @@ class ContractRequestForm(CustomModelForm):
         model = ContractRequest
         fields = (
             'school', 'legal_structure', 'speaker', 'comment', 'status', 'performance', 'applied_rate', 'rate_type',
-            'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year', 'rp',
-            'recruitment_type', 'professional_expertise_level'
+            'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year', 'rp', 'period',
+            'recruitment_type'
         )
+        widgets = {
+            'ttc': forms.Select(choices=TTC_CHOICES)
+        }
 
     def __init__(self, *args, **kwargs):
         super(ContractRequestForm, self).__init__(*args, **kwargs)
-        self.fields['ttc'].widget.attrs['class'] = 'form-check-input'
         self.fields['started_at'].widget.attrs['class'] += ' datepicker_input'
         self.fields['ended_at'].widget.attrs['class'] += ' datepicker_input'
 
@@ -58,7 +71,23 @@ class PerformanceForm(CustomModelForm):
 class SchoolYearForm(CustomModelForm):
     class Meta:
         model = SchoolYear
-        fields = ('school', 'year', 'label')
+        fields = ('school', 'year', 'label', 'initial', 'alternating')
+
+    def __init__(self, *args, **kwargs):
+        super(SchoolYearForm, self).__init__(*args, **kwargs)
+        self.fields['initial'].widget.attrs['class'] = 'form-check-input'
+        self.fields['alternating'].widget.attrs['class'] = 'form-check-input'
+
+
+class SchoolYearDetailForm(CustomModelForm):
+    class Meta:
+        model = SchoolYear
+        fields = ('year', 'label', 'initial', 'alternating')
+
+    def __init__(self, *args, **kwargs):
+        super(SchoolYearDetailForm, self).__init__(*args, **kwargs)
+        self.fields['initial'].widget.attrs['class'] = 'form-check-input'
+        self.fields['alternating'].widget.attrs['class'] = 'form-check-input'
 
 
 class SchoolForm(CustomModelForm):
@@ -108,3 +137,12 @@ class RegisterForm(CustomModelForm, UserCreationForm):
 
         for field_name in ['username', 'password1', 'password2']:
             self.fields[field_name].help_text = None
+
+
+class CompanyForm(CustomModelForm):
+    class Meta:
+        model = Company
+        fields = ('label', 'company_type', 'relation_mail', 'relation_phone_number')
+        widgets = {
+            'relation_phone_number': forms.TextInput(attrs={'placeholder': '0_ __ __ __ __', 'data-slots': '_'})
+        }

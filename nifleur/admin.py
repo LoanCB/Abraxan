@@ -24,7 +24,7 @@ class SpeakerAdmin(admin.ModelAdmin):
     list_display = (
         'first_name', 'last_name', 'civility', 'company', 'mail', 'phone_number', 'highest_degree',
         'main_area_of_expertise', 'second_area_of_expertise', 'third_area_of_expertise',
-        'teaching_expertise_level'
+        'teaching_expertise_level', 'professional_expertise_level'
     )
 
 
@@ -45,12 +45,12 @@ class SchoolYearAdmin(admin.ModelAdmin):
 
 @admin.register(Discipline)
 class DisciplineAdmin(admin.ModelAdmin):
-    list_display = ('school_year', 'label', 'speaker', 'period')
+    list_display = ('school_year', 'label', 'speaker')
 
 
 @admin.register(Status)
 class StatusAdmin(admin.ModelAdmin):
-    list_display = ('position', 'label')
+    list_display = ('position', 'label', 'color', 'type')
 
 
 @admin.register(Unit)
@@ -68,5 +68,5 @@ class ContractRequestAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'school', 'speaker', 'created_at', 'comment', 'status', 'performance', 'applied_rate',
         'rate_type', 'ttc', 'hourly_volume', 'unit', 'started_at', 'ended_at', 'discipline', 'school_year',
-        'rp', 'recruitment_type', 'professional_expertise_level'
+        'rp', 'recruitment_type'
     )
