@@ -60,6 +60,7 @@
         </div>
     </div>
     <div class="d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary">Envoyer</button>
+        {% if edit %}<a class="btn btn-danger" href="{% url 'speakers_list' %}">Annuler</a>{% endif %}
+        <button type="submit" class="btn btn-primary ml-3">Envoyer</button>
     </div>
 </form>

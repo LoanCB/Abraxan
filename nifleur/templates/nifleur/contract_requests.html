@@ -55,7 +55,6 @@
                                     <th>Période</th>
                                     <th>RP</th>
                                     <th>Type de recrutement</th>
-                                    <th>Expertise professionnelle</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -87,7 +86,6 @@
                                         <td>{{ contract.get_period_display }}</td>
                                         <td>{{ contract.rp.get_full_name }}</td>
                                         <td>{{ contract.get_recruitment_type_display }}</td>
-                                        <td>{% include 'nifleur/components/expertise_level.html' with level=contract.professional_expertise_level display=contract.get_professional_expertise_level_display %}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
