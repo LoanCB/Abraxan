@@ -5,31 +5,64 @@
 {% block title %}Detail de contrat{% endblock %}
 
 {% block content %}
+    <h3><a href="{% url 'contract_requests_list' %}">
+        <i class="fa-solid fa-circle-left"></i> Retour à la liste des demandes de contrat</a>
+    </h3>
     <div class="row">
+
+        <div class="col-md-8 col-sm-12">
+
+            <!-- Infos -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Intervenant</th>
+                            <th class="text-center">Société</th>
+                            <th class="text-center">Commentaire</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="text-center">{{ contract.created_at }}</td>
+                            <td class="text-center">{{ contract.speaker }}</td>
+                            <td class="text-center">{% if contract.company %}{{ contract.company }}{% endif %}</td>
+                            <td class="text-center">{% if contract.comment %}{{ contract.comment }}{% endif %}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="btn-timeline-group">
+                <a href="{% url 'change_contract_status' contract.id 'reset' %}" class="btn-timeline btn-push {% if not contract.status.can_back %}btn-disabled{% endif %}">
+                    <i class="fa-2x fa-solid fa-backward-fast"></i>Revenir au début
+                </a>
+                <a href="{% url 'change_contract_status' contract.id 'back' %}" class="btn-timeline btn-push {% if not contract.status.can_back %}btn-disabled{% endif %}">
+                    <i class="fa-2x fa-solid fa-backward"></i>Précédent
+                </a>
+                <a href="{% url 'change_contract_status' contract.id 'next' %}" class="btn-timeline btn-push {% if not contract.status.can_next %}btn-disabled{% endif %}">
+                    <i class="fa-2x fa-solid fa-forward"></i>Suivant
+                </a>
+                <a href="{% url 'change_contract_status' contract.id 'finish' %}" class="btn-timeline btn-push {% if contract.status.finish %}btn-disabled{% endif %}">
+                    <i class="fa-2x fa-solid fa-forward-fast"></i>Terminer le contrat
+                </a>
+                <a href="{% url 'change_contract_status' contract.id 'cancel' %}" class="btn-timeline btn-push {% if contract.status.cancel %}btn-disabled{% endif %}">
+                    <i class="fa-2x fa-solid fa-ban"></i>Annuler le contrat
+                </a>
+            </div>
+        </div>
+
         <!-- Timeline -->
-        <div class="col-md-6 col-sm-12">
+        <div class="col-md-4 col-sm-12">
             <div class='wrapper'>
                 <div class='steps' id='steps'></div>
             </div>
         </div>
 
-        <!-- Buttons -->
-        <div class="col-md-6 col-sm-12">
-            <div class="btn-timeline-group">
-                <a href="{% url 'change_contract_status' contract.id 'reset' %}" class="btn-timeline">
-                    <i class="fa-2x fa-solid fa-backward-fast"></i>Revenir au début
-                </a>
-                <a href="{% url 'change_contract_status' contract.id 'back' %}" class="btn-timeline {% if not contract.status.can_back %}btn-disabled{% endif %}">
-                    <i class="fa-2x fa-solid fa-backward"></i>Précédent
-                </a>
-                <a href="{% url 'change_contract_status' contract.id 'next' %}" class="btn-timeline {% if not contract.status.can_next %}btn-disabled{% endif %}">
-                    <i class="fa-2x fa-solid fa-forward"></i>Suivant
-                </a>
-                <a href="{% url 'change_contract_status' contract.id 'finish' %}" class="btn-timeline">
-                    <i class="fa-2x fa-solid fa-forward-fast"></i>Terminer le contrat
-                </a>
-            </div>
-        </div>
     </div>
 {% endblock %}
 

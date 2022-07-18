@@ -76,7 +76,7 @@
                                         <td>{{ contract.applied_rate }} €</td>
                                         <td>{{ contract.rate_type }}</td>
                                         <td>{{ contract.ttc|yesno:"TTC,SST," }}</td>
-                                        <td>{{ contract.hourly_volume|floatformat:"0" }} {{ contract.unit }}</td>
+                                        <td>{{ contract.hourly_volume|floatformat:"0" }} {% if contract.unit %}{{ contract.unit }}{% endif %}</td>
                                         <td>{{ contract.started_at }}</td>
                                         <td>{{ contract.ended_at }}</td>
                                         <td>{{ contract.discipline }}</td>

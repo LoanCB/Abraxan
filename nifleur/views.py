@@ -268,6 +268,10 @@ def change_contract_status(request, contract_id, action):
         status = Status.objects.filter(type=CLOSE).first()
         contract.status = status
         contract.save()
+    elif action == 'cancel':
+        status = Status.objects.filter(type=CLOSE).last()
+        contract.status = status
+        contract.save()
     else:
         messages.error(request, "Une erreur est survenue")
     return redirect(contract_request_detail, contract_id)

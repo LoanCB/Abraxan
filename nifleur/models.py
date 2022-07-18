@@ -366,7 +366,17 @@ class Status(models.Model):
 
     @property
     def can_next(self):
-        return self.position < Status.objects.all().count()
+        # FIXME Potential bug if position not in strict order
+        return self.position < Status.objects.count()
+
+    @property
+    def finish(self):
+        return self == Status.objects.filter(type=CLOSE).first()
+
+    @property
+    def cancel(self):
+        # FIXME Potential bug if new status CLOSE was created
+        return self == Status.objects.filter(type=CLOSE).last()
 
 
 class Unit(models.Model):

@@ -55,6 +55,21 @@ h3 a
     border-color: var(--main_salmon) !important;
 }
 
+.btn-push
+{
+    box-shadow: 0 5px 0 #B8B8B8;
+
+    /*Animation*/
+    transition: all 0.1s;
+}
+
+.btn-push:active
+{
+  box-shadow: 0 1px 0 #B8B8B8;
+  position: relative;
+  top: 3px;
+}
+
 .clickable
 {
     cursor: pointer;
