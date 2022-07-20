@@ -295,7 +295,8 @@ def change_contract_status(request, contract_id, action):
 
 @login_required
 def create_contract_request(request):
-    form = ContractRequestForm(request.POST or None)
+    default_state = Status.objects.get(position=4)
+    form = ContractRequestForm(request.POST or None, initial={'status': default_state})
     if form.is_valid():
         contract_request = form.save(commit=False)
         contract_request.company = contract_request.speaker.company
