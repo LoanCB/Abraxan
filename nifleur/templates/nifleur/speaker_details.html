@@ -70,7 +70,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 col-sm-8 col-xs-12">
+        <div class="col-md-6 col-sm-8 col-xs-12 mb-3">
             <h1 class="d-flex justify-content-center">Liste des matières</h1>
             <div class="card">
                 <div class="card-body">
@@ -94,8 +94,6 @@
                     </div>
                 </div>
             </div>
-            <p>Nombre d'heures contractualisées : {{ speaker_hours }}</p>
-            <p>Société : {% if speaker.company %}{{ speaker.company }}{% else %}Aucune{% endif %}</p>
         </div>
 
         <div class="col-md-6 col-sm-8 col-xs-12">
@@ -106,6 +104,16 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-3 col-xs-12">
+            <h3 class="text-center">Nombre d'heures contractualisées :</h3>
+            <h3 class="main-number">{{ speaker_hours }}</h3>
+        </div>
+        {% if speaker.company %}
+            <div class="col-sm-3 col-xs-12">
+                <h3 class="text-center">Société :</h3>
+                <h3 class="main-number">{{ speaker.company }}</h3>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 
