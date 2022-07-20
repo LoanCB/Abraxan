@@ -53,12 +53,12 @@
                                         </td>
                                         <td>{{ speaker.mail }}</td>
                                         <td>{% if speaker.phone_number %}{{ speaker.phone_number.as_national }}{% endif %}</td>
-                                        <td>{{ speaker.highest_degree }}</td>
-                                        <td>{{ speaker.main_area_of_expertise }}</td>
+                                        <td>{% if speaker.highest_degree %}{{ speaker.highest_degree }} {% endif %}</td>
+                                        <td>{% if speaker.main_area_of_expertise %}{{ speaker.main_area_of_expertise }}{% endif %}</td>
                                         <td>{% if speaker.second_area_of_expertise %}{{ speaker.second_area_of_expertise }}{% endif %}</td>
                                         <td>{% if speaker.third_area_of_expertise %}{{ speaker.third_area_of_expertise }}{% endif %}</td>
-                                        <td>{{ speaker.get_teaching_expertise_level_display }}</td>
-                                        <td>{{ speaker.get_professional_expertise_level_display }}</td>
+                                        <td>{% if speaker.teaching_expertise_level %}{{ speaker.get_teaching_expertise_level_display }}{% endif %}</td>
+                                        <td>{% if speaker.professional_expertise_level %}{{ speaker.get_professional_expertise_level_display }}{% endif %}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -76,6 +76,38 @@
                     {% include 'nifleur/components/speaker_form.html' with edit=edit_instance %}
                 </div>
             </div>
+
+            <article class="mt-4 mb-4">
+                <h2 class="d-flex justify-content-center">Import de masse</h2>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importSpeakersModel">Importer des intervenants</button>
+                </div>
+
+                <!-- Import Disciplines Modal -->
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal fade" id="importSpeakersModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importSpeakersModelLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="importSpeakersModelLabel">Importer des intervenants</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="speakers_csv">Choississez un fichier CSV</label>
+                                    <input type="file" id="speakers_csv" name="speakers_csv">
+                                    <small></small>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                    <button type="submit" class="btn btn-primary">Importer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </article>
+
         </div>
     </div>
 
@@ -88,7 +120,8 @@
     $(() => {
         $('#speakers_table').DataTable({
             'columnDefs': [{'className': 'text-center', 'targets': '_all'}],
-            'language': {'url': "{% static 'vendors/datatables/translate_fr.json' %}"}
+            'language': {'url': "{% static 'vendors/datatables/translate_fr.json' %}"},
+            order: [[3, 'asc']]
         })
     })
     </script>

@@ -28,7 +28,7 @@
                                     <tr>
                                         <td><a href="{% url 'school_details' school.id %}"><i class="fa-solid fa-eye"></i></a></td>
                                         <td>{{ school.label }}</td>
-                                        <td>{{ school.full_name }}</td>
+                                        <td>{% if school.full_name %}{{ school.full_name }}{% endif %}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -36,6 +36,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <div class="offset-xl-0 col-xl-4 offset-md-3 col-md-6">
 

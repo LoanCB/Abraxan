@@ -1,9 +1,66 @@
 {% extends 'nifleur/base_site.html' %}
 
+{% load static %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1>Bienvenue {% if request.user.first_name or request.user.last_name %}{{ request.user.get_full_name }}{% else %}{{ request.user }}{% endif %}</h1>
-    <a href="{% url 'logout_user' %}">Déconnexion</a>
-    <a href="{% url 'avatar_change' %}">Change your avatar</a>
+    <div class="d-flex text-center flex-column mb-4">
+        <img src="{% static 'images/logo_abraxan.svg' %}" alt="Logo Abraxan" class="abraxan-logo">
+        <h1>Bienvenue {% if request.user.first_name or request.user.last_name %}{{ request.user.get_full_name }}{% else %}{{ request.user }}{% endif %}</h1>
+        <h2>Sur Abraxan</h2>
+    </div>
+    <div class="row last-row">
+        <div class="col-sm-3 col-xs-12">
+            <h3 class="text-center">Nombre total de demandes de contrat :</h3>
+            <h3 class="main-number">{{ contract_count }}</h3>
+        </div>
+        <div class="col-sm-3 col-xs-12">
+            <h3 class="text-center">Nombre de demandes de contrat aujourd'hui :</h3>
+            <h3 class="main-number">{{ today_contract_count }}</h3>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <h2 class="d-flex justify-content-center">Modifier mes informations</h2>
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% include 'nifleur/components/errors_form.html' %}
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-12">
+                                <p class="required">{{ form.username.label }}*</p>
+                                {{ form.username }}
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                {{ form.first_name.label }}
+                                {{ form.first_name }}
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                {{ form.last_name.label }}
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12">
+                                <p class="required">{{ form.password1.label }}*</p>
+                                {{ form.password1 }}
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                <p class="required">{{ form.password2.label }}*</p>
+                                {{ form.password2 }}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <a href="{% url 'avatar_change' %}" class="btn btn-success">Changer mon avatar</a>
+                            <button type="submit" class="btn btn-primary ml-3">Modifier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="other-logo">
+        <img src="{% static 'images/logo_ges.png' %}" alt="Logo GES">
+        <img src="{% static 'images/logo_su.png' %}" alt="Logo SU">
+    </footer>
 {% endblock %}

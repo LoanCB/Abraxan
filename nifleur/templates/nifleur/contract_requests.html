@@ -30,7 +30,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive pb-3">
-                        <table class="table table-striped table-hover table-sm align-middle text-center" id="contract_request_table">
+                        <table class="table table-hover table-sm align-middle text-center" id="contract_request_table">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -76,7 +76,7 @@
                                         <td>{{ contract.applied_rate }} €</td>
                                         <td>{{ contract.rate_type }}</td>
                                         <td>{{ contract.ttc|yesno:"TTC,SST," }}</td>
-                                        <td>{{ contract.hourly_volume|floatformat:"0" }} {{ contract.unit }}</td>
+                                        <td>{{ contract.hourly_volume|floatformat:"0" }} {% if contract.unit %}{{ contract.unit }}{% endif %}</td>
                                         <td>{{ contract.started_at }}</td>
                                         <td>{{ contract.ended_at }}</td>
                                         <td>{{ contract.discipline }}</td>

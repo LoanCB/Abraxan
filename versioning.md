@@ -1,5 +1,9 @@
 # Versioning Projet Abraxan
 
+## v 1.0.0 - 20 juillet 2022
+- Pages : détail d'une société, détail d'une demande de contrat, accueil
+- Import XLS massive sur les intervenants & les matières (fichier type)
+
 ## v 0.6.0 - 17 juillet 2022
 - Nouveaux import sur les écoles & promotion
 - Page liste des sociétés

@@ -106,7 +106,9 @@ class Company(models.Model):
         CompanyType,
         verbose_name='Type de la compagnie',
         related_name='speaker_company_type',
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
     )
     relation_mail = models.EmailField(verbose_name='mail de la relation', null=True, blank=True, unique=True)
     relation_phone_number = PhoneNumberField(
@@ -161,8 +163,8 @@ class Speaker(models.Model):
     )
     mail = models.EmailField(unique=True)
     phone_number = PhoneNumberField(verbose_name='Numéro de téléphone', null=True, blank=True)
-    highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
-    main_area_of_expertise = models.CharField('Domaine de compétence principal', max_length=255)
+    highest_degree = models.CharField('Diplôme le plus élevé', max_length=255, null=True)
+    main_area_of_expertise = models.CharField('Domaine de compétence principal', max_length=255, null=True)
     second_area_of_expertise = models.CharField(
         'Deuxième domaine de compétence',
         max_length=255,
@@ -170,10 +172,15 @@ class Speaker(models.Model):
         blank=True
     )
     third_area_of_expertise = models.CharField('Troisième domaine de compétence', max_length=255, null=True, blank=True)
-    teaching_expertise_level = models.PositiveSmallIntegerField("Niveau d'expertise en pédagogie", choices=LEVELS)
+    teaching_expertise_level = models.PositiveSmallIntegerField(
+        "Niveau d'expertise en pédagogie",
+        choices=LEVELS,
+        null=True
+    )
     professional_expertise_level = models.PositiveSmallIntegerField(
         "Niveau d'expertise en matière professionnelle",
-        choices=LEVELS
+        choices=LEVELS,
+        null=True
     )
 
     class Meta:
@@ -290,6 +297,7 @@ class Discipline(models.Model):
     Attributes:
 
     - :class:`SchoolYear` school_year
+    - :class:`School` school
     - :class:`str` label
     - :class:`Speaker` speaker
     """
@@ -298,7 +306,14 @@ class Discipline(models.Model):
         verbose_name='Classe',
         related_name='disciplines',
         on_delete=models.PROTECT,
-        null=True
+        null=True,
+        blank=True
+    )
+    school = models.ForeignKey(
+        School,
+        verbose_name='Ecole',
+        related_name='disciplines',
+        on_delete=models.PROTECT
     )
     label = models.CharField('Nom', max_length=255)
     speaker = models.ForeignKey(
@@ -316,6 +331,15 @@ class Discipline(models.Model):
 
     def __str__(self):
         return self.label
+
+    def clean(self, *args, **kwargs):
+        if not self.school and self.school_year:
+            self.school = self.school_year.school
+        super().clean()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 OPEN = 1
@@ -359,6 +383,24 @@ class Status(models.Model):
     @property
     def get_verbose_name(self):
         return 'un statut'
+
+    @property
+    def can_back(self):
+        return self.position > 1
+
+    @property
+    def can_next(self):
+        # FIXME Potential bug if position not in strict order
+        return self.position < Status.objects.count()
+
+    @property
+    def finish(self):
+        return self == Status.objects.filter(type=CLOSE).first()
+
+    @property
+    def cancel(self):
+        # FIXME Potential bug if new status CLOSE was created
+        return self == Status.objects.filter(type=CLOSE).last()
 
 
 class Unit(models.Model):

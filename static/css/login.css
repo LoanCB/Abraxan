@@ -77,6 +77,18 @@ body
 	cursor: pointer;
 }
 
+.logos
+{
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
+.logos img
+{
+	margin: 0 0.5rem;
+}
+
 
 /*************************
           Text

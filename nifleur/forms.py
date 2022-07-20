@@ -22,7 +22,7 @@ class CustomModelForm(forms.ModelForm):
 class DisciplineForm(CustomModelForm):
     class Meta:
         model = Discipline
-        fields = ('school_year', 'label')
+        fields = ('school', 'school_year', 'label')
 
 
 class SpeakerForm(CustomModelForm):
@@ -60,6 +60,9 @@ class ContractRequestForm(CustomModelForm):
         super(ContractRequestForm, self).__init__(*args, **kwargs)
         self.fields['started_at'].widget.attrs['class'] += ' datepicker_input'
         self.fields['ended_at'].widget.attrs['class'] += ' datepicker_input'
+
+        users = User.objects.filter(groups__name__icontains='Pédagogique')
+        self.fields['rp'].choices = [(user.pk, user.get_full_name()) for user in users]
 
 
 class PerformanceForm(CustomModelForm):
