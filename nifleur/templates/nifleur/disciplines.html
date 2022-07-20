@@ -10,7 +10,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-xl-8 col-md-12 mb-3">
+        <div class="col-xl-9 col-md-12 mb-3">
             <h2 class="d-flex justify-content-center">Liste des matières</h2>
             <div class="card">
                 <div class="card-body">
@@ -18,6 +18,7 @@
                         <table class="table table-striped table-hover table-sm align-middle text-center" id="disiplines_table">
                             <thead>
                                 <tr>
+                                    <th>Ecole</th>
                                     <th>Classe</th>
                                     <th>Nom</th>
                                     <th>Intervenant</th>
@@ -27,7 +28,8 @@
                             <tbody>
                                 {% for discipline in disciplines %}
                                     <tr>
-                                        <td>{{ discipline.school_year }}</td>
+                                        <td>{{ discipline.school }}</td>
+                                        <td>{% if discipline.school_year %}{{ discipline.school_year }}{% endif %}</td>
                                         <td>{{ discipline.label }}</td>
                                         <td>
                                             {% if discipline.speaker %}
@@ -42,8 +44,40 @@
                     </div>
                 </div>
             </div>
+
+            <article class="mt-4">
+                <h2 class="d-flex justify-content-center">Import de masse</h2>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-info ml-3" data-bs-toggle="modal" data-bs-target="#importDisciplinesModel">Importer des matières</button>
+                </div>
+
+                <!-- Import Disciplines Modal -->
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal fade" id="importDisciplinesModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importDisciplinesModelLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="importDisciplinesModelLabel">Importer des disciplines</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="disciplines_csv">Choississez un fichier CSV</label>
+                                    <input type="file" id="disciplines_csv" name="disciplines_csv">
+                                    <small></small>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                    <button type="submit" class="btn btn-primary">Importer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </article>
+
         </div>
-        <div class="offset-xl-0 col-xl-4 offset-md-3 col-md-6">
+        <div class="offset-xl-0 col-xl-3 offset-md-3 col-md-6">
             <h2 class="d-flex justify-content-center">Ajouter une nouvelle matière</h2>
             <div class="card">
                 <div class="card-body">

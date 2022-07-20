@@ -297,6 +297,7 @@ class Discipline(models.Model):
     Attributes:
 
     - :class:`SchoolYear` school_year
+    - :class:`School` school
     - :class:`str` label
     - :class:`Speaker` speaker
     """
@@ -305,7 +306,14 @@ class Discipline(models.Model):
         verbose_name='Classe',
         related_name='disciplines',
         on_delete=models.PROTECT,
-        null=True
+        null=True,
+        blank=True
+    )
+    school = models.ForeignKey(
+        School,
+        verbose_name='Ecole',
+        related_name='disciplines',
+        on_delete=models.PROTECT
     )
     label = models.CharField('Nom', max_length=255)
     speaker = models.ForeignKey(
@@ -323,6 +331,15 @@ class Discipline(models.Model):
 
     def __str__(self):
         return self.label
+
+    def clean(self, *args, **kwargs):
+        if not self.school and self.school_year:
+            self.school = self.school_year.school
+        super().clean()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 OPEN = 1

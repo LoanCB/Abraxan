@@ -187,18 +187,25 @@ def parameters(request):
 
         if performance_csv:
             import_data(request, performance_csv, 'Performance')
+            return redirect(parameters)
         elif recruitment_type_csv:
             import_data(request, recruitment_type_csv, 'RecruitmentType')
+            return redirect(parameters)
         elif rate_type_csv:
             import_data(request, rate_type_csv, 'RateType')
+            return redirect(parameters)
         elif company_type_csv:
             import_data(request, company_type_csv, 'CompanyType')
+            return redirect(parameters)
         elif unit_csv:
             import_data(request, unit_csv, 'Unit')
+            return redirect(parameters)
         elif legal_structure_csv:
             import_data(request, legal_structure_csv, 'LegalStructure')
+            return redirect(parameters)
         elif status_csv:
             import_data(request, status_csv, 'Status', True)
+            return redirect(parameters)
 
     return render(request, 'nifleur/parameters.html', {
         'performances': performances,
@@ -446,6 +453,7 @@ def speakers_list(request):
                     total += 1
             messages.success(request, f"{total} intervenants ont été ajoutés")
             messages.success(request, f"Il y a eu {total_error} erreurs")
+            return redirect(speakers_list)
 
     return render(request, 'nifleur/speakers.html', {
         'speakers': speakers,
@@ -496,14 +504,48 @@ def speaker_form(request):
 @login_required
 def discipline_list(request):
     disciplines = Discipline.objects.all().order_by('school_year')
-    form = DisciplineForm(request.POST or None)
+    form = DisciplineForm(request.POST or None, prefix='simple-discipline-form')
+
+    if request.method == 'POST':
+        try:
+            disciplines_csv = request.FILES['disciplines_csv']
+        except MultiValueDictKeyError:
+            pass
+        else:
+            xls = pandas.ExcelFile(disciplines_csv)
+            total = 0
+            for sheet in xls.sheet_names:
+                df = pandas.read_excel(disciplines_csv, sheet_name=sheet)
+                columns = df.columns
+                schools = []
+                disciplines = []
+                for index, row in df.iterrows():
+                    if not str(row[columns[0]]) == 'nan':
+                        schools.append(row[columns[0]])
+                    if not str(row[columns[3]]) == 'nan':
+                        disciplines.append(row[columns[3]])
+
+                for s in schools:
+                    try:
+                        school = School.objects.get(label=s)
+                    except:
+                        messages.error(request, f"L'école {s} n'existe pas")
+                    else:
+                        for discipline in disciplines:
+                            Discipline.objects.create(school=school, label=discipline)
+                            total += 1
+
+            messages.success(request, f"{total} matières ont été ajoutées")
+            return redirect(discipline_list)
+
     if form.is_valid():
-        form.save()
+        data = form.save()
         messages.success(
             request,
-            f"La matière {form.cleaned_data['label']} a bien été créée pour la classe {form.cleaned_data['school_year']}"
+            f"La matière {data.label} a bien été créée pour l'école {data.school}"
         )
         return redirect(discipline_list)
+
 
     return render(request, 'nifleur/disciplines.html', {
         'disciplines': disciplines,
@@ -550,6 +592,7 @@ def school_list(request):
                     else:
                         messages.error(request, f"L'école {row[0]} existe déjà")
             messages.info(request, f"Des écoles ont été importées")
+            return redirect(school_list)
 
         try:
             school_year_csv = request.FILES['school_year_csv']
@@ -590,6 +633,7 @@ def school_list(request):
                     total_school_year += 1
 
             messages.info(request, f"{total_school_year_imported} promotions on été importée sur {total_school_year}")
+            return redirect(school_list)
 
     return render(request, 'nifleur/schools.html', {
         'schools': schools,
