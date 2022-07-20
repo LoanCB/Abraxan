@@ -61,6 +61,9 @@ class ContractRequestForm(CustomModelForm):
         self.fields['started_at'].widget.attrs['class'] += ' datepicker_input'
         self.fields['ended_at'].widget.attrs['class'] += ' datepicker_input'
 
+        users = User.objects.filter(groups__name__icontains='Pédagogique')
+        self.fields['rp'].choices = [(user.pk, user.get_full_name()) for user in users]
+
 
 class PerformanceForm(CustomModelForm):
     class Meta:
