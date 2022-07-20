@@ -1,5 +1,6 @@
 import codecs
 import csv
+import datetime
 
 from django.apps import apps
 from django.contrib import messages
@@ -21,7 +22,20 @@ from nifleur.utils import export_csv, short_datetime
 
 @login_required
 def home(request):
-    return render(request, 'nifleur/home.html')
+    contract_count = ContractRequest.objects.count()
+    today = datetime.date.today()
+    today_contract_count = ContractRequest.objects.filter(created_at__gt=today).count()
+    form = RegisterForm(request.POST or None, instance=request.user)
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Vous venez de modifier vos informations")
+
+    return render(request, 'nifleur/home.html', {
+        'contract_count': contract_count,
+        'today_contract_count': today_contract_count,
+        'form': form
+    })
 
 
 def login_user(request):

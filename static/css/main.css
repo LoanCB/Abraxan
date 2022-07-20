@@ -24,6 +24,11 @@
     margin-right: 1rem;
 }
 
+.last-row
+{
+    margin-bottom: 7rem;
+}
+
 
 /*************************
           Text
@@ -33,6 +38,13 @@ h3 a
 {
     text-decoration: none;
     color: black;
+}
+
+h3.main-number
+{
+    font-size: xxX-large;
+    color: var(--main_salmon);
+    text-align: center;
 }
 
 
@@ -73,6 +85,32 @@ h3 a
 .clickable
 {
     cursor: pointer;
+}
+
+
+/*************************
+           IMG
+*************************/
+
+.abraxan-logo
+{
+    height: 100px;
+    width: auto;
+}
+
+.other-logo
+{
+    position: fixed;
+    right: 10px;
+    bottom: 0;
+    background-color: white;
+}
+
+.other-logo img
+{
+    height: 100px;
+    width: auto;
+    margin: 0 0.5rem;
 }
 
 
