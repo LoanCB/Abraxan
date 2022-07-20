@@ -106,7 +106,9 @@ class Company(models.Model):
         CompanyType,
         verbose_name='Type de la compagnie',
         related_name='speaker_company_type',
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
     )
     relation_mail = models.EmailField(verbose_name='mail de la relation', null=True, blank=True, unique=True)
     relation_phone_number = PhoneNumberField(
@@ -161,8 +163,8 @@ class Speaker(models.Model):
     )
     mail = models.EmailField(unique=True)
     phone_number = PhoneNumberField(verbose_name='Numéro de téléphone', null=True, blank=True)
-    highest_degree = models.CharField('Diplôme le plus élevé', max_length=255)
-    main_area_of_expertise = models.CharField('Domaine de compétence principal', max_length=255)
+    highest_degree = models.CharField('Diplôme le plus élevé', max_length=255, null=True)
+    main_area_of_expertise = models.CharField('Domaine de compétence principal', max_length=255, null=True)
     second_area_of_expertise = models.CharField(
         'Deuxième domaine de compétence',
         max_length=255,
@@ -170,10 +172,15 @@ class Speaker(models.Model):
         blank=True
     )
     third_area_of_expertise = models.CharField('Troisième domaine de compétence', max_length=255, null=True, blank=True)
-    teaching_expertise_level = models.PositiveSmallIntegerField("Niveau d'expertise en pédagogie", choices=LEVELS)
+    teaching_expertise_level = models.PositiveSmallIntegerField(
+        "Niveau d'expertise en pédagogie",
+        choices=LEVELS,
+        null=True
+    )
     professional_expertise_level = models.PositiveSmallIntegerField(
         "Niveau d'expertise en matière professionnelle",
-        choices=LEVELS
+        choices=LEVELS,
+        null=True
     )
 
     class Meta:

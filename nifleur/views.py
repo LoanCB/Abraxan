@@ -2,6 +2,7 @@ import codecs
 import csv
 import datetime
 
+import pandas as pandas
 from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -16,7 +17,8 @@ from nifleur.forms import DisciplineForm, SpeakerForm, ContractRequestForm, Perf
     SchoolForm, RecruitmentTypeForm, RateTypeForm, CompanyTypeForm, UnitForm, RegisterForm, LegalStructureForm, \
     SchoolYearDetailForm, CompanyForm
 from nifleur.models import ContractRequest, Speaker, Discipline, School, Performance, SchoolYear, Status, \
-    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company, STATUS_CHOICES, CLOSE
+    RecruitmentType, RateType, CompanyType, Unit, LegalStructure, Company, STATUS_CHOICES, CLOSE, BEGINNER, \
+    INTERMEDIATE, EXPERT
 from nifleur.utils import export_csv, short_datetime
 
 
@@ -95,7 +97,7 @@ def import_data(request, file, model, status=False):
 def parameters(request):
     # models data
     performances = Performance.objects.all().order_by('label')
-    status = Status.objects.all().order_by('position')
+    status = Status.objects.all()
     recruitment_types = RecruitmentType.objects.all()
     rate_types = RateType.objects.all()
     company_types = CompanyType.objects.all()
@@ -356,6 +358,93 @@ def speakers_list(request):
             f"{'modifié' if instance else 'créé'}"
         )
         return redirect(speakers_list)
+
+    if request.method == 'POST':
+        try:
+            speakers_csv = request.FILES['speakers_csv']
+        except MultiValueDictKeyError:
+            pass
+        else:
+            df = pandas.read_excel(speakers_csv)
+            columns = df.columns
+
+            total = 0
+            total_error = 0
+            beginner_level = ['Débutant', 'D']
+            intermediate_level = ['Confirmé', 'C']
+            expert_level = ['Expert', 'E']
+
+            for index, row in df.iterrows():
+                get_civility = row[columns[0]]
+                last_name = row[columns[1]]
+                first_name = row[columns[2]]
+                get_company_type = row[columns[3]] if not str(row[columns[3]]) == 'nan' else None
+                get_company = row[columns[4]] if not str(row[columns[4]]) == 'nan' else None
+                phone_number = row[columns[5]] if not str(row[columns[5]]) == 'nan' else None
+                mail = row[columns[6]]
+                diploma = row[columns[7]] if not str(row[columns[7]]) == 'nan' else None
+                skills1 = row[columns[8]] if not str(row[columns[8]]) == 'nan' else None
+                skills2 = row[columns[9]] if not str(row[columns[9]]) == 'nan' else None
+                skills3 = row[columns[10]] if not str(row[columns[10]]) == 'nan' else None
+                get_teaching = row[columns[11]] if not str(row[columns[11]]) == 'nan' else None
+                get_pro = row[columns[12]] if not str(row[columns[12]]) == 'nan' else None
+
+                if len(str(phone_number)) == 9:
+                    phone_number = f'0{phone_number}'
+
+                if get_civility == 'M.':
+                    civility = Speaker.MEN
+                else:
+                    civility = Speaker.WOMEN
+
+                if get_company:
+                    if get_company_type:
+                        company = CompanyType.objects.get_or_create(label=get_company_type)
+                    else:
+                        company = None
+                    company = Company.objects.get_or_create(label=get_company, company_type=company)
+                else:
+                    company = None
+
+                if get_teaching in beginner_level:
+                    teaching = BEGINNER
+                elif get_teaching in intermediate_level:
+                    teaching = INTERMEDIATE
+                elif get_teaching in expert_level:
+                    teaching = EXPERT
+                else:
+                    teaching = None
+
+                if get_pro in beginner_level:
+                    pro = BEGINNER
+                elif get_pro in intermediate_level:
+                    pro = INTERMEDIATE
+                elif get_pro in expert_level:
+                    pro = EXPERT
+                else:
+                    pro = None
+
+                try:
+                    Speaker.objects.create(
+                        first_name=first_name,
+                        last_name=last_name,
+                        civility=civility,
+                        company=company,
+                        mail=mail,
+                        phone_number=phone_number,
+                        highest_degree=diploma,
+                        main_area_of_expertise=skills1,
+                        second_area_of_expertise=skills2,
+                        third_area_of_expertise=skills3,
+                        teaching_expertise_level=teaching,
+                        professional_expertise_level=pro
+                    )
+                except:
+                    total_error += 1
+                else:
+                    total += 1
+            messages.success(request, f"{total} intervenants ont été ajoutés")
+            messages.success(request, f"Il y a eu {total_error} erreurs")
 
     return render(request, 'nifleur/speakers.html', {
         'speakers': speakers,
