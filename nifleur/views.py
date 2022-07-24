@@ -322,14 +322,14 @@ def export_contract_requests(request):
     data = [[
         'Date Demande', 'Marque / Ecole', 'Civilité', 'Nom', 'Prénom', 'Type société', 'Société', 'Commentaire',
         'Status contrat', 'Type de mission', 'Tarif a appliquer', 'TTC/SST', 'Horaire ou forfait', 'Volume horaire',
-        'Unité', 'Date début', 'Date fin', 'Matière', 'Promotion', 'Alternant/Initial', 'Période', 'RP', 'Téléphone',
+        'Unité', 'Date début', 'Date fin', 'Matière', 'Promotion', 'Initial', 'alternant', 'Période', 'RP', 'Téléphone',
         'Mail', 'Type de recrutement', 'Intitulé du diplôme le plus élevé', 'Domaine de compétence principal',
         'Domaine de compétence 2', 'Domaine de compétence 3', "Niveau d'expertise en pédagogie",
         "Niveau d'expertise matière professionnelle"
     ]]
     for contract in contract_requests:
         ttc = 'TTC' if contract.ttc else 'SST'
-        alternating = 'Alternant' if contract.alternating else 'Initial'
+        unit = contract.unit.label if contract.unit else ''
         if contract.speaker.company:
             company = contract.speaker.company.label
             company_type = contract.speaker.company.company_type
@@ -340,13 +340,14 @@ def export_contract_requests(request):
             short_datetime(contract.created_at), contract.school.label, contract.speaker.get_civility_display(),
             contract.speaker.last_name, contract.speaker.first_name, company_type, company, contract.comment,
             contract.status.label, contract.performance.label, contract.applied_rate, ttc, contract.rate_type.label,
-            contract.hourly_volume, contract.unit.label, short_datetime(contract.started_at),
-            short_datetime(contract.ended_at), contract.discipline.label, contract.school_year.year, alternating,
-            contract.get_period_display(), contract.rp.get_full_name(), contract.speaker.phone_number,
+            contract.hourly_volume, unit, short_datetime(contract.started_at),
+            short_datetime(contract.ended_at), contract.discipline.label, contract.school_year.year,
+            contract.school_year.initial, contract.school_year.alternating, contract.get_period_display(),
+            contract.rp.get_full_name(), contract.speaker.phone_number.as_national,
             contract.speaker.mail, contract.recruitment_type.label, contract.speaker.highest_degree,
             contract.speaker.main_area_of_expertise, contract.speaker.second_area_of_expertise,
             contract.speaker.third_area_of_expertise, contract.speaker.get_teaching_expertise_level_display(),
-            contract.get_professional_expertise_level_display()
+            contract.speaker.get_professional_expertise_level_display()
         ])
     xls = request.GET.get('xls')
     return export_csv('demandes_de_contrat', data, True if xls else False)
@@ -545,7 +546,6 @@ def discipline_list(request):
             f"La matière {data.label} a bien été créée pour l'école {data.school}"
         )
         return redirect(discipline_list)
-
 
     return render(request, 'nifleur/disciplines.html', {
         'disciplines': disciplines,
