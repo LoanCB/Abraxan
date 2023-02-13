@@ -1,4 +1,4 @@
-Django==4.0.6
+Django==4.0.9
 psycopg2==2.9.3
 fontawesomefree==6.1.1
 python-dotenv==0.20.0
